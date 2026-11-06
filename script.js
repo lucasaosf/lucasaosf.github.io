@@ -125,7 +125,7 @@ function initBioCanvas() {
         setTimeout(updateCanvasDimensions, 150);
     });
 
-    // Pond zone interaction states (Restricted strictly to the space between Section 1 and Section 2)
+    // Dedicated Pond Zone between Section 1 (Lucas Aøsf) & Section 2 (Identidade e Liderança)
     const pondZone = document.getElementById('tadpole-pond-zone');
     let mouseInPond = false;
     let mouseX = -1000;
@@ -139,7 +139,7 @@ function initBioCanvas() {
     }
 
     if (pondZone) {
-        // Desktop: mousemove inside pond zone attracts tadpoles like a magnet
+        // Desktop: mousemove strictly inside the pond zone attracts tadpoles like a magnet
         pondZone.addEventListener('mousemove', (e) => {
             mouseInPond = true;
             mouseX = e.clientX;
@@ -185,8 +185,8 @@ function initBioCanvas() {
             x: x,
             y: y,
             radius: 8,
-            maxRadius: 320,
-            speed: 8.5,
+            maxRadius: 300,
+            speed: 8.0,
             alpha: 0.9
         });
         setTimeout(() => {
@@ -194,32 +194,11 @@ function initBioCanvas() {
                 x: x,
                 y: y,
                 radius: 6,
-                maxRadius: 240,
-                speed: 6.2,
-                alpha: 0.6
+                maxRadius: 220,
+                speed: 6.0,
+                alpha: 0.55
             });
         }, 110);
-
-        playWaterDrip();
-    }
-
-    function playWaterDrip() {
-        if (!soundEnabled || !audioCtx) return;
-        try {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            const now = audioCtx.currentTime;
-            osc.frequency.setValueAtTime(440, now);
-            osc.frequency.exponentialRampToValueAtTime(780, now + 0.07);
-            osc.frequency.exponentialRampToValueAtTime(320, now + 0.16);
-            gain.gain.setValueAtTime(0.08, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(now);
-            osc.stop(now + 0.22);
-        } catch (e) {}
     }
 
     const tadpoles = [];
@@ -237,7 +216,6 @@ function initBioCanvas() {
             this.targetAngle = this.angle;
             this.speed = Math.random() * 1.1 + 0.65;
 
-            // Varied depths: background, midground, and foreground
             const depth = Math.random();
             if (depth < 0.45) {
                 this.size = Math.random() * 1.8 + 3.2;
@@ -258,7 +236,7 @@ function initBioCanvas() {
         }
 
         update() {
-            // 1. Scatter reaction if hit by an expanding shockwave from click/touch
+            // 1. Scatter reaction if hit by shockwave from click/touch
             let scattered = false;
             for (let s = 0; s < shockwaves.length; s++) {
                 const sw = shockwaves[s];
@@ -266,19 +244,18 @@ function initBioCanvas() {
                 const dy = this.y - sw.y;
                 const dist = Math.hypot(dx, dy);
 
-                // If within active shockwave wave front
                 if (dist < sw.radius + 65 && dist > sw.radius - 35) {
                     const awayAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.4;
                     this.angle = awayAngle;
                     this.targetAngle = awayAngle;
-                    this.speed = Math.max(this.speed, 6.2 + Math.random() * 2.8);
+                    this.speed = Math.max(this.speed, 6.2 + Math.random() * 2.5);
                     this.turnTimer = 35;
                     scattered = true;
                     break;
                 }
             }
 
-            // 2. Attraction towards mouse cursor ONLY when cursor is inside the pond zone (Desktop)
+            // 2. Attraction towards cursor ONLY when cursor is inside the pond zone on Desktop
             if (!scattered && mouseInPond) {
                 const dx = mouseX - this.x;
                 const dy = mouseY - this.y;
@@ -287,7 +264,6 @@ function initBioCanvas() {
                 if (dist < 380) {
                     const toMouse = Math.atan2(dy, dx);
                     if (dist > 52) {
-                        // Gentle magnet attraction
                         let diff = toMouse - this.angle;
                         while (diff < -Math.PI) diff += Math.PI * 2;
                         while (diff > Math.PI) diff -= Math.PI * 2;
@@ -296,7 +272,6 @@ function initBioCanvas() {
                         this.angle += diff * steer;
                         this.speed = Math.min(this.speed + 0.09, 2.7);
                     } else {
-                        // Close to cursor: orbit gently around it without clumping into a single dot
                         const orbit = toMouse + Math.PI / 2 + Math.sin(this.wigglePhase) * 0.25;
                         let diff = orbit - this.angle;
                         while (diff < -Math.PI) diff += Math.PI * 2;
@@ -311,17 +286,14 @@ function initBioCanvas() {
                 this.naturalSteer();
             }
 
-            // Movement along current angle
             this.x += Math.cos(this.angle) * this.speed;
             this.y += Math.sin(this.angle) * this.speed;
             this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
 
-            // Friction to restore normal swimming speed
             if (this.speed > 2.2) {
                 this.speed *= 0.96;
             }
 
-            // Screen boundary wrap
             if (this.x < -50) this.x = width + 50;
             if (this.x > width + 50) this.x = -50;
             if (this.y < -50) this.y = height + 50;
@@ -348,11 +320,11 @@ function initBioCanvas() {
             ctx.rotate(this.angle);
 
             const baseColor = this.isGold
-                ? gba(212, 175, 55, )
-                : gba(78, 204, 163, );
+                ? 'rgba(212, 175, 55, ' + this.alpha + ')'
+                : 'rgba(78, 204, 163, ' + this.alpha + ')';
             const finColor = this.isGold
-                ? gba(212, 175, 55, )
-                : gba(46, 184, 114, );
+                ? 'rgba(212, 175, 55, ' + (this.alpha * 0.38) + ')'
+                : 'rgba(46, 184, 114, ' + (this.alpha * 0.38) + ')';
 
             // Multi-segment undulating tail
             const segments = 5;
@@ -363,7 +335,7 @@ function initBioCanvas() {
                 pts.push({ x: -this.size * 0.75 - (i * segLen), y: wave });
             }
 
-            // Transparent Fin Membrane (Barbatana Caudal)
+            // Transparent Fin Membrane
             ctx.beginPath();
             ctx.moveTo(pts[0].x, pts[0].y);
             for (let i = 1; i < pts.length; i++) {
@@ -412,7 +384,6 @@ function initBioCanvas() {
     function animate() {
         ctx.clearRect(0, 0, width, height);
 
-        // Render expanding shockwaves / water ripples
         for (let i = shockwaves.length - 1; i >= 0; i--) {
             const sw = shockwaves[i];
             sw.radius += sw.speed;
@@ -420,7 +391,7 @@ function initBioCanvas() {
 
             ctx.beginPath();
             ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-            ctx.strokeStyle = gba(78, 204, 163, );
+            ctx.strokeStyle = 'rgba(78, 204, 163, ' + (sw.alpha * 0.65) + ')';
             ctx.lineWidth = 1.8;
             ctx.stroke();
 
@@ -700,7 +671,7 @@ function initMetricsCounter() {
    ========================================================================== */
 const translations = {
     pt: {
-                pond_badge: "Lagoa de Observação de Anuros",
+        pond_badge: "Lagoa de Observação de Anuros",
         pond_instructions: "<span class=\"desktop-only\"><i class=\"fa-solid fa-arrow-pointer\"></i> Passe o mouse para atrair em cardume &bull; <i class=\"fa-solid fa-hand-pointer\"></i> Clique para dispersar</span><span class=\"mobile-only\"><i class=\"fa-solid fa-hand-pointer\"></i> Toque na água para dispersar os girinos</span>",
         tag_identity: "Identidade & Liderança",
         header_roles: "&lt;Biólogo · Gestor Ambiental · Taxonomista · Sócio Fundador BioKuri&gt;",
