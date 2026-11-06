@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initLanguageSystem();
     initMetricsCounter();
     initAvatarToggle();
+    initDronePlayer();
 });
 
 /* ==========================================================================
@@ -125,7 +126,7 @@ function initBioCanvas() {
     });
 
     const tadpoles = [];
-    const count = width > 1024 ? 95 : (width > 600 ? 58 : 36);
+    const count = width > 1024 ? 500 : (width > 600 ? 350 : 250);
 
     class Tadpole {
         constructor() {
@@ -237,14 +238,9 @@ function initBioCanvas() {
             ctx.beginPath();
             ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
             ctx.fillStyle = baseColor;
-            if (this.size > 6) {
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = baseColor;
-            }
             ctx.fill();
 
             // Lateral Eyes
-            ctx.shadowBlur = 0;
             ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
             ctx.beginPath();
             ctx.arc(this.size * 0.45, -this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
@@ -357,6 +353,42 @@ function initAvatarToggle() {
             playBioBeep(520, 0.08);
         }
     });
+}
+
+
+/* ==========================================================================
+   4.5. DRONE FLIGHT PLAYER & HUD CONTROLLER
+   ========================================================================== */
+function initDronePlayer() {
+    const video = document.getElementById('drone-main-video');
+    const hudLoc = document.getElementById('drone-hud-location');
+    const clipBtns = document.querySelectorAll('.drone-clip-btn');
+    const soundBtn = document.getElementById('drone-sound-btn');
+    if (!video || !clipBtns.length) return;
+
+    clipBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            clipBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const newSrc = btn.getAttribute('data-src');
+            const newLoc = btn.getAttribute('data-loc');
+            if (newSrc && video.getAttribute('data-current') !== newSrc) {
+                video.setAttribute('data-current', newSrc);
+                video.src = newSrc;
+                video.play().catch(() => {});
+                if (hudLoc && newLoc) hudLoc.textContent = newLoc;
+            }
+        });
+    });
+
+    if (soundBtn) {
+        soundBtn.addEventListener('click', () => {
+            video.muted = !video.muted;
+            soundBtn.innerHTML = video.muted 
+                ? '<i class="fa-solid fa-volume-xmark"></i>' 
+                : '<i class="fa-solid fa-volume-high"></i>';
+        });
+    }
 }
 
 /* ==========================================================================
@@ -509,6 +541,10 @@ const translations = {
         focus_prog_desc: "Pipelines avançados para mineração do GBIF (Global Biodiversity Information Facility), análise estatística multivariada de comunidades faunísticas, bioestatística e modelagem ecológica.",
         focus_apps_title: "Engenharia de Softwares de Campo (PWAs)",
         focus_apps_desc: "Idealizador e arquiteto de PWAs como a Caderneta de Campo (georreferenciamento offline, listas de Mackinnon, exportação instantânea Excel) e Cubagem Florestal Smalian.",
+        focus_drone_title: "Pilotagem de Drones & Sensoriamento Remoto (DJI Mini ao Pro & Termal)",
+        focus_drone_desc: "Piloto e operador t&eacute;cnico de RPA/drones, atuando desde a linha DJI Mini at&eacute; modelos Pro e com c&acirc;mera termal para sensoriamento remoto, mapeamento a&eacute;reo de fitofisionomias, monitoramento t&eacute;rmico de fauna e inspe&ccedil;&atilde;o ambiental em &aacute;reas de dif&iacute;cil acesso.",
+        drone_showcase_tag: "Aerolevantamento &amp; Imagens A&eacute;reas Reais",
+        drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
         metric_years: "Anos de experiência na área",
         metric_papers: "Artigos Científicos",
         metric_projects: "Empreendimentos Atendidos",
@@ -599,6 +635,10 @@ const translations = {
         focus_prog_desc: "Advanced automated pipelines for GBIF data mining, multivariate statistical community ecology, bio-statistics, and ecological modeling.",
         focus_apps_title: "Field Software Engineering (PWAs)",
         focus_apps_desc: "Creator and software architect of offline-first PWAs such as Caderneta de Campo (GPS geotagging, Mackinnon lists, automated Excel export) and Smalian Timber Scaler.",
+        focus_drone_title: "Drone Piloting & Remote Sensing (DJI Mini to Pro & Thermal)",
+        focus_drone_desc: "Technical RPA/drone pilot and operator, ranging from DJI Mini to Pro models and thermal sensor cameras for remote sensing, aerial vegetation mapping, thermal wildlife surveys, and environmental inspection of rugged terrain.",
+        drone_showcase_tag: "Real Aerial Surveys & High-Altitude Drone Footage",
+        drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         metric_years: "Years of experience in the field",
         metric_papers: "Scientific Articles",
         metric_projects: "Enterprise Projects Handled",

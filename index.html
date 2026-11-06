@@ -21,7 +21,7 @@
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=5.0">
+    <link rel="stylesheet" href="style.css?v=6.0">
 </head>
 
 <body>
@@ -185,6 +185,58 @@
                             <p data-i18n="focus_apps_desc">Idealizador e arquiteto de PWAs como a <strong>Caderneta de Campo</strong> (georreferenciamento offline, listas de Mackinnon, exportação instantânea Excel) e <strong>Cubagem Florestal Smalian</strong>.</p>
                         </div>
                     </div>
+                    <div class="focus-item highlight-box drone-card">
+                        <div class="focus-icon"><i class="fa-solid fa-helicopter"></i></div>
+                        <div class="focus-content">
+                            <h4 data-i18n="focus_drone_title">Pilotagem de Drones &amp; Sensoriamento Remoto (DJI Mini ao Pro &amp; Termal)</h4>
+                            <p data-i18n="focus_drone_desc">Piloto e operador t&eacute;cnico de RPA/drones, atuando desde a linha DJI Mini at&eacute; modelos Pro e com c&acirc;mera termal para sensoriamento remoto, mapeamento a&eacute;reo de fitofisionomias, monitoramento t&eacute;rmico de fauna e inspe&ccedil;&atilde;o ambiental em &aacute;reas de dif&iacute;cil acesso.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Drone Real Aerial Video Showcase -->
+                <div class="drone-video-showcase">
+                    <div class="drone-showcase-header">
+                        <div class="drone-tag"><i class="fa-solid fa-satellite"></i> <span data-i18n="drone_showcase_tag">Aerolevantamento &amp; Imagens A&eacute;reas Reais</span></div>
+                        <div class="drone-model-pill"><i class="fa-solid fa-crosshairs"></i> <span data-i18n="drone_showcase_badge">DJI Mini &bull; Pro &bull; C&acirc;mera Termal</span></div>
+                    </div>
+                    
+                    <div class="drone-player-container">
+                        <video id="drone-main-video" autoplay muted loop playsinline poster="assets/drone-poster.jpg" class="drone-video-player" data-current="assets/drone-showreel.mp4">
+                            <source src="assets/drone-showreel.mp4" type="video/mp4">
+                            Seu navegador n&atilde;o suporta v&iacute;deos HTML5.
+                        </video>
+                        
+                        <!-- Live HUD Overlay -->
+                        <div class="drone-hud-overlay">
+                            <div class="drone-hud-top">
+                                <span class="hud-rec"><span class="rec-dot"></span> 4K / 2.7K REC</span>
+                                <span class="hud-mode" id="drone-hud-location">Serra da Mantiqueira, Litoral Norte &amp; Cerrado</span>
+                            </div>
+                            <div class="drone-hud-bottom">
+                                <span class="hud-telemetry"><i class="fa-solid fa-wind"></i> PILOTAGEM DE PRECIS&Atilde;O // BIOKURI</span>
+                                <button id="drone-sound-btn" class="drone-sound-btn" title="Alternar &aacute;udio"><i class="fa-solid fa-volume-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Flight Selector Buttons -->
+                    <div class="drone-clip-selector">
+                        <button class="drone-clip-btn active" data-src="assets/drone-showreel.mp4" data-loc="Showreel Completo (Mantiqueira, Ilhabela, Cerrado &amp; Veredas)">
+                            <i class="fa-solid fa-film"></i> Showreel Completo
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-itatiaia.mp4" data-loc="Maci&ccedil;o do Itatiaia / Mantiqueira (Relevo &amp; Altitude)">
+                            <i class="fa-solid fa-mountain"></i> Itatiaia
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-ilhabela.mp4" data-loc="Ilhabela / Litoral Norte (Monitoramento Marinho &amp; Costeiro)">
+                            <i class="fa-solid fa-water"></i> Ilhabela
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-cerrado.mp4" data-loc="Cerrado &amp; Veredas (Topografia &amp; Corredores Ecol&oacute;gicos)">
+                            <i class="fa-solid fa-seedling"></i> Cerrado &amp; Veredas
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-wetlands.mp4" data-loc="&Aacute;reas &Uacute;midas &amp; Borda Florestal (Recursos H&iacute;dricos)">
+                            <i class="fa-solid fa-leaf"></i> &Aacute;reas &Uacute;midas
+                        </button>
+                    </div>
                 </div>
             </section>
         </div>
@@ -248,6 +300,7 @@
                         <span class="badge mistnet"><i class="fa-solid fa-feather"></i> REDES DE NEBLINA &amp; ANILHAMENTO</span>
                         <span class="badge mackinnon"><i class="fa-solid fa-binoculars"></i> TRANSECTOS &amp; LISTAS DE MACKINNON</span>
                         <span class="badge cameras"><i class="fa-solid fa-camera"></i> CAMERA TRAPS &amp; GRAVADORES</span>
+                        <span class="badge drone"><i class="fa-solid fa-crosshairs"></i> PILOTO DRONE DJI (MINI, PRO &amp; TERMAL)</span>
                         <span class="badge eia"><i class="fa-solid fa-file-shield"></i> EIA/RIMA, RAP &amp; LAUDOS CETESB</span>
                         <span class="badge marine"><i class="fa-solid fa-water"></i> MONITORAMENTO MARINHO &amp; COSTEIRO</span>
                     </div>
@@ -921,7 +974,7 @@
     </main>
 
     <!-- Custom Script -->
-    <script src="script.js?v=5.0"></script>
+    <script src="script.js?v=6.0"></script>
 </body>
 
 </html>

@@ -1806,6 +1806,216 @@ h2 {
 }
 
 /* ==========================================================================
+   DRONE VIDEO SHOWCASE & REMOTE SENSING
+   ========================================================================== */
+.focus-item.drone-card {
+    border-color: rgba(78, 204, 163, 0.4);
+    background: linear-gradient(135deg, rgba(78, 204, 163, 0.08) 0%, rgba(14, 37, 21, 0.5) 100%);
+}
+
+.focus-item.drone-card:hover {
+    border-color: var(--bio-emerald);
+    box-shadow: 0 0 20px rgba(78, 204, 163, 0.3);
+}
+
+.badge.drone {
+    background: rgba(78, 204, 163, 0.12);
+    border: 1px solid var(--bio-emerald);
+    color: var(--bio-emerald);
+    font-weight: 600;
+}
+
+.drone-video-showcase {
+    margin-top: 1.6rem;
+    background: rgba(7, 20, 11, 0.75);
+    border: 1px solid rgba(78, 204, 163, 0.3);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+}
+
+.drone-showcase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.95rem;
+}
+
+.drone-tag {
+    font-family: var(--font-terminal);
+    font-size: 0.74rem;
+    color: var(--bio-emerald);
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.drone-model-pill {
+    font-family: var(--font-terminal);
+    font-size: 0.72rem;
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold-accent);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    padding: 0.22rem 0.65rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+}
+
+.drone-player-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #050d07;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid rgba(78, 204, 163, 0.25);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.65);
+}
+
+.drone-video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.drone-hud-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.9rem;
+    background: linear-gradient(180deg, rgba(5, 13, 7, 0.65) 0%, transparent 22%, transparent 75%, rgba(5, 13, 7, 0.75) 100%);
+    font-family: var(--font-terminal);
+    font-size: 0.72rem;
+}
+
+.drone-hud-top,
+.drone-hud-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.hud-rec {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #ff5555;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 85, 85, 0.5);
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.rec-dot {
+    width: 8px;
+    height: 8px;
+    background: #ff3333;
+    border-radius: 50%;
+    animation: recBlink 1.2s infinite;
+}
+
+@keyframes recBlink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+.hud-mode {
+    color: var(--bio-emerald);
+    background: rgba(0, 0, 0, 0.65);
+    padding: 0.2rem 0.65rem;
+    border-radius: 4px;
+    border: 1px solid rgba(78, 204, 163, 0.35);
+    max-width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hud-telemetry {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.68rem;
+    letter-spacing: 0.6px;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0.18rem 0.5rem;
+    border-radius: 4px;
+}
+
+.drone-sound-btn {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(78, 204, 163, 0.45);
+    color: var(--bio-emerald);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.drone-sound-btn:hover {
+    background: var(--bio-emerald);
+    color: var(--bio-deep);
+    transform: scale(1.1);
+}
+
+.drone-clip-selector {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.95rem;
+    align-items: center;
+}
+
+.drone-clip-btn {
+    background: rgba(78, 204, 163, 0.08);
+    border: 1px solid rgba(78, 204, 163, 0.25);
+    color: var(--text-muted);
+    font-family: var(--font-terminal);
+    font-size: 0.72rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.drone-clip-btn:hover {
+    background: rgba(78, 204, 163, 0.18);
+    border-color: var(--bio-emerald);
+    color: var(--text-light);
+    transform: translateY(-2px);
+}
+
+.drone-clip-btn.active {
+    background: var(--bio-emerald);
+    color: var(--bio-deep);
+    border-color: var(--bio-emerald);
+    font-weight: 700;
+    box-shadow: 0 0 14px rgba(78, 204, 163, 0.45);
+}
+
+/* ==========================================================================
    ADAPTIVE RESPONSIVE DESIGN SYSTEM (PC, TABLET & SMARTPHONE)
    ========================================================================== */
 
@@ -2165,6 +2375,41 @@ h2 {
         border-radius: 10px;
     }
 
+    /* Drone Video Showcase Responsive (Tablet & Mobile) */
+    .drone-video-showcase {
+        padding: 0.95rem;
+    }
+
+    .drone-showcase-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .drone-hud-overlay {
+        padding: 0.6rem;
+        font-size: 0.65rem;
+    }
+
+    .hud-mode {
+        max-width: 55%;
+        font-size: 0.62rem;
+        padding: 0.15rem 0.45rem;
+    }
+
+    .hud-telemetry {
+        font-size: 0.6rem;
+    }
+
+    .drone-clip-selector {
+        gap: 0.4rem;
+    }
+
+    .drone-clip-btn {
+        font-size: 0.68rem;
+        padding: 0.3rem 0.6rem;
+    }
+
     /* Footer */
     .portfolio-footer {
         padding: 1.5rem 1rem;
@@ -2304,6 +2549,49 @@ h2 {
     .cert-icon {
         margin-top: 0;
         font-size: 1.3rem;
+    }
+
+    /* Drone Video Showcase Mobile (480px) */
+    .drone-video-showcase {
+        padding: 0.75rem;
+    }
+
+    .hud-telemetry {
+        display: none;
+    }
+
+    .hud-mode {
+        max-width: 60%;
+        font-size: 0.58rem;
+    }
+
+    .hud-rec {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.4rem;
+    }
+
+    .drone-sound-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.72rem;
+    }
+
+    .drone-clip-selector {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.35rem;
+        width: 100%;
+    }
+
+    .drone-clip-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.64rem;
+        padding: 0.32rem 0.45rem;
+    }
+
+    .drone-clip-btn:first-child {
+        grid-column: span 2;
     }
 }
 
