@@ -1548,30 +1548,30 @@ h2 {
 
 .signature-box {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 1.25rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px dashed rgba(78, 204, 163, 0.2);
+    margin-top: 1.6rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed rgba(78, 204, 163, 0.25);
+    width: 100%;
 }
 
 .signature-img {
-    height: 52px;
-    width: auto;
-    filter: drop-shadow(0 0 8px rgba(197, 160, 89, 0.35));
-}
-
-.signature-caption strong {
+    width: 100%;
+    max-width: 580px;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(78, 204, 163, 0.28);
+    transition: var(--transition);
     display: block;
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    color: var(--text-main);
 }
 
-.signature-caption span {
-    font-family: var(--font-terminal);
-    font-size: 0.74rem;
-    color: var(--bio-sage);
+.signature-img:hover {
+    box-shadow: 0 6px 30px rgba(78, 204, 163, 0.25);
+    border-color: var(--bio-emerald);
+    transform: translateY(-2px);
 }
 
 /* ==========================================================================
