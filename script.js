@@ -115,13 +115,18 @@ function initBioCanvas() {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    window.addEventListener('resize', () => {
+    function updateCanvasDimensions() {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', updateCanvasDimensions);
+    window.addEventListener('orientationchange', () => {
+        setTimeout(updateCanvasDimensions, 150);
     });
 
     const tadpoles = [];
-    const count = Math.min(width > 768 ? 32 : 18, 45);
+    const count = width > 1024 ? 35 : (width > 600 ? 22 : 14);
 
     class Tadpole {
         constructor() {
