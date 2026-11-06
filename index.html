@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Aøsf | Taxonomia, Ecologia & Automação Ambiental | Biokuri</title>
+    <meta name="description"
+        content="Portfólio de Lucas Aøsf (Biokuri) - Biólogo, Pesquisador e Gestor Ambiental. Especialista em Taxonomia, Sistemática Filogenética, Ecologia Computacional e Automação em R e Python.">
+    <meta name="author" content="Lucas José Alves de Oliveira Simões Ferreira (Lucas Aøsf)">
+    <meta name="keywords" content="Lucas Aosf, Biokuri, Taxonomia, Sistemática, Herpetologia, Ornitologia, Ecologia Computacional, R, Python, GBIF, Bioacústica, Licenciamento Ambiental">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <!-- Google Fonts: Cormorant Garamond (Elegância científica) + Jost (UI moderna) + Roboto Mono (Bio-terminal & Código) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Jost:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1.0">
+</head>
+
+<body>
+    <!-- Top Utility Bar: Language & Audio Ambient Toggle -->
+    <header class="top-nav-bar">
+        <div class="brand-mini">
+            <img src="assets/logo-emblem-creme.png" alt="Biokuri Emblem" class="nav-emblem">
+            <span class="nav-brand-text">BIOKURI <span>// LAB</span></span>
+        </div>
+        <div class="nav-actions">
+            <button id="sound-toggle" class="nav-btn" title="Efeitos Sonoros">
+                <i class="fa-solid fa-volume-high"></i>
+            </button>
+            <div class="lang-toggle-container">
+                <button id="lang-toggle" class="lang-toggle" aria-label="Alterar Idioma">
+                    <span id="lang-pt" class="active">PT</span> | <span id="lang-en">EN</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Interactive Canvas Background (Bio-Matrix & Spores Field) -->
+    <canvas id="bio-canvas" class="bio-canvas"></canvas>
+    <div class="canopy-vignette"></div>
+    <div class="bio-scanline"></div>
+
+    <main class="container">
+        <!-- Interactive Bio-Terminal Header -->
+        <header class="terminal-window glass-panel">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <span class="btn close" title="Fechar"></span>
+                    <span class="btn minimize" title="Minimizar"></span>
+                    <span class="btn maximize" title="Maximizar"></span>
+                </div>
+                <span class="title"><i class="fa-solid fa-dna neon-green-icon"></i> lucas@biokuri:~/taxonomia-sistematica$</span>
+                <span class="terminal-status"><i class="fa-solid fa-satellite-dish"></i> ONLINE</span>
+            </div>
+            <div class="terminal-body" id="terminal-output">
+                <!-- Injected via JavaScript typing sequence -->
+            </div>
+            <!-- Interactive command input for visitors -->
+            <div class="terminal-input-row">
+                <span class="terminal-prompt">biokuri@aosf:~$</span>
+                <input type="text" id="terminal-cli-input" placeholder="Digite um comando (ex: help, papers, taxa, contact)..." autocomplete="off" spellcheck="false">
+            </div>
+        </header>
+
+        <!-- Top Profile & Focus Grid -->
+        <div class="grid-layout">
+            <!-- Profile Card -->
+            <section class="about-section glass-panel fade-in">
+                <div class="section-tag"><i class="fa-solid fa-leaf"></i> <span data-i18n="tag_identity">Identidade & Liderança</span></div>
+                <div class="profile-info">
+                    <div class="profile-img-container">
+                        <img src="assets/lucas-profile.png" alt="Lucas Aøsf - Foto de Perfil" class="profile-img" onerror="this.src='https://github.com/lucasaosf.png'">
+                        <div class="profile-badge-crbio" title="Registro Profissional">CRBio 127233/01-D</div>
+                    </div>
+                    <div class="bio">
+                        <div class="company-badge">
+                            <img src="assets/logo-biokuri-clara.png" alt="Biokuri Soluções Ambientais" class="biokuri-logo-inline">
+                        </div>
+                        <h3>Lucas Aøsf</h3>
+                        <p class="subtitle">&lt;Taxonomista · Ecólogo Computacional · Fundador Biokuri&gt;</p>
+                        <p class="description" data-i18n="desc_bio">
+                            Biólogo (UNIFATEA) e Especialista em Gestão Ambiental (UNOPAR), anilhador CEMAVE/ICMBio. Atua há mais de uma década na fronteira entre <strong>Taxonomia & Sistemática Filogenética</strong>, ecologia de campo em todos os biomas e <strong>automação científica em R e Python</strong> para modelagem de biodiversidade.
+                        </p>
+                        
+                        <div class="credential-pills">
+                            <span class="pill"><i class="fa-solid fa-id-card"></i> CRBio-01 Ativo</span>
+                            <span class="pill"><i class="fa-solid fa-dove"></i> Anilhador CEMAVE nº 7723874</span>
+                            <span class="pill"><i class="fa-solid fa-globe"></i> Atuação Nacional</span>
+                        </div>
+
+                        <!-- Social & Academic Badges -->
+                        <div class="socials">
+                            <a href="http://lattes.cnpq.br/3193966103707256" target="_blank" class="social-btn lattes" title="Currículo Lattes CNPq">
+                                <i class="fa-solid fa-graduation-cap"></i> Lattes
+                            </a>
+                            <a href="https://orcid.org/0000-0003-3337-2137" target="_blank" class="social-btn orcid" title="ORCID ID">
+                                <i class="fa-brands fa-orcid"></i> ORCID
+                            </a>
+                            <a href="https://www.researchgate.net/profile/Lucas-Aosf" target="_blank" class="social-btn researchgate" title="ResearchGate">
+                                <i class="fa-brands fa-researchgate"></i> ResearchGate
+                            </a>
+                            <a href="https://www.linkedin.com/in/lucas-aosf-307922189" target="_blank" class="social-btn linkedin" title="LinkedIn">
+                                <i class="fa-brands fa-linkedin"></i> LinkedIn
+                            </a>
+                            <a href="https://github.com/lucasaosf" target="_blank" class="social-btn github" title="GitHub">
+                                <i class="fa-brands fa-github"></i> GitHub
+                            </a>
+                            <a href="https://instagram.com/lucas_aosf" target="_blank" class="social-btn instagram" title="Instagram">
+                                <i class="fa-brands fa-instagram"></i> @lucas_aosf
+                            </a>
+                            <a href="mailto:lucasaosf@gmail.com" class="social-btn email" title="Enviar E-mail">
+                                <i class="fa-solid fa-envelope"></i> E-mail
+                            </a>
+                            <a href="https://wa.me/5512991821729" target="_blank" class="social-btn whatsapp" title="WhatsApp Direto">
+                                <i class="fa-brands fa-whatsapp"></i> (12) 99182-1729
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Focus & Expertise -->
+            <section class="focus-section glass-panel fade-in">
+                <h2><i class="fa-solid fa-compass-drafting neon-green-icon"></i> <span data-i18n="header_focus">Atuação & Foco Central</span></h2>
+                <p class="section-intro" data-i18n="intro_focus">
+                    Integração pioneira entre o rigor morfológico da taxonomia tradicional e algoritmos modernos de análise biológica.
+                </p>
+                <div class="focus-grid">
+                    <div class="focus-item highlight-box">
+                        <div class="focus-icon"><i class="fa-solid fa-frog"></i></div>
+                        <div class="focus-content">
+                            <h4 data-i18n="focus_taxo_title">Taxonomia & Sistemática (Foco Primário)</h4>
+                            <p data-i18n="focus_taxo_desc">Diagnose de herpetofauna e ornitofauna, análise morfológica, bioacústica de vocalizações, chaves dicotômicas, clados crípticos (ex: complexo <em>Bothrops atrox</em>) e redescobertas de táxons históricos.</p>
+                        </div>
+                    </div>
+
+                    <div class="focus-item">
+                        <div class="focus-icon"><i class="fa-brands fa-r-project"></i></div>
+                        <div class="focus-content">
+                            <h4 data-i18n="focus_prog_title">Ecologia Computacional & Programação em R</h4>
+                            <p data-i18n="focus_prog_desc">Pipelines avançados para mineração do GBIF (Global Biodiversity Information Facility), análise estatística multivariada de comunidades faunísticas, bioestatística e modelagem ecológica.</p>
+                        </div>
+                    </div>
+
+                    <div class="focus-item">
+                        <div class="focus-icon"><i class="fa-solid fa-robot"></i></div>
+                        <div class="focus-content">
+                            <h4 data-i18n="focus_auto_title">Automação de Relatórios & Dados de Campo</h4>
+                            <p data-i18n="focus_auto_desc">Scripts em Python e R para higienização e tratamento de matrizes ecológicas, cálculo automático de índices faunísticos e confecção automatizada de relatórios para EIA/RIMA e laudos CETESB.</p>
+                        </div>
+                    </div>
+
+                    <div class="focus-item">
+                        <div class="focus-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                        <div class="focus-content">
+                            <h4 data-i18n="focus_apps_title">Engenharia de Softwares de Campo (PWA)</h4>
+                            <p data-i18n="focus_apps_desc">Idealizador e arquiteto de PWAs como a <strong>Caderneta de Campo</strong> (georreferenciamento offline, listas de Mackinnon, exportação instantânea Excel) e <strong>Cubagem Florestal Smalian</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Metrics & Field Impact Counter -->
+        <section class="metrics-strip glass-panel fade-in">
+            <div class="metric-item">
+                <span class="metric-number" data-target="10">10+</span>
+                <span class="metric-label" data-i18n="metric_years">Anos em Campo & Taxonomia</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-number" data-target="5">5+</span>
+                <span class="metric-label" data-i18n="metric_papers">Artigos Científicos & Livros</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-number" data-target="25">25+</span>
+                <span class="metric-label" data-i18n="metric_projects">Empreendimentos Atendidos</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-number" data-target="4">4</span>
+                <span class="metric-label" data-i18n="metric_biomes">Biomas Brasileiros Amostrados</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-number" data-target="100">100%</span>
+                <span class="metric-label" data-i18n="metric_passion">Rigor Metodológico & Conservação</span>
+            </div>
+        </section>
+
+        <!-- Tech & Science Stack Section -->
+        <section class="tech-section glass-panel fade-in">
+            <h2><i class="fa-solid fa-microscope neon-green-icon"></i> <span data-i18n="header_stack">Bio-Tech & Scientific Stack</span></h2>
+            <p class="section-intro" data-i18n="intro_stack">Ferramentas de computação, protocolos de amostragem zoológica e frameworks de análise ambiental aplicados rotineiramente.</p>
+            
+            <div class="badges-categorized">
+                <div class="stack-group">
+                    <span class="group-title"><i class="fa-solid fa-code"></i> <span data-i18n="stack_prog">Linguagens & Ecossistema Dev</span></span>
+                    <div class="badges-grid">
+                        <span class="badge r-lang"><i class="fa-brands fa-r-project"></i> R (Tidyverse, Vegan, Sp)</span>
+                        <span class="badge python"><i class="fa-brands fa-python"></i> PYTHON (Pandas, Automation)</span>
+                        <span class="badge pwa"><i class="fa-brands fa-js"></i> JAVASCRIPT & PWA</span>
+                        <span class="badge html5"><i class="fa-brands fa-html5"></i> HTML5 / CSS3 MODERNO</span>
+                        <span class="badge git"><i class="fa-brands fa-git-alt"></i> GIT & GITHUB</span>
+                    </div>
+                </div>
+
+                <div class="stack-group">
+                    <span class="group-title"><i class="fa-solid fa-chart-line"></i> <span data-i18n="stack_bio">Ciência de Dados & Biodiversidade</span></span>
+                    <div class="badges-grid">
+                        <span class="badge gbif"><i class="fa-solid fa-database"></i> GBIF API & DATA MINING</span>
+                        <span class="badge acoustic"><i class="fa-solid fa-wave-square"></i> BIOACÚSTICA & RAVEN PRO</span>
+                        <span class="badge qgis"><i class="fa-solid fa-map-location-dot"></i> QGIS & GEOPROCESSAMENTO</span>
+                        <span class="badge stats"><i class="fa-solid fa-chart-pie"></i> BIOESTATÍSTICA MULTIVARIADA</span>
+                        <span class="badge excel"><i class="fa-solid fa-file-excel"></i> EXCELJS & SPREADSHEET AUTOMATION</span>
+                    </div>
+                </div>
+
+                <div class="stack-group">
+                    <span class="group-title"><i class="fa-solid fa-paw"></i> <span data-i18n="stack_field">Amostragem Faunística & Licenciamento</span></span>
+                    <div class="badges-grid">
+                        <span class="badge methods"><i class="fa-solid fa-socks"></i> PITFALL & ARMASILHAS (SHERMAN/TOMAHAWK)</span>
+                        <span class="badge mistnet"><i class="fa-solid fa-feather"></i> REDES DE NEBLINA & ANILHAMENTO</span>
+                        <span class="badge mackinnon"><i class="fa-solid fa-binoculars"></i> TRANSECTOS & LISTAS DE MACKINNON</span>
+                        <span class="badge cameras"><i class="fa-solid fa-camera"></i> CAMERA TRAPS & GRAVADORES XPRIZE</span>
+                        <span class="badge eia"><i class="fa-solid fa-file-shield"></i> EIA/RIMA, RAP & LAUDOS CETESB</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Biological Scan / Projects Unlocker -->
+        <section class="projects-section glass-panel fade-in" id="projects-section">
+            <div class="section-header-row">
+                <h2><i class="fa-solid fa-flask-vial neon-green-icon"></i> <span data-i18n="header_projects">Soluções Desenvolvidas, Softwares & Labs</span></h2>
+                <div class="projects-filter-bar">
+                    <button class="filter-btn active" data-filter="all" data-i18n="filter_all">Todos</button>
+                    <button class="filter-btn" data-filter="software" data-i18n="filter_software">Softwares & PWAs</button>
+                    <button class="filter-btn" data-filter="scripts" data-i18n="filter_scripts">Scripts & Automação</button>
+                    <button class="filter-btn" data-filter="science" data-i18n="filter_science">Pesquisa & Ecologia</button>
+                </div>
+            </div>
+
+            <div class="projects-wrapper">
+                <!-- Trigger Button inspired by Marcos's _INITIATE_HACK -->
+                <div id="hack-interface" class="hack-interface">
+                    <button id="btn-hack" class="cyber-button bio-button">
+                        <i class="fa-solid fa-dna"></i> <span data-i18n="btn_scan">_INICIAR_VARREDURA_TAXONÔMICA</span>
+                    </button>
+                    <div id="mini-terminal" class="mini-terminal" style="display: none;">
+                        <!-- Javascript will inject biological scan sequence here -->
+                    </div>
+                </div>
+
+                <!-- Projects Grid (Unlocked after button or directly viewable) -->
+                <div id="projects-content" class="projects-grid locked-content">
+                    
+                    <!-- Projeto 1: Caderneta de Campo PWA -->
+                    <div class="project-card" data-category="software">
+                        <div class="project-img-wrapper">
+                            <img src="assets/caderneta-preview.png" alt="Caderneta de Campo Preview" onerror="this.src='https://lucasaosf.github.io/caderneta-de-campo/apple-touch-icon.png'">
+                            <div class="project-overlay">
+                                <a href="https://lucasaosf.github.io/caderneta-de-campo/" class="btn-view" target="_blank">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="btn_open_app">Abrir App</span>
+                                </a>
+                                <a href="https://github.com/lucasaosf/caderneta-de-campo" class="btn-code" target="_blank">
+                                    <i class="fa-brands fa-github"></i> <span data-i18n="btn_code">Código</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="card-meta">
+                                <span class="badge-type pwa"><i class="fa-solid fa-mobile-screen"></i> Progressive Web App</span>
+                                <span class="badge-status live">LIVE</span>
+                            </div>
+                            <h3>Caderneta de Campo</h3>
+                            <p data-i18n="desc_caderneta">Aplicativo mobile PWA completo para levantamento e monitoramento de fauna e flora em campo. Funciona 100% offline, com marcação de coordenadas GPS, listas de Mackinnon, contagem de abundância, histórico de espécies e exportação direta para planilhas Excel estruturadas.</p>
+                            <div class="project-tags">
+                                <span>PWA Offline-First</span>
+                                <span>JavaScript ES6+</span>
+                                <span>ExcelJS</span>
+                                <span>Geolocalização</span>
+                                <span>Biometria</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 2: Cubagem Florestal Smalian Pro -->
+                    <div class="project-card" data-category="software">
+                        <div class="project-img-wrapper">
+                            <img src="assets/cubagem-preview.png" alt="Cubagem Florestal Preview" onerror="this.src='https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=600&auto=format&fit=crop'">
+                            <div class="project-overlay">
+                                <a href="https://lucasaosf.github.io/cubagem-florestal/" class="btn-view" target="_blank">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> <span data-i18n="btn_open_app">Abrir App</span>
+                                </a>
+                                <a href="https://github.com/lucasaosf/cubagem-florestal" class="btn-code" target="_blank">
+                                    <i class="fa-brands fa-github"></i> <span data-i18n="btn_code">Código</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="card-meta">
+                                <span class="badge-type forestry"><i class="fa-solid fa-tree"></i> Engenharia & Gestão</span>
+                                <span class="badge-status live">LIVE</span>
+                            </div>
+                            <h3>Cubagem Florestal Smalian</h3>
+                            <p data-i18n="desc_cubagem">Ferramenta digital de alta precisão para cálculo volumétrico de toras de madeira pelo método rigoroso de Smalian. Inclui banco de dados dendrológico de espécies nativas, interface otimizada para campo e geração automática de laudos e planilhas técnicas.</p>
+                            <div class="project-tags">
+                                <span>Dendrometria</span>
+                                <span>Smalian Formula</span>
+                                <span>JavaScript</span>
+                                <span>Relatórios Técnicos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 3: M_moreirae_distribution (Biogeografia & GBIF) -->
+                    <div class="project-card" data-category="scripts">
+                        <div class="project-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop" alt="Melanophryniscus moreirae Pipeline">
+                            <div class="project-overlay">
+                                <a href="https://github.com/lucasaosf/M_moreirae_distribution" class="btn-code" target="_blank">
+                                    <i class="fa-brands fa-github"></i> <span data-i18n="btn_view_script">Ver Script R</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="card-meta">
+                                <span class="badge-type r-script"><i class="fa-brands fa-r-project"></i> Pipeline R & GBIF</span>
+                                <span class="badge-status accepted">Artigo 2026</span>
+                            </div>
+                            <h3>M_moreirae_distribution</h3>
+                            <p data-i18n="desc_moreirae">Pipeline em linguagem R para mineração automatizada de ocorrências georreferenciadas na base global do GBIF do sapinho-da-serra (<em>Melanophryniscus moreirae</em>). Integração de dados de ciência cidadã com modelagem biogeográfica que fundamentou artigo aceito em periódico internacional.</p>
+                            <div class="project-tags">
+                                <span>Linguagem R</span>
+                                <span>rgbif</span>
+                                <span>Biogeografia</span>
+                                <span>Ciência Cidadã</span>
+                                <span>Taxonomia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 4: Consultoria Ambiental Automation Framework -->
+                    <div class="project-card" data-category="scripts">
+                        <div class="project-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop" alt="Consultoria Ambiental Preview">
+                            <div class="project-overlay">
+                                <a href="https://github.com/lucasaosf/consultoria_ambiental" class="btn-code" target="_blank">
+                                    <i class="fa-brands fa-github"></i> <span data-i18n="btn_code">Código</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="card-meta">
+                                <span class="badge-type automation"><i class="fa-solid fa-gears"></i> Automação Ambiental</span>
+                                <span class="badge-status production">Produção</span>
+                            </div>
+                            <h3>Consultoria Ambiental Data Hub</h3>
+                            <p data-i18n="desc_consultoria">Framework de scripts e automação para ingestão e conversão de dados brutos coletados em campo para matrizes consolidadas. Agiliza a produção de diagnósticos para EIA/RIMA, gerando curvas de acumulação de espécies, índices ecológicos e tabelas taxonômicas.</p>
+                            <div class="project-tags">
+                                <span>R & Python</span>
+                                <span>EIA/RIMA</span>
+                                <span>Índices Ecológicos</span>
+                                <span>ETL Ambiental</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 5: IMBio - Análises Ecológicas Parque das Nascentes (COP30) -->
+                    <div class="project-card" data-category="science">
+                        <div class="project-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?q=80&w=600&auto=format&fit=crop" alt="Parque das Nascentes IMBio Preview">
+                            <div class="project-overlay">
+                                <a href="https://github.com/lucasaosf/IMBio---Instituto-de-Manejo-da-Biodiversidade" class="btn-code" target="_blank">
+                                    <i class="fa-brands fa-github"></i> <span data-i18n="btn_code">Código</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="card-meta">
+                                <span class="badge-type cop"><i class="fa-solid fa-leaf"></i> COP30 Conferência ONU</span>
+                                <span class="badge-status presented">Apresentado</span>
+                            </div>
+                            <h3>IMBio: Restauração & Clima (COP30)</h3>
+                            <p data-i18n="desc_imbio">Script de análise temporal de dados ecológicos (2019-2024) comprovando que o reflorestamento reduziu a temperatura de superfície e elevou a riqueza da avifauna de 42 para 131 espécies no Parque das Nascentes (Guaratinguetá/SP), apresentado na 30ª Conferência do Clima da ONU.</p>
+                            <div class="project-tags">
+                                <span>R Multivariado</span>
+                                <span>Avifauna</span>
+                                <span>Restauração Florestal</span>
+                                <span>Microclima</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projeto 6: XPRIZE Rainforest Bioacoustics Deployment -->
+                    <div class="project-card" data-category="science">
+                        <div class="project-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1516214104703-d870798883c5?q=80&w=600&auto=format&fit=crop" alt="XPRIZE Bioacoustics Preview">
+                            <div class="project-overlay">
+                                <span class="btn-badge"><i class="fa-solid fa-award"></i> Brazilian Team XPRIZE</span>
+                            </div>
+                        </div>
+                        <div class="project-info">
+                            <div class="card-meta">
+                                <span class="badge-type xprize"><i class="fa-solid fa-ear-listen"></i> Bioacústica Avançada</span>
+                                <span class="badge-status global">Global Competition</span>
+                            </div>
+                            <h3>Brazilian Team XPRIZE Rainforest</h3>
+                            <p data-i18n="desc_xprize">Pesquisador integrante da equipe brasileira na competição global XPRIZE Rainforest (Projeto 104437). Responsável pela instalação e calibração de gravadores autônomos para captação contínua e análise bioacústica de vocalizações em floresta tropical.</p>
+                            <div class="project-tags">
+                                <span>Bioacústica</span>
+                                <span>Gravadores Autônomos</span>
+                                <span>XPRIZE</span>
+                                <span>Mata Atlântica</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Scientific Publications & Discoveries Section (Pilar Central de Taxonomia) -->
+        <section class="publications-section glass-panel fade-in">
+            <div class="section-title-wrap">
+                <h2><i class="fa-solid fa-book-bookmark neon-green-icon"></i> <span data-i18n="header_publications">Produção Bibliográfica & Contribuições Taxonômicas</span></h2>
+                <span class="badge-peer"><i class="fa-solid fa-circle-check"></i> Peer-Reviewed</span>
+            </div>
+            <p class="section-intro" data-i18n="intro_pubs">Artigos completos em periódicos científicos internacionais e nacionais, com foco em sistemática, taxonomia de répteis e anfíbios, história natural e redescobertas.</p>
+
+            <div class="papers-grid">
+                <!-- Paper 1: Redescoberta Bothrops bilineatus -->
+                <div class="paper-card highlight-paper">
+                    <div class="paper-badge-strip">
+                        <span class="paper-journal">Revista Latinoamericana de Herpetología • 2026</span>
+                        <span class="paper-status discovery"><i class="fa-solid fa-sparkles"></i> Redescoberta Taxonômica</span>
+                    </div>
+                    <h4>After three decades, the rediscovery of <em>Bothrops bilineatus</em> (Squamata, Viperidae) in Espírito Santo State, southeastern Brazil</h4>
+                    <p class="paper-authors">Mathielo, R. S.; Martins, B. C.; <strong>Aosf, L.</strong>; Castro, T. M.; Monico, A. T.</p>
+                    <p class="paper-abstract" data-i18n="abstract_bothrops">Registro e confirmação morfológica/taxonômica da víbora-verde após 30 anos sem ocorrências documentadas no Espírito Santo, preenchendo lacunas críticas de biogeografia e conservação da Mata Atlântica.</p>
+                    <div class="paper-footer">
+                        <span class="paper-doi">DOI: 10.22201/fc.25942158e.2026.2.1666</span>
+                        <a href="https://doi.org/10.22201/fc.25942158e.2026.2.1666" target="_blank" class="paper-link"><i class="fa-solid fa-external-link"></i> Ver Artigo</a>
+                    </div>
+                </div>
+
+                <!-- Paper 2: Expansão Melanophryniscus moreirae -->
+                <div class="paper-card">
+                    <div class="paper-badge-strip">
+                        <span class="paper-journal">Reptiles & Amphibians • 2026</span>
+                        <span class="paper-status accepted-tag"><i class="fa-solid fa-check-double"></i> Aceito para Publicação</span>
+                    </div>
+                    <h4>Update and expansion of the distribution of the Maldonado Redbelly Toad, <em>Melanophryniscus moreirae</em> Gallardo 1966, in Southeast Brazil, using citizen science data</h4>
+                    <p class="paper-authors"><strong>Aosf, L.</strong>; Intir, M. D. M.; Azevedo, T. M.; Menezes, L. B.; Moroti, M. T.</p>
+                    <p class="paper-abstract" data-i18n="abstract_moreirae">Expansão e atualização dos limites de distribuição geográfica do sapinho-da-serra (espécie endêmica de altitude), aliando curadoria taxonômica a dados massivos de ciência cidadã validados.</p>
+                    <div class="paper-footer">
+                        <span class="paper-tag-meta">Reptiles & Amphibians Journal</span>
+                        <a href="https://github.com/lucasaosf/M_moreirae_distribution" target="_blank" class="paper-link"><i class="fa-solid fa-code-branch"></i> Pipeline R</a>
+                    </div>
+                </div>
+
+                <!-- Paper 3: Tanatose Bothrops atrox clade -->
+                <div class="paper-card">
+                    <div class="paper-badge-strip">
+                        <span class="paper-journal">Reptiles & Amphibians • 2026</span>
+                        <span class="paper-status behavior"><i class="fa-solid fa-eye"></i> Comportamento & Sistemática</span>
+                    </div>
+                    <h4>New records of death feigning in two species of <em>Bothrops</em> Wagler, 1824 (Squamata: Viperidae) belonging to the atrox clade</h4>
+                    <p class="paper-authors"><strong>Aosf, L.</strong>; Martins, B.; Mathielo, R. S.</p>
+                    <p class="paper-abstract" data-i18n="abstract_feigning">Primeiros relatos detalhados de tanatose (simulação de morte) em serpentes do clado <em>Bothrops atrox</em>, discutindo implicações etológicas e caracteres comportamentais em viperídeos neotropicais.</p>
+                    <div class="paper-footer">
+                        <span class="paper-tag-meta">v. 33, p. 1–3</span>
+                        <span class="paper-tag-meta">Herpetologia Neotropical</span>
+                    </div>
+                </div>
+
+                <!-- Paper 4: Predação Hoplias x Leptodactylus paranaru -->
+                <div class="paper-card">
+                    <div class="paper-badge-strip">
+                        <span class="paper-journal">Herpetologia Brasileira • 2026</span>
+                        <span class="paper-status natural-history"><i class="fa-solid fa-leaf"></i> História Natural</span>
+                    </div>
+                    <h4>First record of predation by <em>Hoplias malabaricus</em> (Characiformes: Erythrinidae) on <em>Leptodactylus paranaru</em> (Anura: Leptodactylidae) in the Atlantic Forest</h4>
+                    <p class="paper-authors"><strong>Aosf, L.</strong>; Oliveira, T. A. S.</p>
+                    <p class="paper-abstract" data-i18n="abstract_hoplias">Primeiro registro formal de predação da rã <em>Leptodactylus paranaru</em> pela traíra, documentando interações tróficas aquático-terrestres em áreas ciliares de Mata Atlântica.</p>
+                    <div class="paper-footer">
+                        <span class="paper-tag-meta">Herpetologia Brasileira, v. 15, p. 1</span>
+                    </div>
+                </div>
+
+                <!-- Paper 5: Predação Boana pardalis x Erythrolamprus miliaris -->
+                <div class="paper-card">
+                    <div class="paper-badge-strip">
+                        <span class="paper-journal">Herpetologia Brasileira • 2022</span>
+                        <span class="paper-status doi-tag">DOI Documentado</span>
+                    </div>
+                    <h4>First record of predation of the leopard tree frog <em>Boana pardalis</em> (Anura: Hylidae) by the water snake <em>Erythrolamprus miliaris</em> (Squamata: Dipsadidae)</h4>
+                    <p class="paper-authors">Ferreira, L. J. A. O. S. (<strong>Lucas Aosf</strong>); Rotenberg, E. L.; Muscat, E.; Moroti, M. T.</p>
+                    <p class="paper-abstract" data-i18n="abstract_boana">Registro de história natural e predação de anfíbio anuro arbóreo de grande porte por cobra d'água na Mata Atlântica costeira.</p>
+                    <div class="paper-footer">
+                        <span class="paper-doi">DOI: 10.5281/zenodo.6867850</span>
+                        <a href="https://doi.org/10.5281/zenodo.6867850" target="_blank" class="paper-link"><i class="fa-solid fa-external-link"></i> Ver Zenodo</a>
+                    </div>
+                </div>
+
+                <!-- Paper 6: Guia Iconográfico ICMBio APA Mananciais -->
+                <div class="paper-card">
+                    <div class="paper-badge-strip">
+                        <span class="paper-journal">ICMBio • 2025</span>
+                        <span class="paper-status book"><i class="fa-solid fa-camera"></i> Acervo Iconográfico</span>
+                    </div>
+                    <h4>Guia Iconográfico “APA Mananciais Rio Paraíba do Sul – Trecho Paulista”</h4>
+                    <p class="paper-authors">Torrubia, R.; <strong>Aosf, L.</strong></p>
+                    <p class="paper-abstract" data-i18n="abstract_guia">Contribuição fotográfica integral e identificação taxonômica da herpetofauna: fotografias de alta resolução de anfíbios e répteis que compõem quase todo o acervo do guia oficial do ICMBio.</p>
+                    <div class="paper-footer">
+                        <span class="paper-tag-meta">Publicação Oficial ICMBio</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Professional Experience & Major Environmental Projects -->
+        <section class="experience-section glass-panel fade-in">
+            <h2><i class="fa-solid fa-briefcase neon-green-icon"></i> <span data-i18n="header_experience">Experiência Profissional & Empreendimentos</span></h2>
+            <p class="section-intro" data-i18n="intro_experience">Responsabilidade técnica e consultoria especializada em infraestrutura de grande porte em todo o Brasil.</p>
+
+            <div class="timeline">
+                <!-- Caruso -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h4>Biólogo Analista Ambiental</h4>
+                            <span class="timeline-company">Caruso Soluções Ambientais & Tecnológicas</span>
+                            <span class="timeline-date">Jul. 2026 – Atual • Paraná & Híbrido</span>
+                        </div>
+                        <p data-i18n="exp_caruso">Responsável pela execução das atividades de campo em monitoramento ambiental (fauna, ruído ambiental e qualidade da água), planejamento de campanhas, aplicação metodológica, inventários, fichas de campo e apoio a relatórios técnicos.</p>
+                        <div class="timeline-tags">
+                            <span>Monitoramento Integrado</span>
+                            <span>Qualidade da Água</span>
+                            <span>Ruído Ambiental</span>
+                            <span>Fauna & Flora</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engpacto -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h4>Biólogo Herpetólogo · Responsável Técnico (RT)</h4>
+                            <span class="timeline-company">Engpacto Soluções Ambientais</span>
+                            <span class="timeline-date">2023 – Atual • SP · PR</span>
+                        </div>
+                        <p data-i18n="exp_engpacto">RT pelos grupos de herpetofauna e quiropterofauna na duplicação da <strong>Rodovia dos Tamoios (Trecho Serra)</strong>, Contorno Sul de Caraguatatuba e São Sebastião, duplicação de rodovias no Paraná, EIA/RIMA do Complexo Logístico Tatu (Cubatão/SP) e extensão da <strong>Rodovia Carvalho Pinto</strong> (Taubaté–Aparecida).</p>
+                        <div class="timeline-tags">
+                            <span>Rodovia dos Tamoios</span>
+                            <span>Carvalho Pinto</span>
+                            <span>Quirópteros & Herpeto</span>
+                            <span>EIA/RIMA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMBio -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h4>Biólogo / Pesquisador</h4>
+                            <span class="timeline-company">IMBio — Instituto de Manejo da Biodiversidade</span>
+                            <span class="timeline-date">2020 – Atual • Vale do Paraíba & Litoral Norte</span>
+                        </div>
+                        <p data-i18n="exp_imbio">Pesquisas com fauna na Serra da Mantiqueira, Serra da Bocaina e Serra do Mar. Linhas de investigação em bioacústica e padrões de vocalização, taxonomia, evolução, sistemática filogenética, biogeografia e programas de educação ambiental.</p>
+                        <div class="timeline-tags">
+                            <span>Sistemática Filogenética</span>
+                            <span>Mantiqueira & Bocaina</span>
+                            <span>Bioacústica</span>
+                            <span>Fauna de Altitude</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EcosBrasil -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h4>Biólogo Herpetólogo / Mastozoólogo</h4>
+                            <span class="timeline-company">EcosBrasil Consultoria e Planejamento Ambiental</span>
+                            <span class="timeline-date">2024 – 2026 • MS · SP · SC</span>
+                        </div>
+                        <p data-i18n="exp_ecos">Monitoramento de herpetofauna e mastofauna para a instalação da <strong>Fábrica de Celulose Arauco</strong> (Inocência/MS), celulose em Bataguassu/MS, <strong>Cargill</strong> no MS, portos de areia (Pindamonhangaba, Aparecida e Realmix/Boituva) e empreendimentos industriais.</p>
+                        <div class="timeline-tags">
+                            <span>Fábrica de Celulose Arauco</span>
+                            <span>Cargill</span>
+                            <span>Mastozoologia</span>
+                            <span>Herpetologia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cayman Ambiental -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h4>Biólogo de Campo / Herpetólogo</h4>
+                            <span class="timeline-company">Cayman Ambiental Science & Environment</span>
+                            <span class="timeline-date">2025 – 2026 • Goiás</span>
+                        </div>
+                        <p data-i18n="exp_cayman">Responsável técnico por mastofauna e herpetofauna no monitoramento de fauna da <strong>PCH Verde 2</strong> (Rio Verde/GO) e monitoramento de herpetofauna na <strong>Mineradora Massari</strong>.</p>
+                        <div class="timeline-tags">
+                            <span>PCH Verde 2</span>
+                            <span>Mineradora Massari</span>
+                            <span>Hidrelétricas</span>
+                            <span>Cerrado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Linhas de Transmissão & Outros -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h4>Biólogo Ornitólogo, Herpetólogo e Mastozoólogo</h4>
+                            <span class="timeline-company">Juma, Cedro & Elementus Soluções Ambientais</span>
+                            <span class="timeline-date">2022 – 2025 • SP · RJ · PA · MG · GO</span>
+                        </div>
+                        <p data-i18n="exp_lt">Monitoramento de aves suscetíveis à colisão em Linhas de Transmissão de alta tensão (LT 500 kV Estreito–Cachoeira Paulista, LT 230 kV Itumbiara–Paranaíba, LT Fernão Dias, LT Marituba–Tucuruí no bioma Amazônia), ornitofauna portuária no Porto de São Sebastião/SP e parque solar em Janaúba/MG (Caatinga).</p>
+                        <div class="timeline-tags">
+                            <span>LT 500 kV</span>
+                            <span>Porto de São Sebastião</span>
+                            <span>Amazônia & Caatinga</span>
+                            <span>Colisão de Aves</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Formation & Professional Accreditations -->
+        <section class="certifications-section glass-panel fade-in">
+            <h2><i class="fa-solid fa-graduation-cap neon-green-icon"></i> <span data-i18n="header_certs">Formação Acadêmica & Credenciais</span></h2>
+
+            <!-- Academic Education -->
+            <h3 class="cert-subtitle"><i class="fa-solid fa-building-columns"></i> <span data-i18n="subtitle_academic">Títulos Acadêmicos</span></h3>
+            <div class="certs-grid">
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-award"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">UNOPAR (Universidade Norte do Paraná) • 2024 – 2025</span>
+                        <h4 data-i18n="acad_pos_title">Especialização em Gestão Ambiental (Pós-Graduação Lato Sensu)</h4>
+                        <p data-i18n="acad_pos_desc">Ênfase em governança ambiental, instrumentos de planejamento territorial, mitigação de impactos e compliance regulatório de grandes empreendimentos.</p>
+                        <span class="cert-status completed" data-i18n="status_pos">Pós-Graduação</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-dna"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">UNIFATEA (Centro Universitário Teresa D’Ávila) • 2016 – 2019</span>
+                        <h4 data-i18n="acad_grad_title">Graduação — Licenciatura em Ciências Biológicas</h4>
+                        <p data-i18n="acad_grad_desc">TCC com mérito acadêmico: “Levantamento da Ornitofauna do Parque Ecológico do Taboão”, Lorena/SP. Bolsista de pesquisa institucional e bolsista PIBID-CAPES de iniciação à docência.</p>
+                        <span class="cert-status completed" data-i18n="status_grad">Graduação Superior</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Official Licenses & Certifications -->
+            <h3 class="cert-subtitle mt-4"><i class="fa-solid fa-certificate"></i> <span data-i18n="subtitle_licenses">Registros Oficiais & Qualificações Técnicas</span></h3>
+            <div class="certs-grid">
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-id-card"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">Conselho Regional de Biologia • 01ª Região</span>
+                        <h4>Registro Profissional CRBio-01 nº 127233/01-D</h4>
+                        <p data-i18n="cert_crbio_desc">Biólogo registrado e devidamente habilitado para assunção de Anotações de Responsabilidade Técnica (ART) e laudos de fauna em âmbito nacional.</p>
+                        <span class="cert-status completed" data-i18n="status_active">Ativo & Regular</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-ring"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">CEMAVE / ICMBio • Ministério do Meio Ambiente</span>
+                        <h4>Anilhador Júnior Credenciado CEMAVE nº 7723874</h4>
+                        <p data-i18n="cert_cemave_desc">Credencial oficial do Centro Nacional de Pesquisa e Conservação de Aves Silvestres para anilhamento, captura, biometria e marcação de avifauna.</p>
+                        <span class="cert-status completed" data-i18n="status_official_cert">Credencial Oficial</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-skull-crossbones"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">EEAR (Escola de Especialistas de Aeronáutica) • 2026</span>
+                        <h4>Instrutor: Prevenção & Manejo de Peçonhentos e Jacarés</h4>
+                        <p data-i18n="cert_eear_desc">Capacitação teórica e treinamento de segurança para militares e especialistas em contenção física de répteis peçonhentos e crocodilianos.</p>
+                        <span class="cert-status completed" data-i18n="status_instructor">Docência / Treinamento</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">WAITA, AVISTAR & Tadpole Evolution Symposium</span>
+                        <h4>Simpósios Internacionais & Especialização</h4>
+                        <p data-i18n="cert_symp_desc">Participação no II International Symposium on Tadpole Evolution (2024), AVISTAR (2024), análise de muda em aves e cursos avançados de herpetologia.</p>
+                        <span class="cert-status completed" data-i18n="status_continuous">Educação Continuada</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats & Naturalist Quote Section -->
+        <div class="grid-layout stats-grid">
+            <section class="stats-section glass-panel fade-in">
+                <h2><i class="fa-solid fa-code-commit neon-green-icon"></i> <span data-i18n="header_stats">GitHub & Atividade Aberta</span></h2>
+                <div class="github-stats-container">
+                    <img src="https://github-readme-stats.vercel.app/api?username=lucasaosf&show_icons=true&theme=dark&hide_border=true&bg_color=0E2515&title_color=B2C2A5&text_color=F2EBDD&icon_color=4ECCA3"
+                        alt="Estatísticas do GitHub de Lucas Aøsf" onerror="this.style.display='none'">
+                    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=lucasaosf&layout=compact&theme=dark&hide_border=true&bg_color=0E2515&title_color=B2C2A5&text_color=F2EBDD"
+                        alt="Principais Linguagens do GitHub" onerror="this.style.display='none'">
+                </div>
+                <div class="github-repo-links">
+                    <a href="https://github.com/lucasaosf" target="_blank" class="cyber-btn-outline">
+                        <i class="fa-brands fa-github"></i> <span data-i18n="btn_explore_gh">Explorar Todos os Repositórios (@lucasaosf)</span>
+                    </a>
+                </div>
+            </section>
+
+            <section class="quote-section glass-panel fade-in">
+                <h2><i class="fa-solid fa-compass neon-green-icon"></i> <span data-i18n="header_manifesto">Manifesto Científico</span></h2>
+                <blockquote class="bio-quote">
+                    "Na sistemática reside a chave para compreender não apenas quem compartilha o planeta conosco, mas a própria tessitura da evolução. Quando aliamos a taxonomia às ferramentas computacionais modernas, damos voz e escala à conservação da biodiversidade."
+                    <cite>— Lucas Aøsf, Fundador da Biokuri</cite>
+                </blockquote>
+
+                <div class="signature-box">
+                    <img src="assets/assinatura-lucas.png" alt="Assinatura Lucas Aøsf Biokuri" class="signature-img" onerror="this.style.display='none'">
+                    <div class="signature-caption">
+                        <strong>Lucas José Alves de Oliveira Simões Ferreira</strong>
+                        <span>Biólogo · Pesquisador · Gestor Ambiental</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="portfolio-footer glass-panel">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/logo-biokuri-verde.png" alt="Biokuri Logo" class="footer-logo-img">
+                </div>
+                <p data-i18n="footer_text">
+                    Desenvolvido por <strong>Lucas Aøsf</strong> // Biokuri — Soluções Ambientais & Ecologia Computacional
+                </p>
+                <p class="footer-subtext">
+                    Inspirado pela estética cyber-terminal de <a href="https://marcosaosf.github.io/cyberaosf/" target="_blank">MarcosAosf</a> com identidade e engenharia ecológica proprietárias.
+                </p>
+                <div class="footer-copy">
+                    &copy; 2026 Lucas Aøsf · CRBio-01 nº 127233/01-D · Todos os direitos reservados.
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Custom Script -->
+    <script src="script.js?v=1.0"></script>
+</body>
+
+</html>
