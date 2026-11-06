@@ -662,7 +662,7 @@ function initScrollReveal() {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersectEvent || entry.isIntersecting) {
+            if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
         });
@@ -670,7 +670,13 @@ function initScrollReveal() {
         threshold: 0.12
     });
 
-    fadeElements.forEach(el => observer.observe(el));
+    fadeElements.forEach(el => {
+        observer.observe(el);
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+            el.classList.add('visible');
+        }
+    });
 }
 
 /* ==========================================================================
@@ -680,13 +686,13 @@ function initMetricsCounter() {
     const numbers = document.querySelectorAll('.metric-number');
     let triggered = false;
 
-    window.addEventListener('scroll', () => {
+    function checkMetrics() {
         if (triggered) return;
         const strip = document.querySelector('.metrics-strip');
         if (!strip) return;
 
         const rect = strip.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9) {
+        if (rect.top < window.innerHeight * 0.95) {
             triggered = true;
             numbers.forEach(el => {
                 const target = parseInt(el.getAttribute('data-target'), 10) || 10;
@@ -703,7 +709,10 @@ function initMetricsCounter() {
                 }, 40);
             });
         }
-    });
+    }
+
+    window.addEventListener('scroll', checkMetrics, { passive: true });
+    checkMetrics();
 }
 
 /* ==========================================================================
