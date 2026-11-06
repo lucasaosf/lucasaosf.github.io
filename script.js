@@ -158,12 +158,12 @@ function initBioCanvas() {
             mouseY = -1000;
         });
 
-        // Desktop: click in pond zone scatters tadpoles
+        // Desktop: click in pond zone scatters tadpoles with gentle localized ripple
         pondZone.addEventListener('click', (e) => {
             triggerShockwave(e.clientX, e.clientY);
         });
 
-        // Mobile: ONLY reacts to finger touch in this specific area by scattering the tadpoles
+        // Mobile: ONLY reacts to finger touch in this specific area by scattering nearby tadpoles
         pondZone.addEventListener('touchstart', (e) => {
             if (e.touches && e.touches.length > 0) {
                 const touch = e.touches[0];
@@ -180,35 +180,26 @@ function initBioCanvas() {
         }
     }, { passive: true });
 
+    // Localized, gentle droplet shockwave (raio reduzido para dispersão suave e natural)
     function triggerShockwave(x, y) {
         shockwaves.push({
             x: x,
             y: y,
-            radius: 8,
-            maxRadius: 360,
-            speed: 9.0,
-            alpha: 0.95
+            radius: 5,
+            maxRadius: 115, // Raio contido e delicado ao redor do toque
+            speed: 4.6,
+            alpha: 0.90
         });
         setTimeout(() => {
             shockwaves.push({
                 x: x,
                 y: y,
-                radius: 6,
-                maxRadius: 280,
-                speed: 7.0,
-                alpha: 0.65
-            });
-        }, 110);
-        setTimeout(() => {
-            shockwaves.push({
-                x: x,
-                y: y,
                 radius: 4,
-                maxRadius: 190,
-                speed: 5.5,
-                alpha: 0.4
+                maxRadius: 80,
+                speed: 3.4,
+                alpha: 0.55
             });
-        }, 220);
+        }, 85);
     }
 
     const tadpoles = [];
@@ -240,13 +231,16 @@ function initBioCanvas() {
                 this.alpha = Math.random() * 0.22 + 0.36;
             }
 
+            // Metamorfose: cerca de 20% dos girinos de meia-água e superfície já possuem patas posteriores em desenvolvimento (Gosner 36-39)
+            this.hasLegs = !this.isDeep && Math.random() < 0.20;
+
             this.tailLength = this.size * 3.4;
             this.wigglePhase = Math.random() * Math.PI * 2;
             this.wiggleSpeed = Math.random() * 0.14 + 0.16;
             this.turnTimer = Math.floor(Math.random() * 100) + 35;
             this.isGold = Math.random() < 0.18;
 
-            // Pre-computed color strings to avoid 3000 GC allocations per frame!
+            // Pre-computed color strings to avoid GC allocations per frame!
             const aStr = this.alpha.toFixed(2);
             const aFinStr = (this.alpha * 0.38).toFixed(2);
             this.baseColor = this.isGold
@@ -258,7 +252,7 @@ function initBioCanvas() {
         }
 
         update() {
-            // 1. Scatter reaction if hit by shockwave from click/touch
+            // 1. Scatter reaction if hit by shockwave from click/touch (raio e impulso suaves e naturais)
             let scattered = false;
             for (let s = 0; s < shockwaves.length; s++) {
                 const sw = shockwaves[s];
@@ -266,12 +260,14 @@ function initBioCanvas() {
                 const dy = this.y - sw.y;
                 const dist = Math.hypot(dx, dy);
 
-                if (dist < sw.radius + 75 && dist > sw.radius - 40) {
-                    const awayAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.45;
+                // Reage apenas aos girinos dentro da ondulação imediata do dedo/clique
+                if (dist < sw.radius + 26 && dist > sw.radius - 16) {
+                    const awayAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.35;
                     this.angle = awayAngle;
                     this.targetAngle = awayAngle;
-                    this.speed = Math.max(this.speed, 6.5 + Math.random() * 2.8);
-                    this.turnTimer = 35;
+                    // Impulso curto e suave: desloca apenas alguns centímetros sem voar para longe
+                    this.speed = Math.max(this.speed, 2.7 + Math.random() * 1.0);
+                    this.turnTimer = 22;
                     scattered = true;
                     break;
                 }
@@ -283,16 +279,16 @@ function initBioCanvas() {
                 const dy = mouseY - this.y;
                 const dist = Math.hypot(dx, dy);
 
-                if (dist < 420) {
+                if (dist < 400) {
                     const toMouse = Math.atan2(dy, dx);
                     if (dist > 52) {
                         let diff = toMouse - this.angle;
                         while (diff < -Math.PI) diff += Math.PI * 2;
                         while (diff > Math.PI) diff -= Math.PI * 2;
 
-                        const steer = Math.max(0.045, 0.14 * (1 - dist / 420));
+                        const steer = Math.max(0.045, 0.14 * (1 - dist / 400));
                         this.angle += diff * steer;
-                        this.speed = Math.min(this.speed + 0.1, 2.8);
+                        this.speed = Math.min(this.speed + 0.08, 2.6);
                     } else {
                         const orbit = toMouse + Math.PI / 2 + Math.sin(this.wigglePhase) * 0.25;
                         let diff = orbit - this.angle;
@@ -312,8 +308,9 @@ function initBioCanvas() {
             this.y += Math.sin(this.angle) * this.speed;
             this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
 
-            if (this.speed > 2.2) {
-                this.speed *= 0.96;
+            // Desaceleração rápida e suave de volta à velocidade tranquila de nado
+            if (this.speed > 1.7) {
+                this.speed *= 0.93;
             }
 
             // Infinite cyclic wrapping around screen boundaries
@@ -394,6 +391,50 @@ function initBioCanvas() {
             ctx.lineWidth = 1.3;
             ctx.stroke();
 
+            // Patas Posteriores (Metamorfose / Anuran Hind Legs)
+            if (this.hasLegs) {
+                const kick = Math.sin(this.wigglePhase) * (this.size * 0.22);
+                ctx.strokeStyle = this.baseColor;
+                ctx.lineWidth = Math.max(1.3, this.size * 0.24);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                for (let side = -1; side <= 1; side += 2) {
+                    const hipX = -this.size * 0.55;
+                    const hipY = side * (this.size * 0.72);
+
+                    // Articulação do Joelho (fêmur-tibial) projetada para fora e para trás
+                    const kneeX = -this.size * 1.12 + kick * 0.4;
+                    const kneeY = side * (this.size * 1.42 + Math.abs(kick) * 0.25);
+
+                    // Articulação do Tornozelo (tíbio-tarsal) dobrada rente à cauda
+                    const ankleX = -this.size * 1.72 + kick * 0.8;
+                    const ankleY = side * (this.size * 0.84);
+
+                    // Pata e dedos (autopódio com membrana)
+                    const toeX = -this.size * 2.22 + kick * 1.1;
+                    const toeY = side * (this.size * 0.64);
+
+                    // Traçado da perna (fêmur -> tíbia/fíbula -> tarso)
+                    ctx.beginPath();
+                    ctx.moveTo(hipX, hipY);
+                    ctx.lineTo(kneeX, kneeY);
+                    ctx.lineTo(ankleX, ankleY);
+                    ctx.lineTo(toeX, toeY);
+                    ctx.stroke();
+
+                    // Dedinhos natatórios da pata
+                    ctx.lineWidth = Math.max(0.9, this.size * 0.16);
+                    ctx.beginPath();
+                    ctx.moveTo(ankleX, ankleY);
+                    ctx.lineTo(toeX - side * 1.4, toeY - side * (this.size * 0.24));
+                    ctx.moveTo(ankleX, ankleY);
+                    ctx.lineTo(toeX + 1.2, toeY + side * (this.size * 0.22));
+                    ctx.stroke();
+                    ctx.lineWidth = Math.max(1.3, this.size * 0.24);
+                }
+            }
+
             // Tadpole Head / Body (Teardrop Anuran Morphology)
             ctx.beginPath();
             ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
@@ -421,12 +462,12 @@ function initBioCanvas() {
         for (let i = shockwaves.length - 1; i >= 0; i--) {
             const sw = shockwaves[i];
             sw.radius += sw.speed;
-            sw.alpha *= 0.96;
+            sw.alpha *= 0.95;
 
             ctx.beginPath();
             ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(78, 204, 163, ' + (sw.alpha * 0.7) + ')';
-            ctx.lineWidth = 2.0;
+            ctx.strokeStyle = 'rgba(78, 204, 163, ' + (sw.alpha * 0.65) + ')';
+            ctx.lineWidth = 1.6;
             ctx.stroke();
 
             if (sw.radius >= sw.maxRadius || sw.alpha <= 0.02) {
