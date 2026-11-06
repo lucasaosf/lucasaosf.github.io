@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudioSystem();
     initBioCanvas();
     initStationWelcome();
-    initJumpingFrog();
     initBioScanner();
     initProjectFilters();
     initScrollReveal();
@@ -126,7 +125,7 @@ function initBioCanvas() {
     });
 
     const tadpoles = [];
-    const count = width > 1024 ? 35 : (width > 600 ? 22 : 14);
+    const count = width > 1024 ? 95 : (width > 600 ? 58 : 36);
 
     class Tadpole {
         constructor() {
@@ -138,14 +137,29 @@ function initBioCanvas() {
             this.y = Math.random() * height;
             this.angle = Math.random() * Math.PI * 2;
             this.targetAngle = this.angle;
-            this.speed = Math.random() * 1.1 + 0.75;
-            this.size = Math.random() * 3 + 4.5; // Head radius (4.5 to 7.5px)
-            this.tailLength = this.size * 3.4;
+            this.speed = Math.random() * 1.1 + 0.65;
+
+            // Varied depths: background, midground, and foreground
+            const depth = Math.random();
+            if (depth < 0.45) {
+                // Background layer: small & soft ambient
+                this.size = Math.random() * 1.8 + 3.2;
+                this.alpha = Math.random() * 0.18 + 0.15;
+            } else if (depth < 0.82) {
+                // Midground layer
+                this.size = Math.random() * 2.2 + 4.8;
+                this.alpha = Math.random() * 0.22 + 0.25;
+            } else {
+                // Foreground layer: larger & vibrant
+                this.size = Math.random() * 2.5 + 6.5;
+                this.alpha = Math.random() * 0.25 + 0.38;
+            }
+
+            this.tailLength = this.size * 3.5;
             this.wigglePhase = Math.random() * Math.PI * 2;
-            this.wiggleSpeed = Math.random() * 0.14 + 0.18;
-            this.turnTimer = Math.floor(Math.random() * 90) + 40;
-            this.alpha = Math.random() * 0.35 + 0.22;
-            this.isGold = Math.random() < 0.18;
+            this.wiggleSpeed = Math.random() * 0.14 + 0.16;
+            this.turnTimer = Math.floor(Math.random() * 100) + 35;
+            this.isGold = Math.random() < 0.2;
         }
 
         update() {
@@ -153,7 +167,7 @@ function initBioCanvas() {
             if (this.turnTimer <= 0) {
                 this.targetAngle += (Math.random() - 0.5) * 1.6;
                 this.turnTimer = Math.floor(Math.random() * 110) + 50;
-                this.speed = Math.random() * 1.1 + 0.7;
+                this.speed = Math.random() * 1.1 + 0.65;
             }
 
             // Smooth rotational steering
@@ -182,15 +196,15 @@ function initBioCanvas() {
                 ? `rgba(212, 175, 55, ${this.alpha})`
                 : `rgba(78, 204, 163, ${this.alpha})`;
             const finColor = this.isGold
-                ? `rgba(212, 175, 55, ${this.alpha * 0.42})`
-                : `rgba(46, 184, 114, ${this.alpha * 0.42})`;
+                ? `rgba(212, 175, 55, ${this.alpha * 0.38})`
+                : `rgba(46, 184, 114, ${this.alpha * 0.38})`;
 
             // Multi-segment undulating tail
-            const segments = 6;
+            const segments = 5;
             const segLen = this.tailLength / segments;
             const pts = [{ x: -this.size * 0.75, y: 0 }];
             for (let i = 1; i <= segments; i++) {
-                const wave = Math.sin(this.wigglePhase - i * 0.58) * (i * 1.55);
+                const wave = Math.sin(this.wigglePhase - i * 0.58) * (i * 1.45);
                 pts.push({ x: -this.size * 0.75 - (i * segLen), y: wave });
             }
 
@@ -216,15 +230,17 @@ function initBioCanvas() {
                 ctx.lineTo(pts[i].x, pts[i].y);
             }
             ctx.strokeStyle = baseColor;
-            ctx.lineWidth = 1.7;
+            ctx.lineWidth = 1.4;
             ctx.stroke();
 
             // Tadpole Head / Body (Teardrop Anuran Morphology)
             ctx.beginPath();
             ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
             ctx.fillStyle = baseColor;
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = baseColor;
+            if (this.size > 6) {
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = baseColor;
+            }
             ctx.fill();
 
             // Lateral Eyes
@@ -308,135 +324,7 @@ function initStationWelcome() {
 }
 
 /* ==========================================================================
-   4. LIVING COMPANION TREEFROG (Anuro Articulado Acompanhante)
-      - Acompanha o usuário confortavelmente enquanto rola a página
-      - Realiza ações aleatórias na rolagem (pulinho, coaxar, inclinar cabeça, piscar)
-      - Sem seguir o cursor do mouse e sem reagir a cliques
-   ========================================================================== */
-function initJumpingFrog() {
-    const frog = document.getElementById('jumping-frog');
-    if (!frog) return;
-
-    let isBusy = false;
-    let lastScrollY = window.scrollY;
-    let scrollActionCooldown = false;
-    let idleActionTimer = null;
-    let lastCroakTime = 0;
-
-    function triggerCroak() {
-        const now = Date.now();
-        if (now - lastCroakTime > 1200) {
-            playFrogCroak();
-            lastCroakTime = now;
-        }
-    }
-
-    // Ações lúdicas aleatórias do sapinho ao rolar a página
-    const actions = [
-        'hop',       // Pulinho elástico com estiramento de patas
-        'croak',     // Inflação do saco vocal com coaxar suave
-        'tiltLeft',  // Inclinação curiosa da cabeça à esquerda
-        'tiltRight', // Inclinação curiosa da cabeça à direita
-        'blink',     // Piscar duplo com olhos dourados
-        'breathe'    // Respiração profunda
-    ];
-
-    function executeFrogAction(action) {
-        if (isBusy) return;
-        isBusy = true;
-
-        if (action === 'hop') {
-            // Agachamento de impulso
-            frog.style.transform = 'translateY(4px) scale(1.12, 0.88)';
-            setTimeout(() => {
-                // Impulso no ar
-                frog.classList.add('in-flight');
-                frog.style.transform = 'translateY(-22px) scale(0.9, 1.2)';
-                triggerCroak();
-
-                setTimeout(() => {
-                    // Amortecimento de aterrissagem
-                    frog.classList.remove('in-flight');
-                    frog.classList.add('landing');
-                    frog.style.transform = 'translateY(2px) scale(1.22, 0.78)';
-
-                    setTimeout(() => {
-                        frog.classList.remove('landing');
-                        frog.style.transform = 'translateY(0) scale(1, 1)';
-                        isBusy = false;
-                    }, 140);
-                }, 260);
-            }, 60);
-        } else if (action === 'croak') {
-            frog.classList.add('action-croak');
-            triggerCroak();
-            setTimeout(() => {
-                frog.classList.remove('action-croak');
-                isBusy = false;
-            }, 550);
-        } else if (action === 'tiltLeft') {
-            frog.classList.add('action-tilt-left');
-            setTimeout(() => {
-                frog.classList.remove('action-tilt-left');
-                isBusy = false;
-            }, 650);
-        } else if (action === 'tiltRight') {
-            frog.classList.add('action-tilt-right');
-            setTimeout(() => {
-                frog.classList.remove('action-tilt-right');
-                isBusy = false;
-            }, 650);
-        } else if (action === 'blink') {
-            frog.classList.add('action-blink');
-            setTimeout(() => {
-                frog.classList.remove('action-blink');
-                setTimeout(() => {
-                    frog.classList.add('action-blink');
-                    setTimeout(() => {
-                        frog.classList.remove('action-blink');
-                        isBusy = false;
-                    }, 120);
-                }, 100);
-            }, 120);
-        } else {
-            // Respiração
-            frog.style.transform = 'scale(1.08, 0.94)';
-            setTimeout(() => {
-                frog.style.transform = 'scale(1, 1)';
-                isBusy = false;
-            }, 450);
-        }
-    }
-
-    // Scroll listener: ações orgânicas conforme rola a tela para baixo
-    window.addEventListener('scroll', () => {
-        const currentY = window.scrollY;
-        const delta = Math.abs(currentY - lastScrollY);
-        lastScrollY = currentY;
-
-        // Reset do timer de inatividade
-        if (idleActionTimer) clearTimeout(idleActionTimer);
-        idleActionTimer = setTimeout(() => {
-            if (!isBusy && Math.random() < 0.6) {
-                executeFrogAction('blink');
-            }
-        }, 8000);
-
-        // Dispara ação aleatória com cadência confortável na rolagem
-        if (delta > 25 && !scrollActionCooldown && !isBusy) {
-            scrollActionCooldown = true;
-            setTimeout(() => {
-                scrollActionCooldown = false;
-            }, Math.floor(Math.random() * 500) + 650);
-
-            const randomAction = actions[Math.floor(Math.random() * actions.length)];
-            executeFrogAction(randomAction);
-        }
-    }, { passive: true });
-}
-
-/* ==========================================================================
-   4.1 INTERACTIVE AVATAR SAGE MODE TOGGLE (Currículo Real <-> Modo Sábio)
+   4. INTERACTIVE AVATAR SAGE MODE TOGGLE (Currículo Real <-> Modo Sábio)
    ========================================================================== */
 function initAvatarToggle() {
     const toggleBtn = document.getElementById('avatar-mode-toggle');

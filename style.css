@@ -409,7 +409,6 @@ h2 {
 .name-frog-wrapper {
     position: relative;
     display: inline-block;
-    padding-top: 26px; /* space for the jumping frog */
     margin-bottom: 0.25rem;
 }
 
@@ -454,133 +453,7 @@ h2 {
     100% { transform: scale(1, 1) translateY(0); }
 }
 
-/* ==========================================================================
-   LIVING COMPANION TREEFROG (Anuro Articulado - Acompanhante de Rolagem)
-   ========================================================================== */
-.jumping-frog {
-    position: fixed;
-    bottom: 24px;
-    right: 28px;
-    width: 52px;
-    height: 52px;
-    z-index: 99999;
-    pointer-events: none; /* Sem reagir ao clique */
-    user-select: none;
-    transform-origin: center bottom;
-    transition: transform 0.28s cubic-bezier(0.25, 1, 0.5, 1);
-    will-change: transform;
-}
 
-@media (max-width: 600px) {
-    .jumping-frog {
-        bottom: 16px;
-        right: 18px;
-        width: 44px;
-        height: 44px;
-    }
-}
-
-.frog-inner {
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    transform-origin: center bottom;
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.frog-svg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 10px rgba(78, 204, 163, 0.35));
-    transition: filter 0.25s ease;
-}
-
-/* Hind legs resting & articulation */
-.frog-leg-left, .frog-leg-right {
-    transform-origin: 50px 65px;
-    transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
-}
-
-.frog-arm-left, .frog-arm-right {
-    transform-origin: 50px 48px;
-    transition: transform 0.2s ease;
-}
-
-/* In-flight leap / hop state */
-.jumping-frog.in-flight .frog-inner {
-    transform: scale(0.86, 1.28) translateY(-26px);
-}
-
-.jumping-frog.in-flight .frog-leg-left {
-    transform: rotate(26deg) translateY(14px) scaleY(1.38);
-}
-
-.jumping-frog.in-flight .frog-leg-right {
-    transform: rotate(-26deg) translateY(14px) scaleY(1.38);
-}
-
-.jumping-frog.in-flight .frog-arm-left {
-    transform: rotate(-16deg) translateY(-5px);
-}
-
-.jumping-frog.in-flight .frog-arm-right {
-    transform: rotate(16deg) translateY(-5px);
-}
-
-.jumping-frog.in-flight .frog-shadow {
-    transform: scale(0.35);
-    opacity: 0.15;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-/* Landing Cushion Squash */
-.jumping-frog.landing .frog-inner {
-    transform: scale(1.26, 0.76) translateY(0);
-    transition: transform 0.12s ease-out;
-}
-
-/* Subgular Vocal Throat Sac Pulse (Breathing & Calling) */
-.frog-throat {
-    transform-origin: 50px 34px;
-    animation: frogThroatPulse 1.6s ease-in-out infinite;
-}
-
-@keyframes frogThroatPulse {
-    0%, 100% { transform: scale(1); opacity: 0.55; }
-    50% { transform: scale(1.32, 1.24); opacity: 0.95; }
-}
-
-/* Deep throat call (action-croak) */
-.jumping-frog.action-croak .frog-throat {
-    transform: scale(1.7, 1.5) !important;
-    opacity: 1 !important;
-    transition: transform 0.18s ease-out, opacity 0.18s ease-out;
-}
-
-/* Head Tilt Actions */
-.jumping-frog.action-tilt-left .frog-inner {
-    transform: rotate(-16deg) translateY(-3px);
-}
-
-.jumping-frog.action-tilt-right .frog-inner {
-    transform: rotate(16deg) translateY(-3px);
-}
-
-/* Eyes Blinking */
-.frog-eyelid {
-    animation: frogBlink 4.2s infinite;
-}
-
-.jumping-frog.action-blink .frog-eyelid {
-    opacity: 0.98 !important;
-    transition: opacity 0.08s ease;
-}
-
-@keyframes frogBlink {
-    0%, 93%, 97%, 100% { opacity: 0; }
-    95% { opacity: 0.95; }
-}
 
 /* Landing Ripple Shockwave */
 .frog-landing-ripple {
@@ -698,10 +571,11 @@ h2 {
 }
 
 .biokuri-logo-inline {
-    height: 38px;
+    height: 52px;
     width: auto;
+    max-width: 240px;
     object-fit: contain;
-    filter: brightness(1.05);
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
 }
 
 .bio h3 {
@@ -2050,6 +1924,11 @@ h2 {
         gap: 1.25rem;
     }
 
+    .biokuri-logo-inline {
+        height: 44px;
+        max-width: 200px;
+    }
+
     .interactive-name {
         font-size: clamp(1.75rem, 6.5vw, 2.2rem);
         justify-content: center;
@@ -2264,14 +2143,6 @@ h2 {
         border-radius: 10px;
     }
 
-    /* Floating Companion Treefrog (Mobile Size) */
-    .jumping-frog {
-        bottom: 14px;
-        right: 14px;
-        width: 42px;
-        height: 42px;
-    }
-
     /* Footer */
     .portfolio-footer {
         padding: 1.5rem 1rem;
@@ -2404,14 +2275,6 @@ h2 {
     .cert-icon {
         margin-top: 0;
         font-size: 1.3rem;
-    }
-
-    /* Companion Frog */
-    .jumping-frog {
-        bottom: 10px;
-        right: 10px;
-        width: 36px;
-        height: 36px;
     }
 }
 
