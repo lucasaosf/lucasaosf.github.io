@@ -105,7 +105,7 @@ function playScanTone(step = 1) {
 }
 
 /* ==========================================================================
-   2. BIO-CANVAS: FLOATING SPORES & ANURAN TAXA
+   2. BIO-CANVAS: SWIMMING TADPOLES (Girinos Nadando no Fundo)
    ========================================================================== */
 function initBioCanvas() {
     const canvas = document.getElementById('bio-canvas');
@@ -120,70 +120,129 @@ function initBioCanvas() {
         height = canvas.height = window.innerHeight;
     });
 
-    const particles = [];
-    const particleCount = Math.min(width > 768 ? 50 : 25, 60);
-    const taxaLabels = [
-        'Melanophryniscus moreirae', 'Bothrops atrox', 'Bothrops bilineatus',
-        'Leptodactylus paranaru', 'Puma concolor', 'CRBio 127233/01-D',
-        'CEMAVE: #7723874', 'Gestão Ambiental', 'Raven Pro: 44.1kHz'
-    ];
+    const tadpoles = [];
+    const count = Math.min(width > 768 ? 32 : 18, 45);
 
-    class Particle {
+    class Tadpole {
         constructor() {
-            this.reset();
+            this.reset(true);
         }
 
-        reset() {
+        reset(initial = false) {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.4;
-            this.vy = -Math.random() * 0.55 - 0.2; // drift upward
-            this.size = Math.random() * 2.8 + 1;
-            this.alpha = Math.random() * 0.5 + 0.2;
-            this.pulseSpeed = Math.random() * 0.02 + 0.01;
-            this.isLabel = Math.random() < 0.2;
-            this.label = taxaLabels[Math.floor(Math.random() * taxaLabels.length)];
-            this.color = Math.random() > 0.4 ? 'rgba(78, 204, 163,' : 'rgba(197, 160, 89,';
+            this.angle = Math.random() * Math.PI * 2;
+            this.targetAngle = this.angle;
+            this.speed = Math.random() * 1.1 + 0.75;
+            this.size = Math.random() * 3 + 4.5; // Head radius (4.5 to 7.5px)
+            this.tailLength = this.size * 3.4;
+            this.wigglePhase = Math.random() * Math.PI * 2;
+            this.wiggleSpeed = Math.random() * 0.14 + 0.18;
+            this.turnTimer = Math.floor(Math.random() * 90) + 40;
+            this.alpha = Math.random() * 0.35 + 0.22;
+            this.isGold = Math.random() < 0.18;
         }
 
         update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            this.alpha += Math.sin(Date.now() * this.pulseSpeed) * 0.006;
-
-            if (this.y < -30 || this.x < -40 || this.x > width + 40) {
-                this.y = height + 20;
-                this.x = Math.random() * width;
+            this.turnTimer--;
+            if (this.turnTimer <= 0) {
+                this.targetAngle += (Math.random() - 0.5) * 1.6;
+                this.turnTimer = Math.floor(Math.random() * 110) + 50;
+                this.speed = Math.random() * 1.1 + 0.7;
             }
+
+            // Smooth rotational steering
+            let diff = this.targetAngle - this.angle;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            this.angle += diff * 0.045;
+
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+            this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
+
+            // Screen boundary wrap
+            if (this.x < -50) this.x = width + 50;
+            if (this.x > width + 50) this.x = -50;
+            if (this.y < -50) this.y = height + 50;
+            if (this.y > height + 50) this.y = -50;
         }
 
         draw() {
             ctx.save();
-            if (this.isLabel) {
-                ctx.font = '10px "Roboto Mono", monospace';
-                ctx.fillStyle = `${this.color} ${Math.max(0.1, Math.min(this.alpha * 0.65, 0.45))})`;
-                ctx.fillText(this.label, this.x, this.y);
-            } else {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `${this.color} ${Math.max(0.1, Math.min(this.alpha, 0.75))})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'rgba(78, 204, 163, 0.6)';
-                ctx.fill();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle);
+
+            const baseColor = this.isGold
+                ? `rgba(212, 175, 55, ${this.alpha})`
+                : `rgba(78, 204, 163, ${this.alpha})`;
+            const finColor = this.isGold
+                ? `rgba(212, 175, 55, ${this.alpha * 0.42})`
+                : `rgba(46, 184, 114, ${this.alpha * 0.42})`;
+
+            // Multi-segment undulating tail
+            const segments = 6;
+            const segLen = this.tailLength / segments;
+            const pts = [{ x: -this.size * 0.75, y: 0 }];
+            for (let i = 1; i <= segments; i++) {
+                const wave = Math.sin(this.wigglePhase - i * 0.58) * (i * 1.55);
+                pts.push({ x: -this.size * 0.75 - (i * segLen), y: wave });
             }
+
+            // Transparent Fin Membrane (Barbatana Caudal)
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.85);
+                ctx.lineTo(pts[i].x, pts[i].y - finWidth);
+            }
+            for (let i = pts.length - 1; i >= 0; i--) {
+                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.85);
+                ctx.lineTo(pts[i].x, pts[i].y + finWidth);
+            }
+            ctx.closePath();
+            ctx.fillStyle = finColor;
+            ctx.fill();
+
+            // Muscular tail notochord core
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                ctx.lineTo(pts[i].x, pts[i].y);
+            }
+            ctx.strokeStyle = baseColor;
+            ctx.lineWidth = 1.7;
+            ctx.stroke();
+
+            // Tadpole Head / Body (Teardrop Anuran Morphology)
+            ctx.beginPath();
+            ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
+            ctx.fillStyle = baseColor;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = baseColor;
+            ctx.fill();
+
+            // Lateral Eyes
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
+            ctx.beginPath();
+            ctx.arc(this.size * 0.45, -this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
+            ctx.arc(this.size * 0.45, this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
+            ctx.fill();
+
             ctx.restore();
         }
     }
 
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
+    for (let i = 0; i < count; i++) {
+        tadpoles.push(new Tadpole());
     }
 
     function animate() {
         ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
+        tadpoles.forEach(t => {
+            t.update();
+            t.draw();
         });
         requestAnimationFrame(animate);
     }
@@ -244,252 +303,131 @@ function initStationWelcome() {
 }
 
 /* ==========================================================================
-   4. INTERACTIVE LIVING TREEFROG (Anuro Articulado - Hylidae)
-      - Patas articuladas com extensão no salto e amortecimento no pouso
-      - PC: Salta onde o mouse passar com rotação balística
-      - Celular: Salta exatamente onde o usuário clicar/tocar com o dedo
-      - Pousa nas letras de "Lucas Aøsf" com animação de impacto elástico
+   4. LIVING COMPANION TREEFROG (Anuro Articulado Acompanhante)
+      - Acompanha o usuário confortavelmente enquanto rola a página
+      - Realiza ações aleatórias na rolagem (pulinho, coaxar, inclinar cabeça, piscar)
+      - Sem seguir o cursor do mouse e sem reagir a cliques
    ========================================================================== */
 function initJumpingFrog() {
     const frog = document.getElementById('jumping-frog');
-    const letters = document.querySelectorAll('.hop-char');
     if (!frog) return;
 
-    let frogX = 0;
-    let frogY = 0;
-    let isJumping = false;
-    let isPerchedOnName = true;
-    let currentLetterIdx = 0;
-    let autoHopTimer = null;
-    let idleTimer = null;
+    let isBusy = false;
+    let lastScrollY = window.scrollY;
+    let scrollActionCooldown = false;
+    let idleActionTimer = null;
     let lastCroakTime = 0;
-    let lastMouseJumpTime = 0;
 
-    // Rate-limited croak to keep audio natural and pleasant
-    function triggerCroak(force = false) {
+    function triggerCroak() {
         const now = Date.now();
-        if (force || now - lastCroakTime > 850) {
+        if (now - lastCroakTime > 1200) {
             playFrogCroak();
             lastCroakTime = now;
         }
     }
 
-    // Spawn green bio-ripple shockwave at landing spot
-    function spawnRipple(x, y) {
-        const ripple = document.createElement('div');
-        ripple.className = 'frog-landing-ripple';
-        ripple.style.left = `${x}px`;
-        ripple.style.top = `${y}px`;
-        document.body.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 480);
-    }
+    // Ações lúdicas aleatórias do sapinho ao rolar a página
+    const actions = [
+        'hop',       // Pulinho elástico com estiramento de patas
+        'croak',     // Inflação do saco vocal com coaxar suave
+        'tiltLeft',  // Inclinação curiosa da cabeça à esquerda
+        'tiltRight', // Inclinação curiosa da cabeça à direita
+        'blink',     // Piscar duplo com olhos dourados
+        'breathe'    // Respiração profunda
+    ];
 
-    // Core jump execution with physics, angle calculation, leg extension & landing squash
-    function jumpTo(targetX, targetY, options = {}) {
-        if (isJumping) return;
-        isJumping = true;
+    function executeFrogAction(action) {
+        if (isBusy) return;
+        isBusy = true;
 
-        const {
-            letterEl = null,
-            isLetterHop = false,
-            forceCroak = false,
-            onComplete = null
-        } = options;
-
-        const dx = targetX - frogX;
-        const dy = targetY - frogY;
-        const dist = Math.hypot(dx, dy);
-
-        // Calculate heading angle (0 deg = facing up)
-        let rotDeg = 0;
-        if (dist > 8) {
-            const angleRad = Math.atan2(dy, dx);
-            rotDeg = (angleRad * 180 / Math.PI) + 90;
-        }
-
-        // Phase 1: Crouch & Aim (40ms)
-        frog.style.transform = `translate3d(${frogX}px, ${frogY}px, 0) rotate(${rotDeg}deg) scale(1.14, 0.86)`;
-
-        setTimeout(() => {
-            // Phase 2: In-Flight propulsion with legs kicking back (300ms)
-            frog.classList.add('in-flight');
-            frog.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) rotate(${rotDeg}deg)`;
-            triggerCroak(forceCroak);
-
+        if (action === 'hop') {
+            // Agachamento de impulso
+            frog.style.transform = 'translateY(4px) scale(1.12, 0.88)';
             setTimeout(() => {
-                // Phase 3: Touchdown cushion & landing squash
-                frog.classList.remove('in-flight');
-                frog.classList.add('landing');
-                frogX = targetX;
-                frogY = targetY;
+                // Impulso no ar
+                frog.classList.add('in-flight');
+                frog.style.transform = 'translateY(-22px) scale(0.9, 1.2)';
+                triggerCroak();
 
-                spawnRipple(targetX + 24, targetY + 24);
-
-                if (letterEl) {
-                    letterEl.classList.remove('letter-bounce');
-                    void letterEl.offsetWidth; // trigger reflow
-                    letterEl.classList.add('letter-bounce');
-                    setTimeout(() => letterEl.classList.remove('letter-bounce'), 450);
-                }
-
-                // Phase 4: Settle back to resting pose
                 setTimeout(() => {
-                    frog.classList.remove('landing');
-                    frog.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) rotate(0deg)`;
-                    isJumping = false;
-                    if (onComplete) onComplete();
-                }, 130);
-            }, 300);
-        }, 40);
-    }
+                    // Amortecimento de aterrissagem
+                    frog.classList.remove('in-flight');
+                    frog.classList.add('landing');
+                    frog.style.transform = 'translateY(2px) scale(1.22, 0.78)';
 
-    // Hop to a specific letter in the name "Lucas Aøsf"
-    function hopToLetter(index, isUserAction = false) {
-        if (index < 0 || index >= letters.length) return;
-        currentLetterIdx = index;
-        isPerchedOnName = true;
-
-        const targetLetter = letters[index];
-        const rect = targetLetter.getBoundingClientRect();
-        const targetX = rect.left + window.scrollX + (rect.width / 2) - 24;
-        const targetY = rect.top + window.scrollY - 34;
-
-        jumpTo(targetX, targetY, {
-            letterEl: targetLetter,
-            isLetterHop: true,
-            forceCroak: isUserAction
-        });
-    }
-
-    // Set initial position atop first letter 'L'
-    function setInitialPerch() {
-        if (letters.length > 0) {
-            const rect = letters[0].getBoundingClientRect();
-            frogX = rect.left + window.scrollX + (rect.width / 2) - 24;
-            frogY = rect.top + window.scrollY - 34;
-            frog.style.transform = `translate3d(${frogX}px, ${frogY}px, 0)`;
-            startIdleHop();
+                    setTimeout(() => {
+                        frog.classList.remove('landing');
+                        frog.style.transform = 'translateY(0) scale(1, 1)';
+                        isBusy = false;
+                    }, 140);
+                }, 260);
+            }, 60);
+        } else if (action === 'croak') {
+            frog.classList.add('action-croak');
+            triggerCroak();
+            setTimeout(() => {
+                frog.classList.remove('action-croak');
+                isBusy = false;
+            }, 550);
+        } else if (action === 'tiltLeft') {
+            frog.classList.add('action-tilt-left');
+            setTimeout(() => {
+                frog.classList.remove('action-tilt-left');
+                isBusy = false;
+            }, 650);
+        } else if (action === 'tiltRight') {
+            frog.classList.add('action-tilt-right');
+            setTimeout(() => {
+                frog.classList.remove('action-tilt-right');
+                isBusy = false;
+            }, 650);
+        } else if (action === 'blink') {
+            frog.classList.add('action-blink');
+            setTimeout(() => {
+                frog.classList.remove('action-blink');
+                setTimeout(() => {
+                    frog.classList.add('action-blink');
+                    setTimeout(() => {
+                        frog.classList.remove('action-blink');
+                        isBusy = false;
+                    }, 120);
+                }, 100);
+            }, 120);
+        } else {
+            // Respiração
+            frog.style.transform = 'scale(1.08, 0.94)';
+            setTimeout(() => {
+                frog.style.transform = 'scale(1, 1)';
+                isBusy = false;
+            }, 450);
         }
     }
 
-    // Initial positioning after layout
-    setTimeout(setInitialPerch, 450);
+    // Scroll listener: ações orgânicas conforme rola a tela para baixo
+    window.addEventListener('scroll', () => {
+        const currentY = window.scrollY;
+        const delta = Math.abs(currentY - lastScrollY);
+        lastScrollY = currentY;
 
-    // Keep perched position synced if window resizes or zooms
-    window.addEventListener('resize', () => {
-        if (isPerchedOnName && letters[currentLetterIdx] && !isJumping) {
-            const rect = letters[currentLetterIdx].getBoundingClientRect();
-            frogX = rect.left + window.scrollX + (rect.width / 2) - 24;
-            frogY = rect.top + window.scrollY - 34;
-            frog.style.transform = `translate3d(${frogX}px, ${frogY}px, 0)`;
-        }
-    });
-
-    // Idle timer: Hop gently between letters if no user interaction for 5 seconds
-    function startIdleHop() {
-        if (autoHopTimer) clearInterval(autoHopTimer);
-        autoHopTimer = setInterval(() => {
-            if (isPerchedOnName && window.scrollY < 450 && !isJumping) {
-                const nextIdx = (currentLetterIdx + 1) % letters.length;
-                hopToLetter(nextIdx, false);
+        // Reset do timer de inatividade
+        if (idleActionTimer) clearTimeout(idleActionTimer);
+        idleActionTimer = setTimeout(() => {
+            if (!isBusy && Math.random() < 0.6) {
+                executeFrogAction('blink');
             }
-        }, 3200);
-    }
+        }, 8000);
 
-    function resetIdleTimer() {
-        if (autoHopTimer) clearInterval(autoHopTimer);
-        if (idleTimer) clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => {
-            if (window.scrollY < 400 && !isJumping) {
-                hopToLetter(0, false);
-            }
-            startIdleHop();
-        }, 5500);
-    }
+        // Dispara ação aleatória com cadência confortável na rolagem
+        if (delta > 25 && !scrollActionCooldown && !isBusy) {
+            scrollActionCooldown = true;
+            setTimeout(() => {
+                scrollActionCooldown = false;
+            }, Math.floor(Math.random() * 500) + 650);
 
-    // -------------------------------------------------------------
-    // DESKTOP (PC): Leap wherever the mouse moves ("onde o mouse passar")
-    // -------------------------------------------------------------
-    document.addEventListener('mousemove', (e) => {
-        const now = Date.now();
-        // Cooldown between continuous hops to simulate natural locomotion
-        if (now - lastMouseJumpTime < 380) return;
-
-        const targetX = e.pageX - 24;
-        const targetY = e.pageY - 24;
-        const dist = Math.hypot(targetX - frogX, targetY - frogY);
-
-        // Only leap if mouse has moved beyond close proximity
-        if (dist > 52) {
-            lastMouseJumpTime = now;
-            isPerchedOnName = false;
-            jumpTo(targetX, targetY, { forceCroak: false });
-            resetIdleTimer();
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+            executeFrogAction(randomAction);
         }
-    });
-
-    // -------------------------------------------------------------
-    // MOBILE: Leap wherever the user taps with finger ("onde a pessoa clicar com o dedo")
-    // -------------------------------------------------------------
-    let touchStartX = 0;
-    let touchStartY = 0;
-
-    document.addEventListener('pointerdown', (e) => {
-        touchStartX = e.pageX;
-        touchStartY = e.pageY;
     }, { passive: true });
-
-    document.addEventListener('pointerup', (e) => {
-        // Measure movement distance to differentiate tap from scroll/swipe
-        const moveDist = Math.hypot(e.pageX - touchStartX, e.pageY - touchStartY);
-        if (moveDist > 14) return; // User was scrolling, not tapping
-
-        // If user tapped directly on the frog, do an excited backflip hop!
-        if (frog.contains(e.target) || e.target === frog) {
-            triggerCroak(true);
-            jumpTo(frogX, frogY - 45, {
-                forceCroak: true,
-                onComplete: () => {
-                    setTimeout(() => jumpTo(frogX, frogY + 45, { forceCroak: false }), 120);
-                }
-            });
-            resetIdleTimer();
-            return;
-        }
-
-        // Frog leaps directly to tapped coordinate!
-        const targetX = e.pageX - 24;
-        const targetY = e.pageY - 24;
-        isPerchedOnName = false;
-        jumpTo(targetX, targetY, { forceCroak: true });
-        resetIdleTimer();
-    }, { passive: true });
-
-    // -------------------------------------------------------------
-    // Letter interactions: Click or hover over name letters
-    // -------------------------------------------------------------
-    letters.forEach((charEl, idx) => {
-        charEl.addEventListener('click', (e) => {
-            e.stopPropagation();
-            hopToLetter(idx, true);
-            resetIdleTimer();
-        });
-        charEl.addEventListener('mouseenter', () => {
-            if (!isJumping && currentLetterIdx !== idx) {
-                hopToLetter(idx, false);
-                resetIdleTimer();
-            }
-        });
-    });
-
-    // Clicking directly on frog
-    frog.addEventListener('click', (e) => {
-        e.stopPropagation();
-        triggerCroak(true);
-        const nextIdx = (currentLetterIdx + 1) % letters.length;
-        hopToLetter(nextIdx, true);
-        resetIdleTimer();
-    });
 }
 
 /* ==========================================================================
@@ -548,7 +486,7 @@ function initBioScanner() {
             '● Conectando ao repositório de Lucas Aøsf...',
             '● Sincronizando ocorrências no banco de dados GBIF... [23.418 registros validados]',
             '● Carregando acervo bioacústico de anfíbios anuros da Mantiqueira e Bocaina...',
-            '● Consultando diagnoses taxonômicas do clado Bothrops e anurofauna neotropical...',
+            '● Consultando diagnoses taxonômicas e leis do código...',
             '● Integrando matrizes de gestão ambiental, laudos e ferramentas de campo...',
             '● Acervo taxonômico e projetos de engenharia liberados com sucesso!'
         ];
@@ -678,10 +616,10 @@ const translations = {
         focus_prog_desc: "Pipelines avançados para mineração do GBIF (Global Biodiversity Information Facility), análise estatística multivariada de comunidades faunísticas, bioestatística e modelagem ecológica.",
         focus_apps_title: "Engenharia de Softwares de Campo (PWAs)",
         focus_apps_desc: "Idealizador e arquiteto de PWAs como a Caderneta de Campo (georreferenciamento offline, listas de Mackinnon, exportação instantânea Excel) e Cubagem Florestal Smalian.",
-        metric_years: "Anos em Campo & Taxonomia",
-        metric_papers: "Artigos Científicos & Obras",
+        metric_years: "Anos de experiência na área",
+        metric_papers: "Artigos Científicos",
         metric_projects: "Empreendimentos Atendidos",
-        metric_biomes: "Biomas & Zonas Costeiras",
+        metric_biomes: "Biomas",
         metric_passion: "Rigor Metodológico & Conservação",
         header_stack: "Bio-Tech & Scientific Stack",
         intro_stack: "Ferramentas de computação, protocolos de amostragem zoológica e frameworks de análise ambiental aplicados rotineiramente.",
@@ -768,10 +706,10 @@ const translations = {
         focus_prog_desc: "Advanced automated pipelines for GBIF data mining, multivariate statistical community ecology, bio-statistics, and ecological modeling.",
         focus_apps_title: "Field Software Engineering (PWAs)",
         focus_apps_desc: "Creator and software architect of offline-first PWAs such as Caderneta de Campo (GPS geotagging, Mackinnon lists, automated Excel export) and Smalian Timber Scaler.",
-        metric_years: "Years in Field & Taxonomy",
-        metric_papers: "Scientific Papers & Works",
+        metric_years: "Years of experience in the field",
+        metric_papers: "Scientific Articles",
         metric_projects: "Enterprise Projects Handled",
-        metric_biomes: "Biomes & Coastal Zones",
+        metric_biomes: "Biomes",
         metric_passion: "Scientific Rigor & Conservation",
         header_stack: "Bio-Tech & Scientific Stack",
         intro_stack: "Computational tools, zoological sampling standards, and data frameworks routinely utilized.",
