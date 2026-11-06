@@ -258,7 +258,7 @@ function initStationWelcome() {
 
     const messages = [
         { text: '🌿 Bem-vindo ao acervo científico e portfólio profissional de Lucas Aøsf', gold: true },
-        { text: '🐸 Biólogo (CRBio-01 nº 127233/01-D) · Gestor Ambiental (Especialista UNOPAR) · Taxonomista', ok: true },
+        { text: '🟢 Biólogo (CRBio-01 nº 127233/01-D) · Gestor Ambiental (Especialista UNOPAR) · Taxonomista', ok: true },
         { text: '🔬 Foco primário: Taxonomia & Sistemática Filogenética, com ênfase em Anfíbios Anuros e Répteis' },
         { text: '💻 Ecologia Computacional, Automação em R e Python, e Engenharia de Softwares de Campo (PWAs)' },
         { text: '📍 Experiências longas e consolidadas desde amostragem de campo a elaboração de laudos, relatórios técnicos e publicações científicas', ok: true }
