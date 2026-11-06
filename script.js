@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollReveal();
     initLanguageSystem();
     initMetricsCounter();
+    initAvatarToggle();
 });
 
 /* ==========================================================================
@@ -325,6 +326,42 @@ function initJumpingFrog() {
 }
 
 /* ==========================================================================
+   4.1 INTERACTIVE AVATAR SAGE MODE TOGGLE (Currículo Real <-> Modo Sábio)
+   ========================================================================== */
+function initAvatarToggle() {
+    const toggleBtn = document.getElementById('avatar-mode-toggle');
+    const profileImg = document.getElementById('main-profile-img');
+    const labelSpan = document.getElementById('avatar-mode-label');
+    if (!toggleBtn || !profileImg) return;
+
+    let isSage = false;
+    const realImgSrc = 'assets/lucas-profile-lattes.jpg';
+    const sageImgSrc = 'assets/invocacao-sapo.gif';
+
+    toggleBtn.addEventListener('click', () => {
+        isSage = !isSage;
+        if (isSage) {
+            profileImg.src = sageImgSrc;
+            profileImg.classList.add('sage-active');
+            toggleBtn.classList.add('active-sage');
+            if (labelSpan) labelSpan.textContent = document.documentElement.lang === 'en' ? 'Real Photo' : 'Foto Real';
+            const icon = toggleBtn.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-user';
+            playFrogCroak();
+            playBioBeep(880, 0.15, 'sawtooth');
+        } else {
+            profileImg.src = realImgSrc;
+            profileImg.classList.remove('sage-active');
+            toggleBtn.classList.remove('active-sage');
+            if (labelSpan) labelSpan.textContent = document.documentElement.lang === 'en' ? 'Sage Mode' : 'Modo Sábio';
+            const icon = toggleBtn.querySelector('i');
+            if (icon) icon.className = 'fa-solid fa-bolt';
+            playBioBeep(520, 0.08);
+        }
+    });
+}
+
+/* ==========================================================================
    5. BIODIVERSITY SCANNER & PROJECTS UNLOCKER
    ========================================================================== */
 function initBioScanner() {
@@ -543,6 +580,10 @@ const translations = {
         header_stats: "GitHub & Atividade Aberta",
         btn_explore_gh: "Explorar Todos os Repositórios (@lucasaosf)",
         header_manifesto: "Manifesto Científico",
+        header_sage_mode: "Modo Sábio // Invocação dos Sapos",
+        desc_sage_intro: "Animação do avatar oficial do GitHub: uma homenagem lúdica ao fascínio e à dedicação aos anfíbios anuros. Empregando a clássica invocação ninja (Kuchiyose no Jutsu), o selo no chão canaliza energia elétrica convocando o sapo gigante guardião e os mestres anfíbios da floresta.",
+        btn_toggle_sage: "Modo Sábio",
+        btn_toggle_real: "Foto Real",
         footer_text: "Desenvolvido por Lucas Aøsf // Biokuri — Soluções Ambientais & Ecologia Computacional"
     },
     en: {
@@ -628,6 +669,10 @@ const translations = {
         header_stats: "GitHub & Open Science",
         btn_explore_gh: "Explore All Repositories (@lucasaosf)",
         header_manifesto: "Scientific Manifesto",
+        header_sage_mode: "Sage Mode // Toad Summoning",
+        desc_sage_intro: "Animation of the official GitHub avatar: a playful homage to the lifelong fascination and dedication to anuran amphibians. Utilizing the classic summoning jutsu (Kuchiyose no Jutsu), the floor seal channels electric energy to summon the giant guardian toad and forest amphibian masters.",
+        btn_toggle_sage: "Sage Mode",
+        btn_toggle_real: "Real Photo",
         footer_text: "Developed by Lucas Aøsf // Biokuri — Environmental Solutions & Computational Ecology"
     }
 };

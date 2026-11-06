@@ -76,8 +76,11 @@
                 <div class="section-tag"><i class="fa-solid fa-leaf"></i> <span data-i18n="tag_identity">Identidade &amp; Liderança</span></div>
                 <div class="profile-info">
                     <div class="profile-img-container">
-                        <img src="assets/lucas-profile.png" alt="Lucas Aøsf - Foto de Perfil" class="profile-img" onerror="this.src='https://github.com/lucasaosf.png'">
+                        <img id="main-profile-img" src="assets/lucas-profile-lattes.jpg" alt="Lucas Aøsf - Foto de Perfil (Biólogo &amp; Gestor Ambiental)" class="profile-img" onerror="this.src='assets/lucas-profile.png'">
                         <div class="profile-badge-crbio" title="Registro Profissional">CRBio 127233/01-D</div>
+                        <button id="avatar-mode-toggle" class="avatar-mode-btn" title="Alternar entre Foto Real (Currículo) e Modo Sábio Animado">
+                            <i class="fa-solid fa-bolt"></i> <span id="avatar-mode-label" data-i18n="btn_toggle_sage">Modo Sábio</span>
+                        </button>
                     </div>
                     <div class="bio">
                         <div class="company-badge">
@@ -826,6 +829,32 @@
                         <h4>Fotógrafo de Natureza &amp; Guia de Vida Silvestre</h4>
                         <p data-i18n="cert_photo_desc">Mais de uma década documentando a biodiversidade brasileira com fotografia macro e de fauna, além de guiamento ornitológico especializado em Mata Atlântica.</p>
                         <span class="cert-status completed" data-i18n="status_field_master">10+ Anos de Acervo</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modo Sábio & Invocação IA (Easter Egg & Arte Animada) -->
+        <section class="sage-showcase-section glass-panel fade-in" id="sage-mode-section">
+            <div class="section-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> <span>Bio-Art // Invocação de Fauna</span></div>
+            <div class="sage-showcase-content">
+                <div class="sage-media-wrapper">
+                    <video class="sage-video-loop" autoplay loop muted playsinline poster="assets/lucas-profile.png">
+                        <source src="assets/invocacao-sapo.mp4" type="video/mp4">
+                        <img src="assets/invocacao-sapo.gif" alt="Lucas Aøsf - Modo Sábio Invocação dos Sapos" class="sage-gif-fallback">
+                    </video>
+                    <div class="sage-media-badge"><i class="fa-solid fa-bolt"></i> IA ANIMATION</div>
+                </div>
+                <div class="sage-info-wrapper">
+                    <h2><i class="fa-solid fa-frog neon-green-icon"></i> <span data-i18n="header_sage_mode">Modo Sábio // Invocação dos Sapos</span></h2>
+                    <p class="section-intro" data-i18n="desc_sage_intro">
+                        Animação do avatar oficial do GitHub: uma homenagem lúdica ao fascínio e à dedicação aos anfíbios anuros. Empregando a clássica invocação ninja (<em>Kuchiyose no Jutsu</em>), o selo no chão canaliza energia elétrica convocando o sapo gigante guardião e os mestres anfíbios da floresta.
+                    </p>
+                    <div class="sage-tags">
+                        <span><i class="fa-solid fa-sparkles"></i> Animação IA</span>
+                        <span><i class="fa-solid fa-frog"></i> Anura</span>
+                        <span><i class="fa-solid fa-scroll"></i> Kuchiyose no Jutsu</span>
+                        <span><i class="fa-brands fa-github"></i> Avatar @lucasaosf</span>
                     </div>
                 </div>
             </div>
