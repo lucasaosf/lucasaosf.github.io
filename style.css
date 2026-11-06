@@ -623,7 +623,17 @@ h2 {
 
 .profile-img-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     flex-shrink: 0;
+}
+
+.profile-avatar-wrap {
+    position: relative;
+    width: 135px;
+    height: 135px;
+    margin-bottom: 0.95rem;
 }
 
 .profile-img {
@@ -643,7 +653,7 @@ h2 {
 
 .profile-badge-crbio {
     position: absolute;
-    bottom: -6px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
     background: #0E2515;
@@ -655,6 +665,7 @@ h2 {
     border-radius: 20px;
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    z-index: 2;
 }
 
 .company-badge {
@@ -1665,8 +1676,11 @@ h2 {
 }
 
 .footer-logo-img {
-    height: 48px;
+    height: 68px;
     width: auto;
+    max-width: 240px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
 }
 
 .portfolio-footer p {
@@ -1721,7 +1735,7 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    margin-top: 0.65rem;
+    margin-top: 0.35rem;
     padding: 0.35rem 0.75rem;
     background: rgba(78, 204, 163, 0.12);
     border: 1px solid var(--bio-emerald);
@@ -1791,6 +1805,18 @@ h2 {
     gap: 2.2rem;
     align-items: center;
     margin-top: 1rem;
+}
+
+.sage-showcase-clean {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.sage-showcase-clean .sage-media-wrapper {
+    max-width: 680px;
+    width: 100%;
 }
 
 @media (max-width: 900px) {
