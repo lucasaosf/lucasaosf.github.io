@@ -185,24 +185,35 @@ function initBioCanvas() {
             x: x,
             y: y,
             radius: 8,
-            maxRadius: 300,
-            speed: 8.0,
-            alpha: 0.9
+            maxRadius: 360,
+            speed: 9.0,
+            alpha: 0.95
         });
         setTimeout(() => {
             shockwaves.push({
                 x: x,
                 y: y,
                 radius: 6,
-                maxRadius: 220,
-                speed: 6.0,
-                alpha: 0.55
+                maxRadius: 280,
+                speed: 7.0,
+                alpha: 0.65
             });
         }, 110);
+        setTimeout(() => {
+            shockwaves.push({
+                x: x,
+                y: y,
+                radius: 4,
+                maxRadius: 190,
+                speed: 5.5,
+                alpha: 0.4
+            });
+        }, 220);
     }
 
     const tadpoles = [];
-    const count = width > 1024 ? 500 : (width > 600 ? 350 : 250);
+    // Infinitos girinos: dense swarm, endless stream, locked 60 FPS
+    const count = width > 1024 ? 1500 : (width > 600 ? 1000 : 700);
 
     class Tadpole {
         constructor() {
@@ -214,25 +225,36 @@ function initBioCanvas() {
             this.y = Math.random() * height;
             this.angle = Math.random() * Math.PI * 2;
             this.targetAngle = this.angle;
-            this.speed = Math.random() * 1.1 + 0.65;
+            this.speed = Math.random() * 1.15 + 0.65;
 
             const depth = Math.random();
-            if (depth < 0.45) {
-                this.size = Math.random() * 1.8 + 3.2;
-                this.alpha = Math.random() * 0.18 + 0.15;
-            } else if (depth < 0.82) {
-                this.size = Math.random() * 2.2 + 4.8;
-                this.alpha = Math.random() * 0.22 + 0.25;
+            this.isDeep = depth < 0.50; // 50% deep background swarm
+            if (this.isDeep) {
+                this.size = Math.random() * 1.5 + 2.5;
+                this.alpha = Math.random() * 0.16 + 0.12;
+            } else if (depth < 0.85) {
+                this.size = Math.random() * 2.0 + 4.2;
+                this.alpha = Math.random() * 0.20 + 0.24;
             } else {
-                this.size = Math.random() * 2.5 + 6.5;
-                this.alpha = Math.random() * 0.25 + 0.38;
+                this.size = Math.random() * 2.5 + 6.2;
+                this.alpha = Math.random() * 0.22 + 0.36;
             }
 
-            this.tailLength = this.size * 3.5;
+            this.tailLength = this.size * 3.4;
             this.wigglePhase = Math.random() * Math.PI * 2;
             this.wiggleSpeed = Math.random() * 0.14 + 0.16;
             this.turnTimer = Math.floor(Math.random() * 100) + 35;
-            this.isGold = Math.random() < 0.2;
+            this.isGold = Math.random() < 0.18;
+
+            // Pre-computed color strings to avoid 3000 GC allocations per frame!
+            const aStr = this.alpha.toFixed(2);
+            const aFinStr = (this.alpha * 0.38).toFixed(2);
+            this.baseColor = this.isGold
+                ? 'rgba(212, 175, 55, ' + aStr + ')'
+                : 'rgba(78, 204, 163, ' + aStr + ')';
+            this.finColor = this.isGold
+                ? 'rgba(212, 175, 55, ' + aFinStr + ')'
+                : 'rgba(46, 184, 114, ' + aFinStr + ')';
         }
 
         update() {
@@ -244,11 +266,11 @@ function initBioCanvas() {
                 const dy = this.y - sw.y;
                 const dist = Math.hypot(dx, dy);
 
-                if (dist < sw.radius + 65 && dist > sw.radius - 35) {
-                    const awayAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.4;
+                if (dist < sw.radius + 75 && dist > sw.radius - 40) {
+                    const awayAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.45;
                     this.angle = awayAngle;
                     this.targetAngle = awayAngle;
-                    this.speed = Math.max(this.speed, 6.2 + Math.random() * 2.5);
+                    this.speed = Math.max(this.speed, 6.5 + Math.random() * 2.8);
                     this.turnTimer = 35;
                     scattered = true;
                     break;
@@ -261,16 +283,16 @@ function initBioCanvas() {
                 const dy = mouseY - this.y;
                 const dist = Math.hypot(dx, dy);
 
-                if (dist < 380) {
+                if (dist < 420) {
                     const toMouse = Math.atan2(dy, dx);
                     if (dist > 52) {
                         let diff = toMouse - this.angle;
                         while (diff < -Math.PI) diff += Math.PI * 2;
                         while (diff > Math.PI) diff -= Math.PI * 2;
 
-                        const steer = Math.max(0.045, 0.13 * (1 - dist / 380));
+                        const steer = Math.max(0.045, 0.14 * (1 - dist / 420));
                         this.angle += diff * steer;
-                        this.speed = Math.min(this.speed + 0.09, 2.7);
+                        this.speed = Math.min(this.speed + 0.1, 2.8);
                     } else {
                         const orbit = toMouse + Math.PI / 2 + Math.sin(this.wigglePhase) * 0.25;
                         let diff = orbit - this.angle;
@@ -294,10 +316,11 @@ function initBioCanvas() {
                 this.speed *= 0.96;
             }
 
-            if (this.x < -50) this.x = width + 50;
-            if (this.x > width + 50) this.x = -50;
-            if (this.y < -50) this.y = height + 50;
-            if (this.y > height + 50) this.y = -50;
+            // Infinite cyclic wrapping around screen boundaries
+            if (this.x < -60) this.x = width + 60;
+            if (this.x > width + 60) this.x = -60;
+            if (this.y < -60) this.y = height + 60;
+            if (this.y > height + 60) this.y = -60;
         }
 
         naturalSteer() {
@@ -305,7 +328,7 @@ function initBioCanvas() {
             if (this.turnTimer <= 0) {
                 this.targetAngle += (Math.random() - 0.5) * 1.6;
                 this.turnTimer = Math.floor(Math.random() * 110) + 50;
-                this.speed = Math.random() * 1.1 + 0.65;
+                this.speed = Math.random() * 1.15 + 0.65;
             }
 
             let diff = this.targetAngle - this.angle;
@@ -315,18 +338,29 @@ function initBioCanvas() {
         }
 
         draw() {
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(this.angle);
+            const cos = Math.cos(this.angle);
+            const sin = Math.sin(this.angle);
+            // Ultra-fast single transform call per tadpole without save/restore overhead
+            ctx.setTransform(cos, sin, -sin, cos, this.x, this.y);
 
-            const baseColor = this.isGold
-                ? 'rgba(212, 175, 55, ' + this.alpha + ')'
-                : 'rgba(78, 204, 163, ' + this.alpha + ')';
-            const finColor = this.isGold
-                ? 'rgba(212, 175, 55, ' + (this.alpha * 0.38) + ')'
-                : 'rgba(46, 184, 114, ' + (this.alpha * 0.38) + ')';
+            if (this.isDeep) {
+                // Optimized fast rendering for deep background swarm
+                const wave = Math.sin(this.wigglePhase) * 2.0;
+                ctx.beginPath();
+                ctx.moveTo(-this.size * 0.6, 0);
+                ctx.quadraticCurveTo(-this.size * 2.2, wave, -this.size * 3.4, wave * 1.4);
+                ctx.strokeStyle = this.baseColor;
+                ctx.lineWidth = 1.1;
+                ctx.stroke();
 
-            // Multi-segment undulating tail
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size * 1.3, this.size * 0.88, 0, 0, Math.PI * 2);
+                ctx.fillStyle = this.baseColor;
+                ctx.fill();
+                return;
+            }
+
+            // Multi-segment undulating tail for mid and surface tadpoles
             const segments = 5;
             const segLen = this.tailLength / segments;
             const pts = [{ x: -this.size * 0.75, y: 0 }];
@@ -347,7 +381,7 @@ function initBioCanvas() {
                 ctx.lineTo(pts[i].x, pts[i].y + finWidth);
             }
             ctx.closePath();
-            ctx.fillStyle = finColor;
+            ctx.fillStyle = this.finColor;
             ctx.fill();
 
             // Muscular tail notochord core
@@ -356,14 +390,14 @@ function initBioCanvas() {
             for (let i = 1; i < pts.length; i++) {
                 ctx.lineTo(pts[i].x, pts[i].y);
             }
-            ctx.strokeStyle = baseColor;
-            ctx.lineWidth = 1.4;
+            ctx.strokeStyle = this.baseColor;
+            ctx.lineWidth = 1.3;
             ctx.stroke();
 
             // Tadpole Head / Body (Teardrop Anuran Morphology)
             ctx.beginPath();
             ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
-            ctx.fillStyle = baseColor;
+            ctx.fillStyle = this.baseColor;
             ctx.fill();
 
             // Lateral Eyes
@@ -372,8 +406,6 @@ function initBioCanvas() {
             ctx.arc(this.size * 0.45, -this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
             ctx.arc(this.size * 0.45, this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
             ctx.fill();
-
-            ctx.restore();
         }
     }
 
@@ -382,6 +414,8 @@ function initBioCanvas() {
     }
 
     function animate() {
+        // Reset transform to identity for full-screen clear & shockwave rings
+        ctx.resetTransform();
         ctx.clearRect(0, 0, width, height);
 
         for (let i = shockwaves.length - 1; i >= 0; i--) {
@@ -391,8 +425,8 @@ function initBioCanvas() {
 
             ctx.beginPath();
             ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(78, 204, 163, ' + (sw.alpha * 0.65) + ')';
-            ctx.lineWidth = 1.8;
+            ctx.strokeStyle = 'rgba(78, 204, 163, ' + (sw.alpha * 0.7) + ')';
+            ctx.lineWidth = 2.0;
             ctx.stroke();
 
             if (sw.radius >= sw.maxRadius || sw.alpha <= 0.02) {
@@ -400,10 +434,16 @@ function initBioCanvas() {
             }
         }
 
-        tadpoles.forEach(t => {
+        // Draw all tadpoles with zero GC string alloc and ultra-fast setTransform
+        for (let i = 0; i < tadpoles.length; i++) {
+            const t = tadpoles[i];
             t.update();
             t.draw();
-        });
+        }
+
+        // Reset transform back to identity
+        ctx.resetTransform();
+
         requestAnimationFrame(animate);
     }
     animate();
