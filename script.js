@@ -671,7 +671,7 @@ function initMetricsCounter() {
    ========================================================================== */
 const translations = {
     pt: {
-        pond_badge: "Lagoa de Observação de Anuros",
+        pond_badge: "Lagoa dos Girinos",
         pond_instructions: "<span class=\"desktop-only\"><i class=\"fa-solid fa-arrow-pointer\"></i> Passe o mouse para atrair em cardume &bull; <i class=\"fa-solid fa-hand-pointer\"></i> Clique para dispersar</span><span class=\"mobile-only\"><i class=\"fa-solid fa-hand-pointer\"></i> Toque na água para dispersar os girinos</span>",
         tag_identity: "Identidade & Liderança",
         header_roles: "&lt;Biólogo · Gestor Ambiental · Taxonomista · Sócio Fundador BioKuri&gt;",
@@ -767,7 +767,7 @@ const translations = {
         footer_text: "Desenvolvido por Lucas Aøsf // Biokuri — Soluções Ambientais & Ecologia Computacional"
     },
     en: {
-                pond_badge: "Anuran Tadpole Observation Pond",
+                pond_badge: "Tadpole Lagoon",
         pond_instructions: "<span class=\"desktop-only\"><i class=\"fa-solid fa-arrow-pointer\"></i> Hover cursor to attract in a school &bull; <i class=\"fa-solid fa-hand-pointer\"></i> Click to scatter</span><span class=\"mobile-only\"><i class=\"fa-solid fa-hand-pointer\"></i> Tap water to scatter tadpoles</span>",
         tag_identity: "Identity & Leadership",
         header_roles: "&lt;Biologist · Environmental Manager · Taxonomist · Co-Founder BioKuri&gt;",
