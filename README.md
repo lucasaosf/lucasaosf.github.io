@@ -1,14 +1,14 @@
 # Portfólio Lucas Aøsf // Biokuri 🌿
 
-Portfólio científico e profissional de **Lucas Aøsf (Lucas José Alves de Oliveira Simões Ferreira)**, com layout e identidade visual proprietários da **Biokuri**, inspirado na arquitetura bio-cyber terminal de [MarcosAosf](https://marcosaosf.github.io/cyberaosf/).
+Portfólio científico e profissional de **Lucas Aøsf (Lucas José Alves de Oliveira Simões Ferreira)** — Biólogo (CRBio-01 nº 127233/01-D), Gestor Ambiental (Especialista UNOPAR), Pesquisador e Taxonomista, fundador da **Biokuri**.
 
 ---
 
 ## 🧬 Pilares de Atuação em Destaque
 
-1. **Taxonomia & Sistemática Filogenética (Foco Central)**: Diagnose morfológica e bioacústica de herpetofauna e ornitofauna, chaves dicotômicas, clados crípticos (complexo *Bothrops atrox*, serpentes e anuros) e redescobertas taxonômicas (*Bothrops bilineatus* após 30 anos no ES).
-2. **Ecologia Computacional & Programação em R**: Pipelines avançados de mineração de ocorrências no GBIF, análise estatística multivariada de comunidades de fauna, bioestatística e modelagem ecológica (apresentado na COP30 da ONU).
-3. **Automação de Relatórios & Matrizes**: Scripts em Python e R para higienização e integração de dados de campo para diagnósticos de EIA/RIMA, RAP e laudos CETESB.
+1. **Taxonomia & Sistemática Filogenética (Foco Central)**: Diagnose morfológica e bioacústica de herpetofauna e anurofauna, chaves dicotômicas, clados crípticos (complexo *Bothrops atrox*, serpentes e anuros) e redescobertas taxonômicas (*Bothrops bilineatus* após 30 anos no ES).
+2. **Ecologia Computacional & Programação em R e Python**: Pipelines avançados de mineração de ocorrências no GBIF, análise estatística multivariada de comunidades de fauna, bioestatística e modelagem ecológica (apresentado na COP30 da ONU).
+3. **Gestão Ambiental & Licenciamento de Infraestrutura**: Atuação técnica em ferrovias, duplicações de rodovias (Tamoios, Carvalho Pinto, Rio-Santos SP-055, PR), indústrias de celulose (Arauco, Bataguassu), hidrelétricas (PCH Verde 2), mineração, parques solares e linhas de transmissão de 500 kV em múltiplos biomas brasileiros.
 4. **Engenharia de Softwares de Campo (PWAs)**: Criador da [Caderneta de Campo](https://lucasaosf.github.io/caderneta-de-campo/) e [Cubagem Florestal Smalian](https://lucasaosf.github.io/cubagem-florestal/).
 
 ---
