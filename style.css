@@ -658,7 +658,7 @@ h2 {
     position: relative;
     width: 135px;
     height: 135px;
-    margin-bottom: 0.95rem;
+    margin-bottom: 1.55rem;
 }
 
 .profile-img {
@@ -1760,7 +1760,7 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    margin-top: 0.35rem;
+    margin-top: 0.45rem;
     padding: 0.35rem 0.75rem;
     background: rgba(78, 204, 163, 0.12);
     border: 1px solid var(--bio-emerald);
