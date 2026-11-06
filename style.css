@@ -1236,14 +1236,68 @@ h2 {
     gap: 0.75rem;
 }
 
+.section-header-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
 .badge-peer {
     background: rgba(56, 229, 77, 0.12);
     border: 1px solid var(--bio-green);
     color: var(--bio-green);
     font-family: var(--font-terminal);
     font-size: 0.75rem;
-    padding: 0.25rem 0.65rem;
+    padding: 0.28rem 0.65rem;
     border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.badge-rg-profile {
+    background: rgba(0, 204, 187, 0.12);
+    border: 1px solid rgba(0, 204, 187, 0.45);
+    color: #00e5cc;
+    font-family: var(--font-terminal);
+    font-size: 0.75rem;
+    padding: 0.28rem 0.65rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: var(--transition);
+}
+
+.badge-rg-profile:hover {
+    background: #00ccbb;
+    color: #03140a;
+    box-shadow: 0 0 12px rgba(0, 204, 187, 0.5);
+    transform: translateY(-1px);
+}
+
+.badge-cv-profile {
+    background: rgba(197, 160, 89, 0.12);
+    border: 1px solid rgba(197, 160, 89, 0.45);
+    color: #e5c07b;
+    font-family: var(--font-terminal);
+    font-size: 0.75rem;
+    padding: 0.28rem 0.65rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: var(--transition);
+}
+
+.badge-cv-profile:hover {
+    background: #c5a059;
+    color: #03140a;
+    box-shadow: 0 0 12px rgba(197, 160, 89, 0.5);
+    transform: translateY(-1px);
 }
 
 .papers-grid {
@@ -1338,6 +1392,30 @@ h2 {
     margin-bottom: 0.5rem;
 }
 
+.paper-title-link {
+    color: var(--text-main);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline;
+}
+
+.paper-title-link:hover {
+    color: var(--bio-emerald);
+}
+
+.paper-title-icon {
+    font-size: 0.72em;
+    margin-left: 0.35rem;
+    color: var(--bio-emerald);
+    opacity: 0.6;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.paper-title-link:hover .paper-title-icon {
+    opacity: 1;
+    transform: translate(2px, -2px);
+}
+
 .paper-authors {
     font-size: 0.82rem;
     color: var(--bio-sage);
@@ -1357,10 +1435,19 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
     border-top: 1px dashed rgba(78, 204, 163, 0.15);
-    padding-top: 0.75rem;
+    padding-top: 0.85rem;
+    margin-top: auto;
     font-family: var(--font-terminal);
     font-size: 0.74rem;
+}
+
+.paper-meta-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
 }
 
 .paper-doi {
@@ -1371,19 +1458,79 @@ h2 {
     color: var(--bio-sage);
 }
 
-.paper-link {
-    color: var(--bio-emerald);
-    text-decoration: none;
+.paper-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.paper-action-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    transition: var(--transition);
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    font-family: var(--font-terminal);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    white-space: nowrap;
 }
 
-.paper-link:hover {
-    color: #fff;
-    text-shadow: 0 0 8px var(--bio-emerald);
+.paper-action-btn.btn-pdf {
+    background: rgba(78, 204, 163, 0.14);
+    color: #4ecca3;
+    border: 1px solid rgba(78, 204, 163, 0.45);
 }
+
+.paper-action-btn.btn-pdf:hover {
+    background: #4ecca3;
+    color: #03140a;
+    box-shadow: 0 0 10px rgba(78, 204, 163, 0.45);
+    transform: translateY(-1px);
+}
+
+.paper-action-btn.btn-rg {
+    background: rgba(0, 204, 187, 0.12);
+    color: #00e5cc;
+    border: 1px solid rgba(0, 204, 187, 0.45);
+}
+
+.paper-action-btn.btn-rg:hover {
+    background: #00ccbb;
+    color: #03140a;
+    box-shadow: 0 0 10px rgba(0, 204, 187, 0.45);
+    transform: translateY(-1px);
+}
+
+.paper-action-btn.btn-doi {
+    background: rgba(197, 160, 89, 0.12);
+    color: #e5c07b;
+    border: 1px solid rgba(197, 160, 89, 0.4);
+}
+
+.paper-action-btn.btn-doi:hover {
+    background: #c5a059;
+    color: #03140a;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.4);
+    transform: translateY(-1px);
+}
+
+.paper-action-btn.btn-code {
+    background: rgba(167, 139, 250, 0.12);
+    color: #c4b5fd;
+    border: 1px solid rgba(167, 139, 250, 0.4);
+}
+
+.paper-action-btn.btn-code:hover {
+    background: #a78bfa;
+    color: #0f0a20;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+    transform: translateY(-1px);
+}
+
 
 /* ==========================================================================
    PROFESSIONAL TIMELINE & MAJOR CONTRACTS
