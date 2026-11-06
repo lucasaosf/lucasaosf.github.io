@@ -21,7 +21,7 @@
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=6.2">
+    <link rel="stylesheet" href="style.css?v=7.0">
 </head>
 
 <body>
@@ -71,6 +71,21 @@
                 <a href="#experience-section" class="station-pill"><i class="fa-solid fa-briefcase"></i> Gestão Ambiental &amp; Campo</a>
             </div>
         </header>
+
+        <!-- Interactive Tadpole Pond Observation Window (Espaço entre Sessão 1 e Sessão 2) -->
+        <div id="tadpole-pond-zone" class="tadpole-pond-zone" title="Lagoa de Observação de Anuros">
+            <div class="pond-zone-waterline top"></div>
+            <div class="pond-zone-content">
+                <span class="pond-zone-badge">
+                    <i class="fa-solid fa-water"></i> <span data-i18n="pond_badge">Lagoa de Observação de Anuros</span>
+                </span>
+                <p class="pond-zone-instructions" data-i18n="pond_instructions">
+                    <span class="desktop-only"><i class="fa-solid fa-arrow-pointer"></i> Passe o mouse para atrair em cardume &bull; <i class="fa-solid fa-hand-pointer"></i> Clique para dispersar</span>
+                    <span class="mobile-only"><i class="fa-solid fa-hand-pointer"></i> Toque na água para dispersar os girinos</span>
+                </p>
+            </div>
+            <div class="pond-zone-waterline bottom"></div>
+        </div>
 
         <!-- Top Profile & Focus Grid -->
         <div class="grid-layout">
@@ -970,7 +985,7 @@
     </main>
 
     <!-- Custom Script -->
-    <script src="script.js?v=6.2"></script>
+    <script src="script.js?v=7.0"></script>
 </body>
 
 </html>

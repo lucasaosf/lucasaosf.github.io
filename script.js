@@ -125,6 +125,103 @@ function initBioCanvas() {
         setTimeout(updateCanvasDimensions, 150);
     });
 
+    // Pond zone interaction states (Restricted strictly to the space between Section 1 and Section 2)
+    const pondZone = document.getElementById('tadpole-pond-zone');
+    let mouseInPond = false;
+    let mouseX = -1000;
+    let mouseY = -1000;
+    const shockwaves = [];
+
+    function isInsidePond(cx, cy) {
+        if (!pondZone) return false;
+        const rect = pondZone.getBoundingClientRect();
+        return cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom;
+    }
+
+    if (pondZone) {
+        // Desktop: mousemove inside pond zone attracts tadpoles like a magnet
+        pondZone.addEventListener('mousemove', (e) => {
+            mouseInPond = true;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        pondZone.addEventListener('mouseenter', (e) => {
+            mouseInPond = true;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        pondZone.addEventListener('mouseleave', () => {
+            mouseInPond = false;
+            mouseX = -1000;
+            mouseY = -1000;
+        });
+
+        // Desktop: click in pond zone scatters tadpoles
+        pondZone.addEventListener('click', (e) => {
+            triggerShockwave(e.clientX, e.clientY);
+        });
+
+        // Mobile: ONLY reacts to finger touch in this specific area by scattering the tadpoles
+        pondZone.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches.length > 0) {
+                const touch = e.touches[0];
+                triggerShockwave(touch.clientX, touch.clientY);
+            }
+        }, { passive: true });
+    }
+
+    window.addEventListener('scroll', () => {
+        if (mouseInPond && !isInsidePond(mouseX, mouseY)) {
+            mouseInPond = false;
+            mouseX = -1000;
+            mouseY = -1000;
+        }
+    }, { passive: true });
+
+    function triggerShockwave(x, y) {
+        shockwaves.push({
+            x: x,
+            y: y,
+            radius: 8,
+            maxRadius: 320,
+            speed: 8.5,
+            alpha: 0.9
+        });
+        setTimeout(() => {
+            shockwaves.push({
+                x: x,
+                y: y,
+                radius: 6,
+                maxRadius: 240,
+                speed: 6.2,
+                alpha: 0.6
+            });
+        }, 110);
+
+        playWaterDrip();
+    }
+
+    function playWaterDrip() {
+        if (!soundEnabled || !audioCtx) return;
+        try {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.exponentialRampToValueAtTime(780, now + 0.07);
+            osc.frequency.exponentialRampToValueAtTime(320, now + 0.16);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.22);
+        } catch (e) {}
+    }
+
     const tadpoles = [];
     const count = width > 1024 ? 500 : (width > 600 ? 350 : 250);
 
@@ -143,15 +240,12 @@ function initBioCanvas() {
             // Varied depths: background, midground, and foreground
             const depth = Math.random();
             if (depth < 0.45) {
-                // Background layer: small & soft ambient
                 this.size = Math.random() * 1.8 + 3.2;
                 this.alpha = Math.random() * 0.18 + 0.15;
             } else if (depth < 0.82) {
-                // Midground layer
                 this.size = Math.random() * 2.2 + 4.8;
                 this.alpha = Math.random() * 0.22 + 0.25;
             } else {
-                // Foreground layer: larger & vibrant
                 this.size = Math.random() * 2.5 + 6.5;
                 this.alpha = Math.random() * 0.25 + 0.38;
             }
@@ -164,22 +258,68 @@ function initBioCanvas() {
         }
 
         update() {
-            this.turnTimer--;
-            if (this.turnTimer <= 0) {
-                this.targetAngle += (Math.random() - 0.5) * 1.6;
-                this.turnTimer = Math.floor(Math.random() * 110) + 50;
-                this.speed = Math.random() * 1.1 + 0.65;
+            // 1. Scatter reaction if hit by an expanding shockwave from click/touch
+            let scattered = false;
+            for (let s = 0; s < shockwaves.length; s++) {
+                const sw = shockwaves[s];
+                const dx = this.x - sw.x;
+                const dy = this.y - sw.y;
+                const dist = Math.hypot(dx, dy);
+
+                // If within active shockwave wave front
+                if (dist < sw.radius + 65 && dist > sw.radius - 35) {
+                    const awayAngle = Math.atan2(dy, dx) + (Math.random() - 0.5) * 0.4;
+                    this.angle = awayAngle;
+                    this.targetAngle = awayAngle;
+                    this.speed = Math.max(this.speed, 6.2 + Math.random() * 2.8);
+                    this.turnTimer = 35;
+                    scattered = true;
+                    break;
+                }
             }
 
-            // Smooth rotational steering
-            let diff = this.targetAngle - this.angle;
-            while (diff < -Math.PI) diff += Math.PI * 2;
-            while (diff > Math.PI) diff -= Math.PI * 2;
-            this.angle += diff * 0.045;
+            // 2. Attraction towards mouse cursor ONLY when cursor is inside the pond zone (Desktop)
+            if (!scattered && mouseInPond) {
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.hypot(dx, dy);
 
+                if (dist < 380) {
+                    const toMouse = Math.atan2(dy, dx);
+                    if (dist > 52) {
+                        // Gentle magnet attraction
+                        let diff = toMouse - this.angle;
+                        while (diff < -Math.PI) diff += Math.PI * 2;
+                        while (diff > Math.PI) diff -= Math.PI * 2;
+
+                        const steer = Math.max(0.045, 0.13 * (1 - dist / 380));
+                        this.angle += diff * steer;
+                        this.speed = Math.min(this.speed + 0.09, 2.7);
+                    } else {
+                        // Close to cursor: orbit gently around it without clumping into a single dot
+                        const orbit = toMouse + Math.PI / 2 + Math.sin(this.wigglePhase) * 0.25;
+                        let diff = orbit - this.angle;
+                        while (diff < -Math.PI) diff += Math.PI * 2;
+                        while (diff > Math.PI) diff -= Math.PI * 2;
+                        this.angle += diff * 0.09;
+                        this.speed = Math.max(this.speed * 0.95, 1.3);
+                    }
+                } else {
+                    this.naturalSteer();
+                }
+            } else if (!scattered) {
+                this.naturalSteer();
+            }
+
+            // Movement along current angle
             this.x += Math.cos(this.angle) * this.speed;
             this.y += Math.sin(this.angle) * this.speed;
             this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
+
+            // Friction to restore normal swimming speed
+            if (this.speed > 2.2) {
+                this.speed *= 0.96;
+            }
 
             // Screen boundary wrap
             if (this.x < -50) this.x = width + 50;
@@ -188,17 +328,31 @@ function initBioCanvas() {
             if (this.y > height + 50) this.y = -50;
         }
 
+        naturalSteer() {
+            this.turnTimer--;
+            if (this.turnTimer <= 0) {
+                this.targetAngle += (Math.random() - 0.5) * 1.6;
+                this.turnTimer = Math.floor(Math.random() * 110) + 50;
+                this.speed = Math.random() * 1.1 + 0.65;
+            }
+
+            let diff = this.targetAngle - this.angle;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            this.angle += diff * 0.045;
+        }
+
         draw() {
             ctx.save();
             ctx.translate(this.x, this.y);
             ctx.rotate(this.angle);
 
             const baseColor = this.isGold
-                ? `rgba(212, 175, 55, ${this.alpha})`
-                : `rgba(78, 204, 163, ${this.alpha})`;
+                ? gba(212, 175, 55, )
+                : gba(78, 204, 163, );
             const finColor = this.isGold
-                ? `rgba(212, 175, 55, ${this.alpha * 0.38})`
-                : `rgba(46, 184, 114, ${this.alpha * 0.38})`;
+                ? gba(212, 175, 55, )
+                : gba(46, 184, 114, );
 
             // Multi-segment undulating tail
             const segments = 5;
@@ -257,6 +411,24 @@ function initBioCanvas() {
 
     function animate() {
         ctx.clearRect(0, 0, width, height);
+
+        // Render expanding shockwaves / water ripples
+        for (let i = shockwaves.length - 1; i >= 0; i--) {
+            const sw = shockwaves[i];
+            sw.radius += sw.speed;
+            sw.alpha *= 0.96;
+
+            ctx.beginPath();
+            ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+            ctx.strokeStyle = gba(78, 204, 163, );
+            ctx.lineWidth = 1.8;
+            ctx.stroke();
+
+            if (sw.radius >= sw.maxRadius || sw.alpha <= 0.02) {
+                shockwaves.splice(i, 1);
+            }
+        }
+
         tadpoles.forEach(t => {
             t.update();
             t.draw();
@@ -528,6 +700,8 @@ function initMetricsCounter() {
    ========================================================================== */
 const translations = {
     pt: {
+                pond_badge: "Lagoa de Observação de Anuros",
+        pond_instructions: "<span class=\"desktop-only\"><i class=\"fa-solid fa-arrow-pointer\"></i> Passe o mouse para atrair em cardume &bull; <i class=\"fa-solid fa-hand-pointer\"></i> Clique para dispersar</span><span class=\"mobile-only\"><i class=\"fa-solid fa-hand-pointer\"></i> Toque na água para dispersar os girinos</span>",
         tag_identity: "Identidade & Liderança",
         header_roles: "&lt;Biólogo · Gestor Ambiental · Taxonomista · Sócio Fundador BioKuri&gt;",
         desc_bio: "Biólogo (UNIFATEA) e <strong>Especialista em Gestão Ambiental (UNOPAR)</strong>, anilhador CEMAVE/ICMBio. Experiência longa e consolidada com <strong>Taxonomia & Sistemática Filogenética</strong> (com ênfase em <strong>anfíbios anuros</strong> e répteis), ecologia de campo em todos os biomas brasileiros e <strong>automação científica em R e Python</strong> para modelagem de biodiversidade e gestão de grandes empreendimentos.",
@@ -622,6 +796,8 @@ const translations = {
         footer_text: "Desenvolvido por Lucas Aøsf // Biokuri — Soluções Ambientais & Ecologia Computacional"
     },
     en: {
+                pond_badge: "Anuran Tadpole Observation Pond",
+        pond_instructions: "<span class=\"desktop-only\"><i class=\"fa-solid fa-arrow-pointer\"></i> Hover cursor to attract in a school &bull; <i class=\"fa-solid fa-hand-pointer\"></i> Click to scatter</span><span class=\"mobile-only\"><i class=\"fa-solid fa-hand-pointer\"></i> Tap water to scatter tadpoles</span>",
         tag_identity: "Identity & Leadership",
         header_roles: "&lt;Biologist · Environmental Manager · Taxonomist · Co-Founder BioKuri&gt;",
         desc_bio: "Biologist (UNIFATEA) and <strong>Environmental Management Specialist (UNOPAR)</strong>, CEMAVE/ICMBio bird bander. Long and consolidated experience in <strong>Taxonomy & Phylogenetic Systematics</strong> (with emphasis on <strong>anuran amphibians</strong> and reptiles), field ecology across all Brazilian biomes, and <strong>computational science in R & Python</strong> for biodiversity modeling and environmental governance.",

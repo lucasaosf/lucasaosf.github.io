@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    BIOKURI // PORTFÓLIO LUCAS AØSF
    Identidade Visual: Verde Floresta Profundo, Marfim Creme, Ouro/Bronze & Esmeralda Bioluminescente
    Tipografia: Cormorant Garamond (Ciência/Sistemática), Jost (Interface), Roboto Mono (Bio-Terminal)
@@ -485,6 +485,88 @@ h2 {
     color: #4ECCA3 !important;
     border-color: rgba(78, 204, 163, 0.4) !important;
     font-weight: 600;
+}
+
+/* ==========================================================================
+   TADPOLE POND OBSERVATION ZONE (Espaço Interativo entre Sessão 1 e Sessão 2)
+   ========================================================================== */
+.tadpole-pond-zone {
+    position: relative;
+    width: 100%;
+    min-height: 210px;
+    margin: 1.85rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(7, 20, 11, 0.12) 0%, rgba(14, 37, 21, 0.38) 50%, rgba(7, 20, 11, 0.12) 100%);
+    border: 1px dashed rgba(78, 204, 163, 0.35);
+    border-radius: var(--radius-md);
+    cursor: crosshair;
+    overflow: hidden;
+    transition: var(--transition);
+    user-select: none;
+    box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.5), 0 0 16px rgba(78, 204, 163, 0.1);
+}
+
+.tadpole-pond-zone:hover {
+    border-color: var(--bio-emerald);
+    box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(78, 204, 163, 0.22);
+}
+
+.pond-zone-waterline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(78, 204, 163, 0.45) 50%, transparent 100%);
+    pointer-events: none;
+}
+
+.pond-zone-waterline.top { top: 0; }
+.pond-zone-waterline.bottom { bottom: 0; }
+
+.pond-zone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
+    pointer-events: none;
+    text-align: center;
+    padding: 1rem;
+    z-index: 1;
+}
+
+.pond-zone-badge {
+    font-family: var(--font-terminal);
+    font-size: 0.74rem;
+    color: var(--bio-emerald);
+    background: rgba(7, 20, 11, 0.7);
+    border: 1px solid rgba(78, 204, 163, 0.4);
+    padding: 0.25rem 0.8rem;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.pond-zone-instructions {
+    font-family: var(--font-terminal);
+    font-size: 0.72rem;
+    color: rgba(230, 241, 235, 0.75);
+    background: rgba(7, 20, 11, 0.5);
+    padding: 0.2rem 0.75rem;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(3px);
+}
+
+.pond-zone-instructions .mobile-only {
+    display: none;
 }
 
 /* ==========================================================================
@@ -2137,6 +2219,30 @@ h2 {
         font-size: 0.74rem;
         padding: 0.35rem 0.7rem;
     }
+    /* Tadpole Pond Zone (Tablet & Mobile) */
+    .tadpole-pond-zone {
+        min-height: 175px;
+        margin: 1.35rem 0;
+    }
+
+    .pond-zone-instructions .desktop-only {
+        display: none;
+    }
+
+    .pond-zone-instructions .mobile-only {
+        display: inline;
+    }
+
+    .pond-zone-badge {
+        font-size: 0.68rem;
+        padding: 0.2rem 0.65rem;
+    }
+
+    .pond-zone-instructions {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.55rem;
+    }
+
 
     /* Profile Card Centering & Overlap Prevention */
     .section-tag {
@@ -2462,6 +2568,11 @@ h2 {
         width: 22px;
         height: 22px;
     }
+    .tadpole-pond-zone {
+        min-height: 155px;
+        margin: 1.15rem 0;
+    }
+
 
     /* Profile Avatar & Badges */
     .section-tag {
