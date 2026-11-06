@@ -244,84 +244,251 @@ function initStationWelcome() {
 }
 
 /* ==========================================================================
-   4. INTERACTIVE JUMPING FROG OVER LETTERS ("Sapinho pulando entre as letras")
+   4. INTERACTIVE LIVING TREEFROG (Anuro Articulado - Hylidae)
+      - Patas articuladas com extensão no salto e amortecimento no pouso
+      - PC: Salta onde o mouse passar com rotação balística
+      - Celular: Salta exatamente onde o usuário clicar/tocar com o dedo
+      - Pousa nas letras de "Lucas Aøsf" com animação de impacto elástico
    ========================================================================== */
 function initJumpingFrog() {
-    const wrapper = document.querySelector('.name-frog-wrapper');
     const frog = document.getElementById('jumping-frog');
     const letters = document.querySelectorAll('.hop-char');
+    if (!frog) return;
 
-    if (!wrapper || !frog || letters.length === 0) return;
-
+    let frogX = 0;
+    let frogY = 0;
+    let isJumping = false;
+    let isPerchedOnName = true;
     let currentLetterIdx = 0;
     let autoHopTimer = null;
+    let idleTimer = null;
+    let lastCroakTime = 0;
+    let lastMouseJumpTime = 0;
 
-    function hopToLetter(index, isUserClick = false) {
-        if (index < 0 || index >= letters.length) return;
-        currentLetterIdx = index;
+    // Rate-limited croak to keep audio natural and pleasant
+    function triggerCroak(force = false) {
+        const now = Date.now();
+        if (force || now - lastCroakTime > 850) {
+            playFrogCroak();
+            lastCroakTime = now;
+        }
+    }
 
-        const targetLetter = letters[index];
-        const wrapRect = wrapper.getBoundingClientRect();
-        const letterRect = targetLetter.getBoundingClientRect();
+    // Spawn green bio-ripple shockwave at landing spot
+    function spawnRipple(x, y) {
+        const ripple = document.createElement('div');
+        ripple.className = 'frog-landing-ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 480);
+    }
 
-        // Calculate landing coordinate relative to wrapper
-        const targetX = (letterRect.left - wrapRect.left) + (letterRect.width / 2) - 13;
-        const targetY = (letterRect.top - wrapRect.top) - 26;
+    // Core jump execution with physics, angle calculation, leg extension & landing squash
+    function jumpTo(targetX, targetY, options = {}) {
+        if (isJumping) return;
+        isJumping = true;
 
-        // Perform arc leap
-        frog.style.transform = `translate(${targetX}px, ${targetY - 14}px) rotate(${isUserClick ? -18 : 12}deg) scale(1.18)`;
-        frog.classList.add('in-flight');
+        const {
+            letterEl = null,
+            isLetterHop = false,
+            forceCroak = false,
+            onComplete = null
+        } = options;
 
-        playFrogCroak();
+        const dx = targetX - frogX;
+        const dy = targetY - frogY;
+        const dist = Math.hypot(dx, dy);
+
+        // Calculate heading angle (0 deg = facing up)
+        let rotDeg = 0;
+        if (dist > 8) {
+            const angleRad = Math.atan2(dy, dx);
+            rotDeg = (angleRad * 180 / Math.PI) + 90;
+        }
+
+        // Phase 1: Crouch & Aim (40ms)
+        frog.style.transform = `translate3d(${frogX}px, ${frogY}px, 0) rotate(${rotDeg}deg) scale(1.14, 0.86)`;
 
         setTimeout(() => {
-            // Touchdown onto the letter
-            frog.style.transform = `translate(${targetX}px, ${targetY}px) rotate(0deg) scale(1)`;
-            frog.classList.remove('in-flight');
-
-            // Letter bounces upon landing
-            targetLetter.classList.remove('letter-bounce');
-            void targetLetter.offsetWidth; // trigger reflow
-            targetLetter.classList.add('letter-bounce');
+            // Phase 2: In-Flight propulsion with legs kicking back (300ms)
+            frog.classList.add('in-flight');
+            frog.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) rotate(${rotDeg}deg)`;
+            triggerCroak(forceCroak);
 
             setTimeout(() => {
-                targetLetter.classList.remove('letter-bounce');
-            }, 450);
-        }, 220);
+                // Phase 3: Touchdown cushion & landing squash
+                frog.classList.remove('in-flight');
+                frog.classList.add('landing');
+                frogX = targetX;
+                frogY = targetY;
+
+                spawnRipple(targetX + 24, targetY + 24);
+
+                if (letterEl) {
+                    letterEl.classList.remove('letter-bounce');
+                    void letterEl.offsetWidth; // trigger reflow
+                    letterEl.classList.add('letter-bounce');
+                    setTimeout(() => letterEl.classList.remove('letter-bounce'), 450);
+                }
+
+                // Phase 4: Settle back to resting pose
+                setTimeout(() => {
+                    frog.classList.remove('landing');
+                    frog.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) rotate(0deg)`;
+                    isJumping = false;
+                    if (onComplete) onComplete();
+                }, 130);
+            }, 300);
+        }, 40);
     }
 
-    // Initial positioning on the first letter 'L'
-    setTimeout(() => {
-        hopToLetter(0);
-        startAutoHop();
-    }, 600);
+    // Hop to a specific letter in the name "Lucas Aøsf"
+    function hopToLetter(index, isUserAction = false) {
+        if (index < 0 || index >= letters.length) return;
+        currentLetterIdx = index;
+        isPerchedOnName = true;
 
-    function startAutoHop() {
+        const targetLetter = letters[index];
+        const rect = targetLetter.getBoundingClientRect();
+        const targetX = rect.left + window.scrollX + (rect.width / 2) - 24;
+        const targetY = rect.top + window.scrollY - 34;
+
+        jumpTo(targetX, targetY, {
+            letterEl: targetLetter,
+            isLetterHop: true,
+            forceCroak: isUserAction
+        });
+    }
+
+    // Set initial position atop first letter 'L'
+    function setInitialPerch() {
+        if (letters.length > 0) {
+            const rect = letters[0].getBoundingClientRect();
+            frogX = rect.left + window.scrollX + (rect.width / 2) - 24;
+            frogY = rect.top + window.scrollY - 34;
+            frog.style.transform = `translate3d(${frogX}px, ${frogY}px, 0)`;
+            startIdleHop();
+        }
+    }
+
+    // Initial positioning after layout
+    setTimeout(setInitialPerch, 450);
+
+    // Keep perched position synced if window resizes or zooms
+    window.addEventListener('resize', () => {
+        if (isPerchedOnName && letters[currentLetterIdx] && !isJumping) {
+            const rect = letters[currentLetterIdx].getBoundingClientRect();
+            frogX = rect.left + window.scrollX + (rect.width / 2) - 24;
+            frogY = rect.top + window.scrollY - 34;
+            frog.style.transform = `translate3d(${frogX}px, ${frogY}px, 0)`;
+        }
+    });
+
+    // Idle timer: Hop gently between letters if no user interaction for 5 seconds
+    function startIdleHop() {
         if (autoHopTimer) clearInterval(autoHopTimer);
         autoHopTimer = setInterval(() => {
-            const nextIdx = (currentLetterIdx + 1) % letters.length;
-            hopToLetter(nextIdx);
-        }, 2800);
+            if (isPerchedOnName && window.scrollY < 450 && !isJumping) {
+                const nextIdx = (currentLetterIdx + 1) % letters.length;
+                hopToLetter(nextIdx, false);
+            }
+        }, 3200);
     }
 
-    function pauseAutoHop() {
+    function resetIdleTimer() {
         if (autoHopTimer) clearInterval(autoHopTimer);
-        setTimeout(startAutoHop, 6000);
+        if (idleTimer) clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+            if (window.scrollY < 400 && !isJumping) {
+                hopToLetter(0, false);
+            }
+            startIdleHop();
+        }, 5500);
     }
 
-    // Click on any letter makes the frog leap directly there!
+    // -------------------------------------------------------------
+    // DESKTOP (PC): Leap wherever the mouse moves ("onde o mouse passar")
+    // -------------------------------------------------------------
+    document.addEventListener('mousemove', (e) => {
+        const now = Date.now();
+        // Cooldown between continuous hops to simulate natural locomotion
+        if (now - lastMouseJumpTime < 380) return;
+
+        const targetX = e.pageX - 24;
+        const targetY = e.pageY - 24;
+        const dist = Math.hypot(targetX - frogX, targetY - frogY);
+
+        // Only leap if mouse has moved beyond close proximity
+        if (dist > 52) {
+            lastMouseJumpTime = now;
+            isPerchedOnName = false;
+            jumpTo(targetX, targetY, { forceCroak: false });
+            resetIdleTimer();
+        }
+    });
+
+    // -------------------------------------------------------------
+    // MOBILE: Leap wherever the user taps with finger ("onde a pessoa clicar com o dedo")
+    // -------------------------------------------------------------
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    document.addEventListener('pointerdown', (e) => {
+        touchStartX = e.pageX;
+        touchStartY = e.pageY;
+    }, { passive: true });
+
+    document.addEventListener('pointerup', (e) => {
+        // Measure movement distance to differentiate tap from scroll/swipe
+        const moveDist = Math.hypot(e.pageX - touchStartX, e.pageY - touchStartY);
+        if (moveDist > 14) return; // User was scrolling, not tapping
+
+        // If user tapped directly on the frog, do an excited backflip hop!
+        if (frog.contains(e.target) || e.target === frog) {
+            triggerCroak(true);
+            jumpTo(frogX, frogY - 45, {
+                forceCroak: true,
+                onComplete: () => {
+                    setTimeout(() => jumpTo(frogX, frogY + 45, { forceCroak: false }), 120);
+                }
+            });
+            resetIdleTimer();
+            return;
+        }
+
+        // Frog leaps directly to tapped coordinate!
+        const targetX = e.pageX - 24;
+        const targetY = e.pageY - 24;
+        isPerchedOnName = false;
+        jumpTo(targetX, targetY, { forceCroak: true });
+        resetIdleTimer();
+    }, { passive: true });
+
+    // -------------------------------------------------------------
+    // Letter interactions: Click or hover over name letters
+    // -------------------------------------------------------------
     letters.forEach((charEl, idx) => {
-        charEl.addEventListener('click', () => {
+        charEl.addEventListener('click', (e) => {
+            e.stopPropagation();
             hopToLetter(idx, true);
-            pauseAutoHop();
+            resetIdleTimer();
+        });
+        charEl.addEventListener('mouseenter', () => {
+            if (!isJumping && currentLetterIdx !== idx) {
+                hopToLetter(idx, false);
+                resetIdleTimer();
+            }
         });
     });
 
-    // Clicking on the frog makes it leap to the next letter excitedly
-    frog.addEventListener('click', () => {
+    // Clicking directly on frog
+    frog.addEventListener('click', (e) => {
+        e.stopPropagation();
+        triggerCroak(true);
         const nextIdx = (currentLetterIdx + 1) % letters.length;
         hopToLetter(nextIdx, true);
-        pauseAutoHop();
+        resetIdleTimer();
     });
 }
 
