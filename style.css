@@ -632,7 +632,7 @@ h2 {
     position: relative;
     width: 135px;
     height: 135px;
-    margin-bottom: 1.55rem;
+    margin-bottom: 0.85rem;
 }
 
 .profile-img {
@@ -2759,7 +2759,7 @@ h2 {
     .profile-avatar-wrap {
         width: 125px;
         height: 125px;
-        margin-bottom: 1.45rem;
+        margin-bottom: 0.80rem;
     }
 
     .profile-img {
