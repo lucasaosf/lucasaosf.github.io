@@ -116,9 +116,27 @@ body {
 }
 
 .brand-mini {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
+    text-decoration: none;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.brand-mini:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+.nav-brand-logo {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+    transition: filter 0.3s ease;
+}
+
+.brand-mini:hover .nav-brand-logo {
+    filter: drop-shadow(0 0 10px rgba(198, 158, 104, 0.4));
 }
 
 .nav-emblem {
@@ -131,16 +149,20 @@ body {
 .nav-brand-text {
     font-family: var(--font-serif);
     font-size: 1.15rem;
-    font-weight: 700;
-    letter-spacing: 2px;
+    font-weight: 600;
+    letter-spacing: 3px;
     color: var(--text-main);
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1px;
 }
 
-.nav-brand-text span {
-    font-family: var(--font-terminal);
-    font-size: 0.75rem;
-    color: var(--bio-emerald);
-    font-weight: 400;
+.nav-brand-text .brand-bio {
+    color: var(--bio-gold);
+}
+
+.nav-brand-text .brand-kuri {
+    color: var(--text-main);
 }
 
 .nav-actions {
@@ -2569,6 +2591,10 @@ h2 {
         margin-top: 0.25rem;
     }
 
+    .nav-brand-logo {
+        height: 32px;
+    }
+
     .nav-brand-text {
         font-size: 1.05rem;
         letter-spacing: 1.5px;
@@ -2967,6 +2993,10 @@ h2 {
     /* Top Bar */
     .top-nav-bar {
         padding: 0.35rem 0.65rem;
+    }
+
+    .nav-brand-logo {
+        height: 26px;
     }
 
     .nav-brand-text {
