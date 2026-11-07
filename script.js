@@ -105,13 +105,9 @@ function playScanTone(step = 1) {
 }
 
 /* ==========================================================================
-   2. BIO-CANVAS: METAMORFOSE ANURA (Girinos, Imagos e Pererecas no Fundo)
-   Ciclo contínuo de 7 dias com 4 estágios anatômicos simultâneos:
-   - Estágio 0: Girino clássico (ápode, cauda longa ondulante)
-   - Estágio 1: Girino com 1 par de pernas (traseiras/posteriores móveis)
-   - Estágio 2: Imago com 2 pares de pernas (4 patas e cauda curta em regressão)
-   - Estágio 3: Pererequinha adulta (sem cauda, discos adesivos, pernada anura)
-   Dispersão orgânica ao toque sem aglomeração nem formação circular
+   2. BIO-CANVAS: LAGOA DOS GIRINOS (Girinos Ápodes Nadando no Fundo)
+   Girinos clássicos com nado ondulante suave e cauda translúcida
+   Dispersão orgânica ao toque (raio delicado e contido) sem formação circular
    ========================================================================== */
 function initBioCanvas() {
     const canvas = document.getElementById('bio-canvas');
@@ -146,26 +142,26 @@ function initBioCanvas() {
         return cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom;
     }
 
-    // Localized, gentle droplet shockwave
+    // Ondulação suave e localizada (raio contido e delicado ao redor do toque)
     function triggerShockwave(x, y) {
         shockwaves.push({
             x: x,
             y: y,
-            radius: 5,
-            maxRadius: 115,
-            speed: 4.6,
-            alpha: 0.90
+            radius: 4,
+            maxRadius: 62, // Raio de ação contido e sutil
+            speed: 3.2,
+            alpha: 0.85
         });
         setTimeout(() => {
             shockwaves.push({
                 x: x,
                 y: y,
-                radius: 4,
-                maxRadius: 80,
-                speed: 3.4,
-                alpha: 0.55
+                radius: 3,
+                maxRadius: 42,
+                speed: 2.2,
+                alpha: 0.48
             });
-        }, 85);
+        }, 75);
     }
 
     if (pondZone) {
@@ -197,7 +193,6 @@ function initBioCanvas() {
         });
 
         // Mobile: ONLY reacts to finger touch in this specific area by scattering nearby tadpoles
-        // Bloqueia eventos de mouse sintéticos do navegador móvel para nunca aglomerar em círculo!
         pondZone.addEventListener('touchstart', (e) => {
             isTouchInteraction = true;
             mouseInPond = false;
@@ -207,7 +202,7 @@ function initBioCanvas() {
             clearTimeout(touchResetTimer);
             touchResetTimer = setTimeout(() => {
                 isTouchInteraction = false;
-            }, 900);
+            }, 800);
 
             if (e.touches && e.touches.length > 0) {
                 const touch = e.touches[0];
@@ -236,15 +231,12 @@ function initBioCanvas() {
         }
     }, { passive: true });
 
-    const organisms = [];
+    const tadpoles = [];
     // Infinitos girinos: dense swarm, endless stream, locked 60 FPS
     const count = width > 1024 ? 1500 : (width > 600 ? 1000 : 700);
-    // Ciclo contínuo de metamorfose biológica ao longo de 7 dias reais (em milissegundos)
-    const CYCLE_MS = 7 * 24 * 60 * 60 * 1000; // 604.800.000 ms
 
-    class Organism {
-        constructor(id) {
-            this.id = id;
+    class Tadpole {
+        constructor() {
             this.reset(true);
         }
 
@@ -255,27 +247,8 @@ function initBioCanvas() {
             this.targetAngle = this.angle;
             this.speed = Math.random() * 1.1 + 0.65;
 
-            // Idade contínua no ciclo de 7 dias (distribuição uniforme para coexistência de todos os estágios)
-            const age = (Date.now() + (this.id / count) * CYCLE_MS) % CYCLE_MS;
-            const progress = age / CYCLE_MS;
-
-            // 4 Estágios Simultâneos:
-            // 0: Girino clássico (ápode, cauda longa) [0.00 a 0.38]
-            // 1: Girino com 1 par de pernas posteriores [0.38 a 0.65]
-            // 2: Imago com 2 pares de pernas (4 patas, cauda curta em regressão) [0.65 a 0.84]
-            // 3: Pererequinha adulta (sem cauda, discos adesivos nas pontas dos dedos, pernada anura) [0.84 a 1.00]
-            if (progress < 0.38) {
-                this.stage = 0;
-            } else if (progress < 0.65) {
-                this.stage = 1;
-            } else if (progress < 0.84) {
-                this.stage = 2;
-            } else {
-                this.stage = 3;
-            }
-
             const depth = Math.random();
-            this.isDeep = depth < 0.48; // ~48% fundo suave para profundidade e alta taxa de quadros
+            this.isDeep = depth < 0.50; // 50% fundo suave para profundidade
             if (this.isDeep) {
                 this.size = Math.random() * 1.4 + 2.4;
                 this.alpha = Math.random() * 0.16 + 0.12;
@@ -287,9 +260,9 @@ function initBioCanvas() {
                 this.alpha = Math.random() * 0.22 + 0.36;
             }
 
-            this.tailLength = this.stage === 2 ? this.size * 1.4 : this.size * 3.4;
+            this.tailLength = this.size * 3.4;
             this.wigglePhase = Math.random() * Math.PI * 2;
-            this.wiggleSpeed = this.stage === 3 ? (Math.random() * 0.08 + 0.09) : (Math.random() * 0.14 + 0.16);
+            this.wiggleSpeed = Math.random() * 0.14 + 0.16;
             this.turnTimer = Math.floor(Math.random() * 100) + 40;
             this.scatterTimer = 0;
             this.isGold = Math.random() < 0.18;
@@ -306,21 +279,21 @@ function initBioCanvas() {
         }
 
         update() {
-            // 1. Reação ao toque ou clique na água (dispersão imediata e suave)
+            // 1. Reação ao toque ou clique (raio sutil e contido)
             for (let s = 0; s < shockwaves.length; s++) {
                 const sw = shockwaves[s];
                 const dx = this.x - sw.x;
                 const dy = this.y - sw.y;
                 const dist = Math.hypot(dx, dy);
 
-                if (dist < sw.radius + 28 && dist > sw.radius - 18) {
+                if (dist < sw.radius + 16 && dist > sw.radius - 12) {
                     const awayAngle = Math.atan2(dy, dx);
-                    // Ampla divergência angular aleatória para espalhar sem padrão circular
+                    // Dispersão com ângulo aleatório divergente para espalhar sem padrão circular
                     this.angle = awayAngle + (Math.random() - 0.5) * 1.8;
                     this.targetAngle = this.angle + (Math.random() - 0.5) * 1.0;
-                    this.speed = Math.max(this.speed, 2.6 + Math.random() * 1.0);
-                    // Timer de dispersão: nada de forma totalmente independente por vários segundos
-                    this.scatterTimer = Math.floor(Math.random() * 110) + 80;
+                    this.speed = Math.max(this.speed, 2.3 + Math.random() * 0.8);
+                    // Timer de dispersão: nada de forma totalmente independente por alguns segundos
+                    this.scatterTimer = Math.floor(Math.random() * 90) + 60;
                     break;
                 }
             }
@@ -351,23 +324,12 @@ function initBioCanvas() {
                 this.naturalSteer();
             }
 
-            // 3. Cinemática de deslocamento:
-            if (this.stage === 3) {
-                // Pererequinha adulta: nado com pernadas síncronas ("frog kick") e deslizamento por inércia
-                this.wigglePhase += this.wiggleSpeed;
-                const stroke = Math.sin(this.wigglePhase);
-                const kickThrust = stroke > 0.4 ? (stroke - 0.4) * 0.85 : 0;
-                const currentVel = this.speed + kickThrust;
-                this.x += Math.cos(this.angle) * currentVel;
-                this.y += Math.sin(this.angle) * currentVel;
-            } else {
-                // Girinos: propulsão contínua com ondulação da cauda
-                this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
-                this.x += Math.cos(this.angle) * this.speed;
-                this.y += Math.sin(this.angle) * this.speed;
-            }
+            // 3. Propulsão contínua com ondulação da cauda
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+            this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
 
-            // Desaceleração suave pós-impulso de volta à velocidade tranquila
+            // Desaceleração suave pós-impulso
             if (this.speed > 1.6) {
                 this.speed *= 0.94;
             }
@@ -396,50 +358,14 @@ function initBioCanvas() {
         draw() {
             const cos = Math.cos(this.angle);
             const sin = Math.sin(this.angle);
-            // Ultra-fast single transform call per organism without save/restore overhead
             ctx.setTransform(cos, sin, -sin, cos, this.x, this.y);
 
             if (this.isDeep) {
-                this.drawDeep();
-                return;
-            }
-
-            if (this.stage === 3) {
-                this.drawAdultFrog();
-            } else if (this.stage === 2) {
-                this.drawImago();
-            } else if (this.stage === 1) {
-                this.drawTwoLeggedTadpole();
-            } else {
-                this.drawClassicTadpole();
-            }
-        }
-
-        drawDeep() {
-            const wave = Math.sin(this.wigglePhase) * 1.8;
-            if (this.stage === 3) {
-                // Pererequinha de fundo: silhueta anura compacta
-                ctx.beginPath();
-                ctx.ellipse(0, 0, this.size * 1.25, this.size * 0.9, 0, 0, Math.PI * 2);
-                ctx.fillStyle = this.baseColor;
-                ctx.fill();
-
-                ctx.strokeStyle = this.baseColor;
-                ctx.lineWidth = 1.1;
-                const stroke = Math.sin(this.wigglePhase);
-                const legExt = stroke > 0 ? stroke * (this.size * 1.1) : 0;
-                ctx.beginPath();
-                ctx.moveTo(-this.size * 0.4, -this.size * 0.6);
-                ctx.lineTo(-this.size * 1.2 - legExt, -this.size * 1.0);
-                ctx.moveTo(-this.size * 0.4, this.size * 0.6);
-                ctx.lineTo(-this.size * 1.2 - legExt, this.size * 1.0);
-                ctx.stroke();
-            } else {
-                // Girino de fundo: silhueta com cauda ondulante
+                // Girino profundo: cauda suave e corpo oval
+                const wave = Math.sin(this.wigglePhase) * 1.8;
                 ctx.beginPath();
                 ctx.moveTo(-this.size * 0.6, 0);
-                const tailLen = this.stage === 2 ? this.size * 1.5 : this.size * 3.3;
-                ctx.quadraticCurveTo(-tailLen * 0.6, wave, -tailLen, wave * 1.3);
+                ctx.quadraticCurveTo(-this.size * 2.0, wave, -this.size * 3.3, wave * 1.3);
                 ctx.strokeStyle = this.baseColor;
                 ctx.lineWidth = 1.1;
                 ctx.stroke();
@@ -448,14 +374,44 @@ function initBioCanvas() {
                 ctx.ellipse(0, 0, this.size * 1.3, this.size * 0.88, 0, 0, Math.PI * 2);
                 ctx.fillStyle = this.baseColor;
                 ctx.fill();
+                return;
             }
-        }
 
-        // Estágio 0: Girino clássico (ápode, cauda longa plena)
-        drawClassicTadpole() {
-            this.drawTail(this.tailLength, 5);
+            // Girino clássico de meia-água e superfície (ápode com cauda longa e translúcida)
+            const segments = 5;
+            const segLen = this.tailLength / segments;
+            const pts = [{ x: -this.size * 0.75, y: 0 }];
+            for (let i = 1; i <= segments; i++) {
+                const wave = Math.sin(this.wigglePhase - i * 0.58) * (i * 1.45);
+                pts.push({ x: -this.size * 0.75 - (i * segLen), y: wave });
+            }
 
-            // Corpo oval de girino
+            // Membrana natatória dorsal e ventral translúcida
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.85);
+                ctx.lineTo(pts[i].x, pts[i].y - finWidth);
+            }
+            for (let i = pts.length - 1; i >= 0; i--) {
+                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.85);
+                ctx.lineTo(pts[i].x, pts[i].y + finWidth);
+            }
+            ctx.closePath();
+            ctx.fillStyle = this.finColor;
+            ctx.fill();
+
+            // Notochord / Eixo muscular
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                ctx.lineTo(pts[i].x, pts[i].y);
+            }
+            ctx.strokeStyle = this.baseColor;
+            ctx.lineWidth = 1.3;
+            ctx.stroke();
+
+            // Corpo oval anuro de girino
             ctx.beginPath();
             ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
             ctx.fillStyle = this.baseColor;
@@ -468,283 +424,26 @@ function initBioCanvas() {
             ctx.arc(this.size * 0.45, this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
             ctx.fill();
         }
-
-        // Estágio 1: Girino com 1 par de pernas (traseiras bem visíveis)
-        drawTwoLeggedTadpole() {
-            this.drawTail(this.tailLength, 5);
-            this.drawHindLegs(1.0);
-
-            // Corpo
-            ctx.beginPath();
-            ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.baseColor;
-            ctx.fill();
-
-            // Olhos
-            ctx.fillStyle = 'rgba(10, 20, 14, 0.85)';
-            ctx.beginPath();
-            ctx.arc(this.size * 0.45, -this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
-            ctx.arc(this.size * 0.45, this.size * 0.48, this.size * 0.22, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Estágio 2: Girino com 2 pares de pernas / Imago (4 patas + cauda curta)
-        drawImago() {
-            // Cauda curta em regressão ativa
-            this.drawTail(this.tailLength, 4, 0.55);
-
-            // Patas dianteiras e traseiras
-            this.drawFrontArms();
-            this.drawHindLegs(1.15);
-
-            // Corpo intermediário (cabeça começando a afilar)
-            ctx.beginPath();
-            ctx.ellipse(0, 0, this.size * 1.3, this.size * 0.95, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.baseColor;
-            ctx.fill();
-
-            // Olhos mais proeminentes
-            ctx.fillStyle = 'rgba(10, 20, 14, 0.88)';
-            ctx.beginPath();
-            ctx.arc(this.size * 0.42, -this.size * 0.52, this.size * 0.25, 0, Math.PI * 2);
-            ctx.arc(this.size * 0.42, this.size * 0.52, this.size * 0.25, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Estágio 3: Pererequinha adulta (SEM cauda, discos adesivos/ventosas nas pontas)
-        drawAdultFrog() {
-            const stroke = Math.sin(this.wigglePhase);
-            const kickExtension = stroke > 0 ? stroke : 0;
-
-            // Patas Dianteiras com discos adesivos
-            this.drawFrontArms(true);
-
-            // Patas Traseiras Longas de Perereca (Hylidae) com ventosas
-            ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = Math.max(1.3, this.size * 0.25);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            for (let side = -1; side <= 1; side += 2) {
-                const hipX = -this.size * 0.45;
-                const hipY = side * (this.size * 0.65);
-
-                const kneeX = -this.size * (0.95 + kickExtension * 0.65);
-                const kneeY = side * (this.size * (1.55 - kickExtension * 0.45));
-
-                const ankleX = -this.size * (1.75 + kickExtension * 1.35);
-                const ankleY = side * (this.size * (0.85 - kickExtension * 0.45));
-
-                const footX = -this.size * (2.4 + kickExtension * 1.7);
-                const footY = side * (this.size * (0.6 - kickExtension * 0.35));
-
-                // Fêmur -> Tíbia -> Tarso
-                ctx.beginPath();
-                ctx.moveTo(hipX, hipY);
-                ctx.lineTo(kneeX, kneeY);
-                ctx.lineTo(ankleX, ankleY);
-                ctx.lineTo(footX, footY);
-                ctx.stroke();
-
-                // Dedos e ventosas (discos adesivos circulares característicos)
-                ctx.lineWidth = Math.max(0.9, this.size * 0.16);
-                for (let d = -1; d <= 1; d++) {
-                    const toeAngle = (d * 0.35);
-                    const toeLen = this.size * 0.45;
-                    const tipX = footX - Math.cos(toeAngle) * toeLen;
-                    const tipY = footY + side * Math.sin(toeAngle) * toeLen;
-
-                    ctx.beginPath();
-                    ctx.moveTo(footX, footY);
-                    ctx.lineTo(tipX, tipY);
-                    ctx.stroke();
-
-                    // Disco adesivo (ventosa)
-                    ctx.fillStyle = this.baseColor;
-                    ctx.beginPath();
-                    ctx.arc(tipX, tipY, Math.max(1.2, this.size * 0.14), 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.lineWidth = Math.max(1.3, this.size * 0.25);
-            }
-
-            // Corpo da perereca (tronco anuro com cintura pélvica e sem cauda!)
-            ctx.beginPath();
-            ctx.moveTo(this.size * 1.25, 0); // Focinho
-            ctx.quadraticCurveTo(this.size * 0.6, -this.size * 0.95, -this.size * 0.2, -this.size * 0.85);
-            ctx.quadraticCurveTo(-this.size * 0.75, -this.size * 0.65, -this.size * 0.85, 0); // Cintura pélvica/Urostilo
-            ctx.quadraticCurveTo(-this.size * 0.75, this.size * 0.65, -this.size * 0.2, this.size * 0.85);
-            ctx.quadraticCurveTo(this.size * 0.6, this.size * 0.95, this.size * 1.25, 0);
-            ctx.closePath();
-            ctx.fillStyle = this.baseColor;
-            ctx.fill();
-
-            // Crista dorsal suave
-            ctx.strokeStyle = this.finColor;
-            ctx.lineWidth = 1.0;
-            ctx.beginPath();
-            ctx.moveTo(this.size * 0.4, 0);
-            ctx.lineTo(-this.size * 0.75, 0);
-            ctx.stroke();
-
-            // Olhos proeminentes de perereca (dorsolaterais com brilho de lente)
-            for (let side = -1; side <= 1; side += 2) {
-                const eyeX = this.size * 0.55;
-                const eyeY = side * (this.size * 0.62);
-
-                ctx.fillStyle = this.baseColor;
-                ctx.beginPath();
-                ctx.arc(eyeX, eyeY, this.size * 0.32, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = 'rgba(8, 16, 12, 0.92)';
-                ctx.beginPath();
-                ctx.arc(eyeX, eyeY, this.size * 0.20, 0, Math.PI * 2);
-                ctx.fill();
-
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-                ctx.beginPath();
-                ctx.arc(eyeX + this.size * 0.08, eyeY - side * (this.size * 0.06), this.size * 0.08, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // Braços Anteriores (Stage 2 e Stage 3)
-        drawFrontArms(isAdult = false) {
-            ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = Math.max(1.1, this.size * 0.20);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            for (let side = -1; side <= 1; side += 2) {
-                const shX = this.size * 0.25;
-                const shY = side * (this.size * 0.75);
-
-                const elbowX = this.size * 0.05;
-                const elbowY = side * (this.size * 1.2);
-
-                const handX = this.size * 0.35;
-                const handY = side * (this.size * 1.45);
-
-                ctx.beginPath();
-                ctx.moveTo(shX, shY);
-                ctx.lineTo(elbowX, elbowY);
-                ctx.lineTo(handX, handY);
-                ctx.stroke();
-
-                if (isAdult) {
-                    ctx.lineWidth = Math.max(0.8, this.size * 0.14);
-                    for (let d = -1; d <= 1; d += 2) {
-                        const fingerX = handX + (d * this.size * 0.2);
-                        const fingerY = handY + side * (this.size * 0.25);
-                        ctx.beginPath();
-                        ctx.moveTo(handX, handY);
-                        ctx.lineTo(fingerX, fingerY);
-                        ctx.stroke();
-
-                        ctx.fillStyle = this.baseColor;
-                        ctx.beginPath();
-                        ctx.arc(fingerX, fingerY, Math.max(1.1, this.size * 0.12), 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    ctx.lineWidth = Math.max(1.1, this.size * 0.20);
-                }
-            }
-        }
-
-        // Patas Posteriores (Stage 1 e Stage 2)
-        drawHindLegs(scale = 1.0) {
-            const kick = Math.sin(this.wigglePhase) * (this.size * 0.22);
-            ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = Math.max(1.3, this.size * 0.24);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            for (let side = -1; side <= 1; side += 2) {
-                const hipX = -this.size * 0.55;
-                const hipY = side * (this.size * 0.72);
-
-                const kneeX = -this.size * (1.12 * scale) + kick * 0.4;
-                const kneeY = side * (this.size * (1.42 * scale) + Math.abs(kick) * 0.25);
-
-                const ankleX = -this.size * (1.72 * scale) + kick * 0.8;
-                const ankleY = side * (this.size * (0.84 * scale));
-
-                const toeX = -this.size * (2.22 * scale) + kick * 1.1;
-                const toeY = side * (this.size * (0.64 * scale));
-
-                ctx.beginPath();
-                ctx.moveTo(hipX, hipY);
-                ctx.lineTo(kneeX, kneeY);
-                ctx.lineTo(ankleX, ankleY);
-                ctx.lineTo(toeX, toeY);
-                ctx.stroke();
-
-                ctx.lineWidth = Math.max(0.9, this.size * 0.16);
-                ctx.beginPath();
-                ctx.moveTo(ankleX, ankleY);
-                ctx.lineTo(toeX - side * 1.4, toeY - side * (this.size * 0.24));
-                ctx.moveTo(ankleX, ankleY);
-                ctx.lineTo(toeX + 1.2, toeY + side * (this.size * 0.22));
-                ctx.stroke();
-                ctx.lineWidth = Math.max(1.3, this.size * 0.24);
-            }
-        }
-
-        // Cauda ondulante com membrana natatória translúcida (Stage 0, 1, 2)
-        drawTail(length, segments = 5, finScale = 1.0) {
-            const segLen = length / segments;
-            const pts = [{ x: -this.size * 0.75, y: 0 }];
-            for (let i = 1; i <= segments; i++) {
-                const wave = Math.sin(this.wigglePhase - i * 0.58) * (i * 1.45);
-                pts.push({ x: -this.size * 0.75 - (i * segLen), y: wave });
-            }
-
-            // Membrana dorsal e ventral da nadadeira
-            ctx.beginPath();
-            ctx.moveTo(pts[0].x, pts[0].y);
-            for (let i = 1; i < pts.length; i++) {
-                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.85 * finScale);
-                ctx.lineTo(pts[i].x, pts[i].y - finWidth);
-            }
-            for (let i = pts.length - 1; i >= 0; i--) {
-                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.85 * finScale);
-                ctx.lineTo(pts[i].x, pts[i].y + finWidth);
-            }
-            ctx.closePath();
-            ctx.fillStyle = this.finColor;
-            ctx.fill();
-
-            // Notochord / Eixo muscular central
-            ctx.beginPath();
-            ctx.moveTo(pts[0].x, pts[0].y);
-            for (let i = 1; i < pts.length; i++) {
-                ctx.lineTo(pts[i].x, pts[i].y);
-            }
-            ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = 1.3;
-            ctx.stroke();
-        }
     }
 
     for (let i = 0; i < count; i++) {
-        organisms.push(new Organism(i));
+        tadpoles.push(new Tadpole());
     }
 
     function animate() {
         ctx.resetTransform();
         ctx.clearRect(0, 0, width, height);
 
-        // Ondas de dispersão da água
+        // Ondas de dispersão da água (raio sutil)
         for (let i = shockwaves.length - 1; i >= 0; i--) {
             const sw = shockwaves[i];
             sw.radius += sw.speed;
-            sw.alpha *= 0.95;
+            sw.alpha *= 0.94;
 
             ctx.beginPath();
             ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
             ctx.strokeStyle = 'rgba(78, 204, 163, ' + (sw.alpha * 0.65) + ')';
-            ctx.lineWidth = 1.6;
+            ctx.lineWidth = 1.5;
             ctx.stroke();
 
             if (sw.radius >= sw.maxRadius || sw.alpha <= 0.02) {
@@ -752,11 +451,11 @@ function initBioCanvas() {
             }
         }
 
-        // Renderização de todos os organismos vivos
-        for (let i = 0; i < organisms.length; i++) {
-            const o = organisms[i];
-            o.update();
-            o.draw();
+        // Renderização dos girinos
+        for (let i = 0; i < tadpoles.length; i++) {
+            const t = tadpoles[i];
+            t.update();
+            t.draw();
         }
 
         ctx.resetTransform();
