@@ -1865,11 +1865,17 @@ h2 {
 }
 
 .footer-logo-img {
-    height: 68px;
+    height: 108px;
     width: auto;
-    max-width: 240px;
+    max-width: 290px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.55));
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.footer-logo-img:hover {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 16px rgba(198, 158, 104, 0.4));
 }
 
 .portfolio-footer p {
@@ -1899,9 +1905,10 @@ h2 {
 
 .footer-copy {
     font-family: var(--font-terminal);
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     color: var(--text-dim);
-    margin-top: 1rem;
+    margin-top: 0.85rem;
+    line-height: 1.6;
 }
 
 /* Fade-in Animation Classes */
@@ -2968,8 +2975,8 @@ h2 {
     }
 
     .footer-logo-img {
-        height: 52px;
-        max-width: 190px;
+        height: 84px;
+        max-width: 230px;
     }
 
     .footer-copy {

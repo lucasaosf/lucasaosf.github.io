@@ -884,7 +884,7 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
         desc_sage_intro: "Animação do avatar oficial do GitHub: uma homenagem lúdica ao fascínio e à dedicação aos anfíbios anuros. Empregando a clássica invocação ninja (Kuchiyose no Jutsu), o selo no chão canaliza energia elétrica convocando o sapo gigante guardião e os mestres anfíbios da floresta.",
         btn_toggle_sage: "Modo Sábio",
         btn_toggle_real: "Foto Real",
-        footer_text: "Desenvolvido por Lucas Aøsf // Biokuri — Soluções Ambientais & Ecologia Computacional"
+        footer_copy: "&copy; 2026 Lucas A&oslash;sf &middot; Bi&oacute;logo (CRBio-01 n&ordm; 127233/01-D) &amp; Gestor Ambiental &middot; Todos os direitos reservados."
     },
     en: {
                 pond_badge: "Tadpole Lagoon",
@@ -991,7 +991,7 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         desc_sage_intro: "Animation of the official GitHub avatar: a playful homage to the lifelong fascination and dedication to anuran amphibians. Utilizing the classic summoning jutsu (Kuchiyose no Jutsu), the floor seal channels electric energy to summon the giant guardian toad and forest amphibian masters.",
         btn_toggle_sage: "Sage Mode",
         btn_toggle_real: "Real Photo",
-        footer_text: "Developed by Lucas Aøsf // Biokuri — Environmental Solutions & Computational Ecology"
+        footer_copy: "&copy; 2026 Lucas A&oslash;sf &middot; Biologist (CRBio-01 no. 127233/01-D) &amp; Environmental Manager &middot; All rights reserved."
     }
 };
 
