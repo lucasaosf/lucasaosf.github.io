@@ -1806,6 +1806,15 @@ h2 {
     margin: 1.25rem 0;
 }
 
+.bio-quote p {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    color: inherit;
+    line-height: inherit;
+}
+
 .bio-quote cite {
     display: block;
     font-family: var(--font-terminal);
