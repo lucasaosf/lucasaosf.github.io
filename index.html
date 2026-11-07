@@ -21,7 +21,7 @@
 
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=8.1">
+    <link rel="stylesheet" href="style.css?v=9.0">
     <noscript>
         <style>
             .fade-in { opacity: 1 !important; transform: none !important; }
@@ -227,7 +227,7 @@
                         <div class="drone-hud-overlay">
                             <div class="drone-hud-top">
                                 <span class="hud-rec"><span class="rec-dot"></span> 4K / 2.7K REC</span>
-                                <span class="hud-mode" id="drone-hud-location">Serra da Mantiqueira, Litoral Norte &amp; Cerrado</span>
+                                <span class="hud-mode" id="drone-hud-location">Showreel Completo (Amaz&ocirc;nia, Caatinga, Cerrado, Mata Atl&acirc;ntica &amp; Litoral)</span>
                             </div>
                             <div class="drone-hud-bottom">
                                 <span class="hud-telemetry"><i class="fa-solid fa-wind"></i> PILOTAGEM DE PRECIS&Atilde;O // BIOKURI</span>
@@ -238,21 +238,86 @@
 
                     <!-- Interactive Flight Selector Buttons -->
                     <div class="drone-clip-selector">
-                        <button class="drone-clip-btn active" data-src="assets/drone-showreel.mp4" data-loc="Showreel Completo (Mantiqueira, Ilhabela, Cerrado &amp; Veredas)">
-                            <i class="fa-solid fa-film"></i> Showreel Completo
+                        <button class="drone-clip-btn active" data-src="assets/drone-showreel.mp4" data-loc="Showreel Completo (Amaz&ocirc;nia, Caatinga, Cerrado, Mata Atl&acirc;ntica &amp; Litoral)">
+                            <i class="fa-solid fa-film"></i> <span data-i18n="drone_btn_showreel">Showreel Geral</span>
                         </button>
-                        <button class="drone-clip-btn" data-src="assets/drone-itatiaia.mp4" data-loc="Maci&ccedil;o do Itatiaia / Mantiqueira (Relevo &amp; Altitude)">
-                            <i class="fa-solid fa-mountain"></i> Itatiaia
+                        <button class="drone-clip-btn" data-src="assets/drone-amazonia.mp4" data-loc="Amaz&ocirc;nia (Dossel Equatorial &amp; LT Marituba-Tucuru&iacute; / PA)">
+                            <i class="fa-solid fa-tree"></i> <span data-i18n="drone_btn_amazonia">Amaz&ocirc;nia</span>
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-caatinga.mp4" data-loc="Caatinga (Semi&aacute;rido, Fitofisionomias &amp; Parque Solar Jana&uacute;ba / MG)">
+                            <i class="fa-solid fa-sun"></i> <span data-i18n="drone_btn_caatinga">Caatinga</span>
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-cerrado.mp4" data-loc="Cerrado &amp; Veredas (Topografia &amp; Savana de Altitude)">
+                            <i class="fa-solid fa-seedling"></i> <span data-i18n="drone_btn_cerrado">Cerrado</span>
+                        </button>
+                        <button class="drone-clip-btn" data-src="assets/drone-itatiaia.mp4" data-loc="Mata Atl&acirc;ntica (Maci&ccedil;o do Itatiaia / Serra da Mantiqueira)">
+                            <i class="fa-solid fa-mountain"></i> <span data-i18n="drone_btn_itatiaia">Mata Atl&acirc;ntica</span>
                         </button>
                         <button class="drone-clip-btn" data-src="assets/drone-ilhabela.mp4" data-loc="Ilhabela / Litoral Norte (Monitoramento Marinho &amp; Costeiro)">
-                            <i class="fa-solid fa-water"></i> Ilhabela
+                            <i class="fa-solid fa-water"></i> <span data-i18n="drone_btn_ilhabela">Ilhabela</span>
                         </button>
-                        <button class="drone-clip-btn" data-src="assets/drone-cerrado.mp4" data-loc="Cerrado &amp; Veredas (Topografia &amp; Corredores Ecol&oacute;gicos)">
-                            <i class="fa-solid fa-seedling"></i> Cerrado &amp; Veredas
+                        <button class="drone-clip-btn" data-src="assets/drone-macintir.mp4" data-loc="S&iacute;tio Mac Intir / Chel (Borda Florestal &amp; Ref&uacute;gio de Biodiversidade)">
+                            <i class="fa-solid fa-leaf"></i> <span data-i18n="drone_btn_macintir">S&iacute;tio Mac Intir</span>
                         </button>
-                        <button class="drone-clip-btn" data-src="assets/drone-wetlands.mp4" data-loc="&Aacute;reas &Uacute;midas &amp; Borda Florestal (Recursos H&iacute;dricos)">
-                            <i class="fa-solid fa-leaf"></i> &Aacute;reas &Uacute;midas
-                        </button>
+                    </div>
+
+                    <!-- Drone High-Res Aerial Photo Gallery -->
+                    <div class="drone-photo-gallery">
+                        <div class="drone-gallery-header">
+                            <span class="drone-gallery-tag"><i class="fa-solid fa-camera-retro"></i> <span data-i18n="drone_gallery_tag">Registros Fotogr&aacute;ficos A&eacute;reos em Alta Resolu&ccedil;&atilde;o</span></span>
+                            <span class="drone-gallery-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> <span data-i18n="drone_gallery_hint">Clique para ampliar</span></span>
+                        </div>
+                        <div class="drone-photo-grid">
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-caatinga.jpg" data-caption="Caatinga &mdash; Voo de inspe&ccedil;&atilde;o e fitofisionomias do semi&aacute;rido (Patos / PB)">
+                                <img src="assets/drone-foto-caatinga.jpg" alt="Foto a&eacute;rea de drone na Caatinga" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-caatinga">Caatinga</span>
+                                    <span class="photo-desc">Patos &bull; PB</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-amazonia.jpg" data-caption="Amaz&ocirc;nia &mdash; Dossel florestal e monitoramento de linha de transmiss&atilde;o (Par&aacute;)">
+                                <img src="assets/drone-foto-amazonia.jpg" alt="Foto a&eacute;rea de drone na Amaz&ocirc;nia" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-amazonia">Amaz&ocirc;nia</span>
+                                    <span class="photo-desc">LT Marituba &bull; PA</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-cerrado.jpg" data-caption="Cerrado &mdash; Topografia, fitofisionomias e savana de altitude">
+                                <img src="assets/drone-foto-cerrado.jpg" alt="Foto a&eacute;rea de drone no Cerrado" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-cerrado">Cerrado</span>
+                                    <span class="photo-desc">Veredas &bull; MG/GO</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-itatiaia.jpg" data-caption="Mata Atl&acirc;ntica &mdash; Maci&ccedil;o do Itatiaia e campos de altitude da Mantiqueira">
+                                <img src="assets/drone-foto-itatiaia.jpg" alt="Foto a&eacute;rea de drone no Maci&ccedil;o do Itatiaia" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-atlantica">Mata Atl&acirc;ntica</span>
+                                    <span class="photo-desc">Itatiaia &bull; RJ</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-ilhabela.jpg" data-caption="Ilhabela / Litoral Norte &mdash; Monitoramento costeiro e &aacute;guas marinhas">
+                                <img src="assets/drone-foto-ilhabela.jpg" alt="Foto a&eacute;rea de drone em Ilhabela" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-ilhabela">Litoral Norte</span>
+                                    <span class="photo-desc">Ilhabela &bull; SP</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-macintir.jpg" data-caption="S&iacute;tio Mac Intir &mdash; Ref&uacute;gio ecol&oacute;gico e borda florestal da Mantiqueira">
+                                <img src="assets/drone-foto-macintir.jpg" alt="Foto a&eacute;rea de drone no S&iacute;tio Mac Intir" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-macintir">Mantiqueira</span>
+                                    <span class="photo-desc">S&iacute;tio Mac Intir</span>
+                                </figcaption>
+                            </figure>
+                            <figure class="drone-photo-card" data-full="assets/drone-foto-chel.jpg" data-caption="Chel / Canan&eacute;ia &mdash; Mapeamento a&eacute;reo estuarino e costeiro">
+                                <img src="assets/drone-foto-chel.jpg" alt="Foto a&eacute;rea de drone em Chel" loading="lazy">
+                                <figcaption>
+                                    <span class="photo-badge badge-chel">Estu&aacute;rio</span>
+                                    <span class="photo-desc">Canan&eacute;ia &bull; SP</span>
+                                </figcaption>
+                            </figure>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -1125,8 +1190,20 @@
         </footer>
     </main>
 
+    <!-- Drone Photo Lightbox Modal -->
+    <div id="drone-lightbox-modal" class="drone-lightbox-modal" role="dialog" aria-modal="true" aria-label="Visualizador de Fotografia A&eacute;rea">
+        <div class="lightbox-backdrop"></div>
+        <div class="lightbox-content">
+            <button id="drone-lightbox-close" class="lightbox-close-btn" aria-label="Fechar">&times;</button>
+            <div class="lightbox-img-wrap">
+                <img id="drone-lightbox-img" src="" alt="Amplia&ccedil;&atilde;o de fotografia a&eacute;rea">
+            </div>
+            <div id="drone-lightbox-caption" class="lightbox-caption"></div>
+        </div>
+    </div>
+
     <!-- Custom Script -->
-    <script src="script.js?v=8.1"></script>
+    <script src="script.js?v=9.0"></script>
 </body>
 
 </html>

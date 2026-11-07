@@ -2254,6 +2254,242 @@ h2 {
 }
 
 /* ==========================================================================
+   DRONE PHOTO GALLERY & HIGH-RES LIGHTBOX
+   ========================================================================== */
+.drone-photo-gallery {
+    margin-top: 1.35rem;
+    border-top: 1px solid rgba(78, 204, 163, 0.16);
+    padding-top: 1.1rem;
+}
+
+.drone-gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    font-family: var(--font-terminal);
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.drone-gallery-tag {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--bio-emerald);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.drone-gallery-hint {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    opacity: 0.85;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.drone-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 0.7rem;
+}
+
+.drone-photo-card {
+    margin: 0;
+    position: relative;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid rgba(78, 204, 163, 0.22);
+    background: rgba(5, 12, 10, 0.7);
+    cursor: pointer;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+    aspect-ratio: 16/10;
+}
+
+.drone-photo-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: var(--bio-emerald);
+    box-shadow: 0 10px 24px rgba(78, 204, 163, 0.25);
+}
+
+.drone-photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease;
+}
+
+.drone-photo-card:hover img {
+    transform: scale(1.08);
+}
+
+.drone-photo-card figcaption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.45rem 0.55rem;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 12, 10, 0.94) 75%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-family: var(--font-terminal);
+    pointer-events: none;
+}
+
+.photo-badge {
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.photo-desc {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+}
+
+.photo-badge.badge-caatinga {
+    background: rgba(230, 162, 60, 0.2);
+    color: #e6a23c;
+    border: 1px solid rgba(230, 162, 60, 0.45);
+}
+
+.photo-badge.badge-amazonia {
+    background: rgba(78, 204, 163, 0.2);
+    color: #4ecca3;
+    border: 1px solid rgba(78, 204, 163, 0.45);
+}
+
+.photo-badge.badge-cerrado {
+    background: rgba(212, 175, 55, 0.2);
+    color: #d4af37;
+    border: 1px solid rgba(212, 175, 55, 0.45);
+}
+
+.photo-badge.badge-atlantica {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.45);
+}
+
+.photo-badge.badge-ilhabela {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.45);
+}
+
+.photo-badge.badge-macintir,
+.photo-badge.badge-chel {
+    background: rgba(155, 89, 182, 0.2);
+    color: #a29bfe;
+    border: 1px solid rgba(155, 89, 182, 0.45);
+}
+
+/* Lightbox Modal */
+.drone-lightbox-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.drone-lightbox-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 12, 10, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 92vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    animation: lightboxZoomIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes lightboxZoomIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.lightbox-close-btn {
+    position: absolute;
+    top: -2.4rem;
+    right: 0;
+    background: rgba(5, 12, 10, 0.85);
+    border: 1px solid rgba(78, 204, 163, 0.4);
+    color: var(--text-light);
+    font-size: 1.6rem;
+    line-height: 1;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.lightbox-close-btn:hover {
+    background: var(--bio-emerald);
+    color: var(--bio-deep);
+    border-color: var(--bio-emerald);
+    transform: rotate(90deg);
+}
+
+.lightbox-img-wrap {
+    max-width: 100%;
+    max-height: 78vh;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid rgba(78, 204, 163, 0.35);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 30px rgba(78, 204, 163, 0.2);
+}
+
+.lightbox-img-wrap img {
+    max-width: 100%;
+    max-height: 78vh;
+    display: block;
+    object-fit: contain;
+}
+
+.lightbox-caption {
+    margin-top: 0.75rem;
+    font-family: var(--font-terminal);
+    font-size: 0.82rem;
+    color: var(--text-light);
+    background: rgba(5, 12, 10, 0.8);
+    padding: 0.45rem 0.95rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(78, 204, 163, 0.2);
+    text-align: center;
+}
+
+/* ==========================================================================
    ADAPTIVE RESPONSIVE DESIGN SYSTEM (PC, TABLET & SMARTPHONE)
    ========================================================================== */
 
@@ -2877,6 +3113,11 @@ h2 {
 
     .drone-clip-btn:first-child {
         grid-column: span 2;
+    }
+
+    .drone-photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.45rem;
     }
 }
 

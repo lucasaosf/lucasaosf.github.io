@@ -1,4 +1,4 @@
-﻿/**
+/**
  * BIOKURI // PORTFÓLIO DE LUCAS AØSF
  * Biólogo · Gestor Ambiental · Taxonomista & Especialista em Anfíbios Anuros
  * Ecologia Computacional, Automação & Programação
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initMetricsCounter();
     initAvatarToggle();
     initDronePlayer();
+    initDroneLightbox();
 });
 
 /* ==========================================================================
@@ -590,6 +591,49 @@ function initDronePlayer() {
     }
 }
 
+
+function initDroneLightbox() {
+    const cards = document.querySelectorAll('.drone-photo-card');
+    const modal = document.getElementById('drone-lightbox-modal');
+    const modalImg = document.getElementById('drone-lightbox-img');
+    const modalCap = document.getElementById('drone-lightbox-caption');
+    const modalClose = document.getElementById('drone-lightbox-close');
+
+    if (!cards.length || !modal || !modalImg) return;
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const fullSrc = card.getAttribute('data-full');
+            const caption = card.getAttribute('data-caption');
+            if (fullSrc) {
+                modalImg.src = fullSrc;
+                if (modalCap) modalCap.innerHTML = caption || '';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => { modalImg.src = ''; }, 280);
+    };
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.classList.contains('lightbox-backdrop')) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+}
+
 /* ==========================================================================
    5. BIODIVERSITY SCANNER & PROJECTS UNLOCKER
    ========================================================================== */
@@ -754,7 +798,16 @@ const translations = {
         focus_drone_title: "Pilotagem de Drones & Sensoriamento Remoto (DJI Mini ao Pro & Termal)",
         focus_drone_desc: "Piloto e operador t&eacute;cnico de RPA/drones, atuando desde a linha DJI Mini at&eacute; modelos Pro e com c&acirc;mera termal para sensoriamento remoto, mapeamento a&eacute;reo de fitofisionomias, monitoramento t&eacute;rmico de fauna e inspe&ccedil;&atilde;o ambiental em &aacute;reas de dif&iacute;cil acesso.",
         drone_showcase_tag: "Aerolevantamento &amp; Imagens A&eacute;reas Reais",
-        drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
+drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
+        drone_btn_showreel: "Showreel Geral",
+        drone_btn_amazonia: "AmazÃ´nia",
+        drone_btn_caatinga: "Caatinga",
+        drone_btn_cerrado: "Cerrado",
+        drone_btn_itatiaia: "Mata AtlÃ¢ntica",
+        drone_btn_ilhabela: "Ilhabela",
+        drone_btn_macintir: "SÃ­tio Mac Intir",
+        drone_gallery_tag: "Registros FotogrÃ¡ficos AÃ©reos em Alta ResoluÃ§Ã£o",
+        drone_gallery_hint: "Clique para ampliar",
         metric_years: "Anos de experiência na área",
         metric_papers: "Artigos Científicos",
         metric_projects: "Empreendimentos Atendidos",
@@ -850,7 +903,16 @@ const translations = {
         focus_drone_title: "Drone Piloting & Remote Sensing (DJI Mini to Pro & Thermal)",
         focus_drone_desc: "Technical RPA/drone pilot and operator, ranging from DJI Mini to Pro models and thermal sensor cameras for remote sensing, aerial vegetation mapping, thermal wildlife surveys, and environmental inspection of rugged terrain.",
         drone_showcase_tag: "Real Aerial Surveys & High-Altitude Drone Footage",
-        drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
+drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
+        drone_btn_showreel: "General Showreel",
+        drone_btn_amazonia: "Amazon Rainforest",
+        drone_btn_caatinga: "Caatinga",
+        drone_btn_cerrado: "Cerrado",
+        drone_btn_itatiaia: "Atlantic Forest",
+        drone_btn_ilhabela: "Ilhabela Island",
+        drone_btn_macintir: "Mac Intir Site",
+        drone_gallery_tag: "High-Resolution Aerial Drone Photo Collection",
+        drone_gallery_hint: "Click to enlarge",
         metric_years: "Years of experience in the field",
         metric_papers: "Scientific Articles",
         metric_projects: "Enterprise Projects Handled",
