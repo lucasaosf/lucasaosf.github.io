@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-    <link rel="stylesheet" href="style.css?v=10.4">
+    <link rel="stylesheet" href="style.css?v=10.5">
     <noscript>
         <style>
             .fade-in { opacity: 1 !important; transform: none !important; }
@@ -323,6 +323,28 @@
                         </div>
                     </div>
                 </section>
+
+        <!-- Manifesto Cient&iacute;fico & Assinatura Profissional -->
+        <section class="quote-section glass-panel fade-in" id="manifesto-section">
+            <h2><i class="fa-solid fa-compass neon-green-icon"></i> <span data-i18n="header_manifesto">Manifesto Cient&iacute;fico</span></h2>
+            <blockquote class="bio-quote">
+                <p data-i18n="manifesto_quote">&ldquo;A verdadeira conserva&ccedil;&atilde;o come&ccedil;a no ch&atilde;o da mata, reconhecendo cada esp&eacute;cie por sua voz e sua identidade. Quando unimos o rigor da taxonomia cl&aacute;ssica &agrave; intelig&ecirc;ncia dos dados e da gest&atilde;o ambiental, transformamos o conhecimento cient&iacute;fico em legado para a biodiversidade.&rdquo;</p>
+                <cite data-i18n="manifesto_cite">&mdash; Lucas A&oslash;sf, Bi&oacute;logo, Gestor Ambiental &amp; S&oacute;cio Fundador da BioKuri</cite>
+            </blockquote>
+
+            <div class="signature-box">
+                <img src="assets/assinatura-lucas.png" alt="Assinatura de Email Profissional - Lucas A&oslash;sf (Biokuri)" class="signature-img" onerror="this.style.display='none'">
+                
+                <div class="whatsapp-cta-wrap">
+                    <a href="https://wa.me/5512991821729" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-direct" title="Iniciar Conversa no WhatsApp com Lucas A&oslash;sf">
+                        <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+                        <span class="whatsapp-btn-text" data-i18n="btn_whatsapp_cta">Conversar no WhatsApp</span>
+                        <span class="whatsapp-btn-number">(12) 99182-1729</span>
+                    </a>
+                    <p class="whatsapp-cta-sub" data-i18n="sub_whatsapp_cta">Atendimento direto para consultorias ambientais, laudos e parcerias</p>
+                </div>
+            </div>
+        </section>
 
 <!-- Metrics & Field Impact Counter -->
         <section class="metrics-strip glass-panel fade-in">
@@ -1220,40 +1242,6 @@
             </div>
         </section>
 
-        <!-- Stats & Naturalist Quote Section -->
-        <div class="grid-layout stats-grid">
-            <section class="stats-section glass-panel fade-in">
-                <h2><i class="fa-solid fa-code-commit neon-green-icon"></i> <span data-i18n="header_stats">GitHub &amp; Atividade Aberta</span></h2>
-                <div class="github-stats-container">
-                    <img src="https://github-readme-stats.vercel.app/api?username=lucasaosf&show_icons=true&theme=dark&hide_border=true&bg_color=0E2515&title_color=B2C2A5&text_color=F2EBDD&icon_color=4ECCA3"
-                        alt="Estatísticas do GitHub de Lucas Aøsf" onerror="this.style.display='none'">
-                    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=lucasaosf&layout=compact&theme=dark&hide_border=true&bg_color=0E2515&title_color=B2C2A5&text_color=F2EBDD"
-                        alt="Principais Linguagens do GitHub" onerror="this.style.display='none'">
-                </div>
-            </section>
-
-            <section class="quote-section glass-panel fade-in">
-                <h2><i class="fa-solid fa-compass neon-green-icon"></i> <span data-i18n="header_manifesto">Manifesto Científico</span></h2>
-                <blockquote class="bio-quote">
-                    <p data-i18n="manifesto_quote">&ldquo;A verdadeira conserva&ccedil;&atilde;o come&ccedil;a no ch&atilde;o da mata, reconhecendo cada esp&eacute;cie por sua voz e sua identidade. Quando unimos o rigor da taxonomia cl&aacute;ssica &agrave; intelig&ecirc;ncia dos dados e da gest&atilde;o ambiental, transformamos o conhecimento cient&iacute;fico em legado para a biodiversidade.&rdquo;</p>
-                    <cite data-i18n="manifesto_cite">&mdash; Lucas A&oslash;sf, Bi&oacute;logo, Gestor Ambiental &amp; S&oacute;cio Fundador da BioKuri</cite>
-                </blockquote>
-
-                                <div class="signature-box">
-                    <img src="assets/assinatura-lucas.png" alt="Assinatura de Email Profissional - Lucas A&oslash;sf (Biokuri)" class="signature-img" onerror="this.style.display='none'">
-                    
-                    <div class="whatsapp-cta-wrap">
-                        <a href="https://wa.me/5512991821729" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-direct" title="Iniciar Conversa no WhatsApp com Lucas A&oslash;sf">
-                            <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
-                            <span class="whatsapp-btn-text" data-i18n="btn_whatsapp_cta">Conversar no WhatsApp</span>
-                            <span class="whatsapp-btn-number">(12) 99182-1729</span>
-                        </a>
-                        <p class="whatsapp-cta-sub" data-i18n="sub_whatsapp_cta">Atendimento direto para consultorias ambientais, laudos e parcerias</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-
         <!-- Footer -->
         <footer class="portfolio-footer glass-panel">
             <div class="footer-content">
@@ -1282,7 +1270,7 @@
     <!-- Custom Script -->
         <!-- Leaflet Map JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-    <script src="script.js?v=10.4"></script>
+    <script src="script.js?v=10.5"></script>
 </body>
 
 </html>
