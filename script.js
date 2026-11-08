@@ -248,13 +248,14 @@ function initBioCanvas() {
             this.y = Math.random() * height;
             this.angle = Math.random() * Math.PI * 2;
             this.targetAngle = this.angle;
-            this.speed = Math.random() * 1.3 + 1.15; // Velocidade base dinamica e vivaz (sem lentidao)
+            // Velocidade calibrada: cadencia biologica equilibrada (nem rapido, nem lento)
+            this.speed = Math.random() * 0.35 + 0.65;
 
-            // Ciclo de Metamorfose Anura Realista:
-            // 0: Girino clÃ¡ssico Ã¡pode (~40%)
-            // 1: Girino com patas traseiras mÃ³veis (~30%)
-            // 2: Imago com 4 patas e cauda regredindo (~18%)
-            // 3: Pererequinha adulta jovem com ventosas e pernada anura (~12%)
+            // Metamorfose Anura Realista (Gosner 25 - 46):
+            // 0: Girino apode com espiral intestinal, miotomos e nadadeiras (Gosner 25) (~40%)
+            // 1: Girino com membros posteriores e membrana natatoria (Gosner 37-39) (~30%)
+            // 2: Imago metamorfico com 4 membros e cauda em reabsorcao (Gosner 42-44) (~18%)
+            // 3: Jovem perereca Hylidae com ventosas, sem cauda e pernada sincrona (Gosner 46) (~12%)
             const stageRatio = this.id / this.total;
             if (stageRatio < 0.40) {
                 this.stage = 0;
@@ -267,48 +268,66 @@ function initBioCanvas() {
             }
 
             const depth = Math.random();
-            this.isDeep = depth < 0.46; // Camada de fundo suave para tridimensionalidade
+            this.isDeep = depth < 0.44; // Camada de fundo suave para profundidade optica
             if (this.isDeep) {
-                this.size = Math.random() * 1.3 + 2.5;
-                this.alpha = Math.random() * 0.16 + 0.12;
+                this.size = Math.random() * 1.4 + 2.8;
+                this.alpha = Math.random() * 0.16 + 0.14;
             } else if (depth < 0.82) {
-                this.size = Math.random() * 1.8 + 4.2;
-                this.alpha = Math.random() * 0.20 + 0.25;
+                this.size = Math.random() * 1.8 + 4.6;
+                this.alpha = Math.random() * 0.20 + 0.28;
             } else {
-                this.size = Math.random() * 2.2 + 5.8;
-                this.alpha = Math.random() * 0.22 + 0.38;
+                this.size = Math.random() * 2.2 + 6.6;
+                this.alpha = Math.random() * 0.20 + 0.40;
             }
 
-            this.tailLength = this.stage === 2 ? this.size * 1.5 : this.size * 3.4;
+            this.tailLength = this.stage === 2 ? this.size * 1.6 : this.size * 3.4;
             this.wigglePhase = Math.random() * Math.PI * 2;
-            this.wiggleSpeed = this.stage === 3 ? (Math.random() * 0.12 + 0.13) : (Math.random() * 0.18 + 0.20);
-            this.turnTimer = Math.floor(Math.random() * 90) + 35;
+            // Frequencia de batimento caudal e pernada calibradas de forma natural
+            this.wiggleSpeed = this.stage === 3 ? (Math.random() * 0.05 + 0.055) : (Math.random() * 0.08 + 0.085);
+            this.turnTimer = Math.floor(Math.random() * 110) + 40;
             this.scatterTimer = 0;
             this.isGold = Math.random() < 0.16;
 
             // Ciclo de pernada anura sincronizada (kick & glide)
             this.kickPhase = Math.random() * Math.PI * 2;
-            this.kickSpeed = Math.random() * 0.07 + 0.08;
+            this.kickSpeed = Math.random() * 0.035 + 0.038;
 
-            // Cores prÃ©-computadas por organismo (evita gargalo de GC no canvas)
+            // Cores pre-computadas por organismo (evita GC allocations)
             const aStr = this.alpha.toFixed(2);
-            const aFinStr = (this.alpha * 0.36).toFixed(2);
-            const aViscStr = (this.alpha * 0.28).toFixed(2);
-            const aIrisStr = (this.alpha * 0.75).toFixed(2);
+            const aFinStr = (this.alpha * 0.35).toFixed(2);
+            const aViscStr = (this.alpha * 0.42).toFixed(2);
+            const aCoreStr = (this.alpha * 0.26).toFixed(2);
+            const aIrisStr = (this.alpha * 0.85).toFixed(2);
+            const aSpotStr = (this.alpha * 0.48).toFixed(2);
+            const aWebStr = (this.alpha * 0.30).toFixed(2);
+            const aMyoStr = (this.alpha * 0.32).toFixed(2);
 
+            // Paleta biologica de Mata Atlantica (tons olivaceos / dourados-bronze)
             this.baseColor = this.isGold
-                ? 'rgba(212, 175, 55, ' + aStr + ')'
-                : 'rgba(78, 204, 163, ' + aStr + ')';
+                ? 'rgba(214, 178, 70, ' + aStr + ')'
+                : 'rgba(64, 185, 140, ' + aStr + ')';
             this.finColor = this.isGold
-                ? 'rgba(212, 175, 55, ' + aFinStr + ')'
-                : 'rgba(46, 184, 114, ' + aFinStr + ')';
+                ? 'rgba(225, 195, 100, ' + aFinStr + ')'
+                : 'rgba(50, 165, 120, ' + aFinStr + ')';
             this.viscColor = this.isGold
-                ? 'rgba(240, 205, 90, ' + aViscStr + ')'
-                : 'rgba(32, 120, 82, ' + aViscStr + ')';
+                ? 'rgba(180, 135, 45, ' + aViscStr + ')'
+                : 'rgba(18, 80, 52, ' + aViscStr + ')';
+            this.coreColor = this.isGold
+                ? 'rgba(235, 205, 120, ' + aCoreStr + ')'
+                : 'rgba(80, 210, 160, ' + aCoreStr + ')';
             this.irisColor = this.isGold
-                ? 'rgba(255, 230, 130, ' + aIrisStr + ')'
-                : 'rgba(125, 245, 195, ' + aIrisStr + ')';
-            this.pupilColor = 'rgba(7, 20, 11, 0.88)';
+                ? 'rgba(255, 225, 110, ' + aIrisStr + ')'
+                : 'rgba(140, 245, 200, ' + aIrisStr + ')';
+            this.pupilColor = 'rgba(5, 15, 10, 0.95)';
+            this.spotColor = this.isGold
+                ? 'rgba(130, 90, 25, ' + aSpotStr + ')'
+                : 'rgba(15, 52, 34, ' + aSpotStr + ')';
+            this.webColor = this.isGold
+                ? 'rgba(214, 178, 70, ' + aWebStr + ')'
+                : 'rgba(64, 185, 140, ' + aWebStr + ')';
+            this.myoColor = this.isGold
+                ? 'rgba(150, 110, 35, ' + aMyoStr + ')'
+                : 'rgba(20, 72, 48, ' + aMyoStr + ')';
         }
 
         update(dt = 1.0) {
@@ -321,18 +340,18 @@ function initBioCanvas() {
 
                 if (dist < sw.radius + 20 && dist > sw.radius - 16) {
                     const awayAngle = Math.atan2(dy, dx);
-                    this.angle = awayAngle + (Math.random() - 0.5) * 1.5;
+                    this.angle = awayAngle + (Math.random() - 0.5) * 1.4;
                     this.targetAngle = this.angle + (Math.random() - 0.5) * 0.8;
-                    this.speed = Math.max(this.speed, 2.8 + Math.random() * 1.0);
-                    this.scatterTimer = Math.floor(Math.random() * 80) + 40;
+                    this.speed = Math.max(this.speed, 2.0 + Math.random() * 0.5);
+                    this.scatterTimer = Math.floor(Math.random() * 60) + 30;
                     break;
                 }
             }
 
-            // 2. Comportamento natatorio organico e navegacao fluida
+            // 2. Comportamento natatorio organico e navegacao equilibrada
             if (this.scatterTimer > 0) {
                 this.scatterTimer -= dt;
-                this.angle += (Math.random() - 0.5) * 0.10 * dt;
+                this.angle += (Math.random() - 0.5) * 0.08 * dt;
             } else if (mouseInPond && !isTouchInteraction) {
                 const dx = mouseX - this.x;
                 const dy = mouseY - this.y;
@@ -344,9 +363,9 @@ function initBioCanvas() {
                     while (diff < -Math.PI) diff += Math.PI * 2;
                     while (diff > Math.PI) diff -= Math.PI * 2;
 
-                    const steer = Math.max(0.04, 0.14 * (1 - dist / 380));
+                    const steer = Math.max(0.025, 0.10 * (1 - dist / 380));
                     this.angle += diff * Math.min(1.0, steer * dt);
-                    this.speed = Math.min(this.speed + 0.08 * dt, 2.8);
+                    this.speed = Math.min(this.speed + 0.04 * dt, 1.40);
                 } else {
                     this.naturalSteer(dt);
                 }
@@ -354,27 +373,27 @@ function initBioCanvas() {
                 this.naturalSteer(dt);
             }
 
-            // 3. Propulsao biomecanica real escalada por delta-time (120 FPS nativo)
+            // 3. Propulsao biomecanica real escalada por delta-time
             if (this.stage === 3) {
                 // Pererequinha adulta: nado por pernada sincronizada (kick & glide)
                 this.kickPhase += this.kickSpeed * dt;
                 const kickCycle = Math.sin(this.kickPhase);
-                const burst = kickCycle > 0.20 ? (kickCycle - 0.20) * 1.8 : 0;
-                const currentSpeed = this.speed * (0.80 + burst);
+                const burst = kickCycle > 0.20 ? (kickCycle - 0.20) * 1.35 : 0;
+                const currentSpeed = this.speed * (0.85 + burst);
                 this.x += Math.cos(this.angle) * currentSpeed * dt;
                 this.y += Math.sin(this.angle) * currentSpeed * dt;
-                this.wigglePhase += this.wiggleSpeed * 0.75 * dt;
+                this.wigglePhase += this.wiggleSpeed * 0.70 * dt;
             } else {
-                // Girinos e Imagos: propulsao ondulante vigorosa com cauda
+                // Girinos e Imagos: propulsao ondulante moderada e suave com cauda
                 this.x += Math.cos(this.angle) * this.speed * dt;
                 this.y += Math.sin(this.angle) * this.speed * dt;
-                this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15) * dt;
+                this.wigglePhase += this.wiggleSpeed * (this.speed * 1.05 + 0.25) * dt;
                 this.kickPhase += this.kickSpeed * dt;
             }
 
-            // Damping suave de velocidade alta independente da taxa de quadros
-            if (this.speed > 1.8) {
-                this.speed = 1.8 + (this.speed - 1.8) * Math.pow(0.93, dt);
+            // Damping suave para velocidade de cruzeiro equilibrada (nem muito rapido nem lento)
+            if (this.speed > 0.95) {
+                this.speed = 0.95 + (this.speed - 0.95) * Math.pow(0.92, dt);
             }
 
             // Retorno infinito continuo pelas bordas da tela
@@ -387,16 +406,17 @@ function initBioCanvas() {
         naturalSteer(dt = 1.0) {
             this.turnTimer -= dt;
             if (this.turnTimer <= 0) {
-                this.targetAngle += (Math.random() - 0.5) * 1.6;
-                this.turnTimer = Math.floor(Math.random() * 95) + 35;
-                this.speed = Math.random() * 1.3 + 1.15;
+                this.targetAngle += (Math.random() - 0.5) * 1.5;
+                this.turnTimer = Math.floor(Math.random() * 110) + 40;
+                this.speed = Math.random() * 0.35 + 0.65;
             }
 
             let diff = this.targetAngle - this.angle;
             while (diff < -Math.PI) diff += Math.PI * 2;
             while (diff > Math.PI) diff -= Math.PI * 2;
-            this.angle += diff * Math.min(1.0, 0.05 * dt);
+            this.angle += diff * Math.min(1.0, 0.04 * dt);
         }
+
         draw() {
             const cos = Math.cos(this.angle);
             const sin = Math.sin(this.angle);
@@ -420,117 +440,197 @@ function initBioCanvas() {
 
         // Camada de profundidade: silhueta suave e leve
         drawDeep() {
-            const wave = Math.sin(this.wigglePhase) * 1.8;
+            const wave = Math.sin(this.wigglePhase) * 1.4;
             if (this.stage === 3) {
                 // Pererequinha no fundo
                 ctx.beginPath();
-                ctx.ellipse(0, 0, this.size * 1.25, this.size * 0.88, 0, 0, Math.PI * 2);
+                ctx.ellipse(0, 0, this.size * 1.25, this.size * 0.85, 0, 0, Math.PI * 2);
                 ctx.fillStyle = this.baseColor;
                 ctx.fill();
 
                 const kick = Math.sin(this.kickPhase);
-                const ext = kick > 0 ? kick * (this.size * 1.2) : 0;
+                const ext = kick > 0 ? kick * (this.size * 1.1) : 0;
                 ctx.strokeStyle = this.baseColor;
                 ctx.lineWidth = 1.1;
                 ctx.beginPath();
                 ctx.moveTo(-this.size * 0.4, -this.size * 0.55);
-                ctx.lineTo(-this.size * 1.2 - ext, -this.size * 0.95);
+                ctx.lineTo(-this.size * 1.1 - ext, -this.size * 0.90);
                 ctx.moveTo(-this.size * 0.4, this.size * 0.55);
-                ctx.lineTo(-this.size * 1.2 - ext, this.size * 0.95);
+                ctx.lineTo(-this.size * 1.1 - ext, this.size * 0.90);
                 ctx.stroke();
             } else {
                 // Girino no fundo
                 ctx.beginPath();
                 ctx.moveTo(-this.size * 0.6, 0);
                 const tailLen = this.stage === 2 ? this.size * 1.5 : this.size * 3.3;
-                ctx.quadraticCurveTo(-tailLen * 0.6, wave, -tailLen, wave * 1.3);
+                ctx.quadraticCurveTo(-tailLen * 0.55, wave, -tailLen, wave * 1.2);
                 ctx.strokeStyle = this.baseColor;
                 ctx.lineWidth = 1.1;
                 ctx.stroke();
 
                 ctx.beginPath();
-                ctx.ellipse(0, 0, this.size * 1.3, this.size * 0.88, 0, 0, Math.PI * 2);
+                ctx.ellipse(0, 0, this.size * 1.28, this.size * 0.86, 0, 0, Math.PI * 2);
                 ctx.fillStyle = this.baseColor;
                 ctx.fill();
             }
         }
 
-        // Cauda ondulante com notocorda e nadadeiras dorsal/ventral translÃºcidas
-        drawTail(length, segments = 5, finScale = 1.0) {
+        // Cauda ondulante realista com notocorda, miotomos em chevron e nadadeiras translucidas
+        drawTail(length, segments = 6, finScale = 1.0) {
             const segLen = length / segments;
             const pts = [{ x: -this.size * 0.72, y: 0 }];
             for (let i = 1; i <= segments; i++) {
-                const wave = Math.sin(this.wigglePhase - i * 0.58) * (i * 1.45);
+                const wave = Math.sin(this.wigglePhase - i * 0.52) * (i * 1.30);
                 pts.push({ x: -this.size * 0.72 - (i * segLen), y: wave });
             }
 
-            // Membrana natatÃ³ria (dorsal e ventral contÃ­nuas)
+            // 1. Nadadeira dorsal e ventral (membrana caudal translucida de anuro)
+            // A nadadeira dorsal em Hylidae se estende anterior sobre o terco posterior do corpo
             ctx.beginPath();
-            ctx.moveTo(pts[0].x, pts[0].y);
+            ctx.moveTo(-this.size * 0.35, 0);
             for (let i = 1; i < pts.length; i++) {
-                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.88 * finScale);
-                ctx.lineTo(pts[i].x, pts[i].y - finWidth);
+                const arch = Math.sin((i / segments) * Math.PI);
+                const finHeight = arch * (this.size * 0.95 * finScale);
+                ctx.lineTo(pts[i].x, pts[i].y - finHeight);
             }
-            for (let i = pts.length - 1; i >= 0; i--) {
-                const finWidth = Math.sin((i / segments) * Math.PI) * (this.size * 0.88 * finScale);
-                ctx.lineTo(pts[i].x, pts[i].y + finWidth);
+            const lastPt = pts[pts.length - 1];
+            ctx.lineTo(lastPt.x - 1.5, lastPt.y);
+
+            // Nadadeira ventral
+            for (let i = pts.length - 1; i >= 1; i--) {
+                const arch = Math.sin((i / segments) * Math.PI);
+                const finHeight = arch * (this.size * 0.85 * finScale);
+                ctx.lineTo(pts[i].x, pts[i].y + finHeight);
             }
+            ctx.lineTo(-this.size * 0.70, 0);
             ctx.closePath();
             ctx.fillStyle = this.finColor;
             ctx.fill();
 
-            // Notocorda muscular afunilando para a ponta
+            // 2. Pontuacoes de melanoforos na nadadeira (padrao de camuflagem de girino)
+            if (this.size > 4.5) {
+                ctx.fillStyle = this.spotColor;
+                for (let i = 2; i < pts.length - 1; i += 2) {
+                    const arch = Math.sin((i / segments) * Math.PI);
+                    const fh = arch * (this.size * 0.50 * finScale);
+                    ctx.beginPath();
+                    ctx.arc(pts[i].x, pts[i].y - fh, Math.max(0.6, this.size * 0.08), 0, Math.PI * 2);
+                    ctx.arc(pts[i].x + 1.2, pts[i].y + fh * 0.7, Math.max(0.5, this.size * 0.07), 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // 3. Musculatura Caudal / Notocorda (feixe muscular robusto afunilado)
             ctx.beginPath();
             ctx.moveTo(pts[0].x, pts[0].y);
             for (let i = 1; i < pts.length; i++) {
                 ctx.lineTo(pts[i].x, pts[i].y);
             }
             ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = Math.max(1.1, this.size * 0.22);
+            ctx.lineWidth = Math.max(1.2, this.size * 0.32);
+            ctx.lineCap = 'round';
             ctx.stroke();
+
+            // 4. Miotomos (linhas mioseptais em chevron '>' ao longo do eixo muscular)
+            if (this.size > 4.2) {
+                ctx.strokeStyle = this.myoColor;
+                ctx.lineWidth = Math.max(0.6, this.size * 0.10);
+                for (let i = 1; i < pts.length - 1; i++) {
+                    const px = pts[i].x;
+                    const py = pts[i].y;
+                    const armLen = this.size * 0.22;
+                    ctx.beginPath();
+                    ctx.moveTo(px - armLen * 0.7, py - armLen);
+                    ctx.lineTo(px, py);
+                    ctx.lineTo(px - armLen * 0.7, py + armLen);
+                    ctx.stroke();
+                }
+            }
         }
 
-        // Anatomia do corpo de girino: contorno em gota, espiral visceral e olhos
+        // Anatomia biologica do corpo de girino: contorno em gota/ovoide, espiral visceral, espiraculo e olhos
         drawTadpoleBody() {
-            // Corpo em gota anura
+            // 1. Contorno biologico realista do corpo em vista dorsal (ovoide deprimido)
             ctx.beginPath();
-            ctx.ellipse(0, 0, this.size * 1.35, this.size * 0.92, 0, 0, Math.PI * 2);
+            ctx.moveTo(this.size * 1.38, 0); // Focinho arredondado
+            ctx.quadraticCurveTo(this.size * 1.15, -this.size * 0.65, this.size * 0.45, -this.size * 0.88); // Bochechas / arco orbitario
+            ctx.quadraticCurveTo(-this.size * 0.10, -this.size * 0.95, -this.size * 0.55, -this.size * 0.68); // Flanco lateral
+            ctx.quadraticCurveTo(-this.size * 0.78, -this.size * 0.35, -this.size * 0.78, 0); // Insercao caudal
+            ctx.quadraticCurveTo(-this.size * 0.78, this.size * 0.35, -this.size * 0.55, this.size * 0.68);
+            ctx.quadraticCurveTo(-this.size * 0.10, this.size * 0.95, this.size * 0.45, this.size * 0.88);
+            ctx.quadraticCurveTo(this.size * 1.15, this.size * 0.65, this.size * 1.38, 0);
+            ctx.closePath();
             ctx.fillStyle = this.baseColor;
             ctx.fill();
 
-            // Espiral visceral interna (tubo digestÃ³rio em espiral / gut coil de anuros)
-            ctx.strokeStyle = this.viscColor;
-            ctx.lineWidth = Math.max(0.8, this.size * 0.14);
+            // 2. Transparencia visceral / Anatomia interna (tipica de descricoes taxonomicas)
+            ctx.fillStyle = this.coreColor;
             ctx.beginPath();
-            ctx.arc(-this.size * 0.15, 0, this.size * 0.42, 0.4, Math.PI * 1.6);
+            ctx.ellipse(this.size * 0.30, 0, this.size * 0.42, this.size * 0.38, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Espiral visceral intestinal (gut coil / dupla alca espiralada concentrica)
+            ctx.strokeStyle = this.viscColor;
+            ctx.lineWidth = Math.max(0.8, this.size * 0.15);
+            ctx.beginPath();
+            ctx.arc(-this.size * 0.18, 0, this.size * 0.44, 0.35, Math.PI * 1.65);
             ctx.stroke();
             ctx.beginPath();
-            ctx.arc(-this.size * 0.12, 0, this.size * 0.22, 0.8, Math.PI * 1.8);
+            ctx.arc(-this.size * 0.16, 0, this.size * 0.24, 0.75, Math.PI * 1.85);
             ctx.stroke();
 
-            // Olhos dorso-laterais com Ã­ris brilhante e pupila
-            this.drawEyes(this.size * 0.45, this.size * 0.48, this.size * 0.22);
+            // 3. Espiraculo sinistro (tubo espiracular no flanco esquerdo)
+            ctx.strokeStyle = this.spotColor;
+            ctx.lineWidth = Math.max(0.6, this.size * 0.10);
+            ctx.beginPath();
+            ctx.moveTo(-this.size * 0.08, -this.size * 0.88);
+            ctx.lineTo(-this.size * 0.22, -this.size * 0.96);
+            ctx.stroke();
+
+            // 4. Narinas (pequenas fendas anterodorsais)
+            ctx.fillStyle = this.spotColor;
+            ctx.beginPath();
+            ctx.arc(this.size * 1.05, -this.size * 0.18, Math.max(0.5, this.size * 0.06), 0, Math.PI * 2);
+            ctx.arc(this.size * 1.05, this.size * 0.18, Math.max(0.5, this.size * 0.06), 0, Math.PI * 2);
+            ctx.fill();
+
+            // 5. Melanoforos dorsais sutis (manchas de pigmento dermico)
+            if (this.size > 4.2) {
+                ctx.fillStyle = this.spotColor;
+                ctx.beginPath();
+                ctx.arc(this.size * 0.65, -this.size * 0.25, Math.max(0.6, this.size * 0.08), 0, Math.PI * 2);
+                ctx.arc(this.size * 0.65, this.size * 0.25, Math.max(0.6, this.size * 0.08), 0, Math.PI * 2);
+                ctx.arc(-this.size * 0.45, -this.size * 0.22, Math.max(0.7, this.size * 0.09), 0, Math.PI * 2);
+                ctx.arc(-this.size * 0.45, this.size * 0.22, Math.max(0.7, this.size * 0.09), 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 6. Olhos dorsolaterais proeminentes salientes do contorno
+            this.drawEyes(this.size * 0.48, this.size * 0.52, this.size * 0.24);
         }
 
-        // Olhos anuros com pupila e halo de Ã­ris
+        // Olhos anuros com iris metalica, pupila e reflexo corneal
         drawEyes(eyeX, eyeY, eyeRadius) {
             for (let side = -1; side <= 1; side += 2) {
                 const y = side * eyeY;
-                // Ãris
                 ctx.fillStyle = this.irisColor;
                 ctx.beginPath();
                 ctx.arc(eyeX, y, eyeRadius, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Pupila
                 ctx.fillStyle = this.pupilColor;
                 ctx.beginPath();
-                ctx.arc(eyeX, y, eyeRadius * 0.62, 0, Math.PI * 2);
+                ctx.arc(eyeX, y, eyeRadius * 0.60, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.70)';
+                ctx.beginPath();
+                ctx.arc(eyeX + eyeRadius * 0.22, y - side * eyeRadius * 0.22, eyeRadius * 0.24, 0, Math.PI * 2);
                 ctx.fill();
             }
         }
 
-        // Patas posteriores (Membros traseiros - Gosner 36-39)
+        // Patas posteriores com 5 dedos e membrana natatoria (Gosner 37-39)
         drawHindLegs(scale = 1.0, isAdult = false) {
             const kick = Math.sin(this.wigglePhase) * (this.size * 0.22);
             ctx.strokeStyle = this.baseColor;
@@ -540,157 +640,19 @@ function initBioCanvas() {
 
             for (let side = -1; side <= 1; side += 2) {
                 const hipX = -this.size * 0.52;
-                const hipY = side * (this.size * 0.70);
+                const hipY = side * (this.size * 0.68);
 
-                // Coxa / FÃªmur
-                const kneeX = -this.size * (1.10 * scale) + kick * 0.4;
-                const kneeY = side * (this.size * (1.38 * scale) + Math.abs(kick) * 0.25);
+                // Coxa / Femur
+                const kneeX = -this.size * (1.10 * scale) + kick * 0.35;
+                const kneeY = side * (this.size * (1.38 * scale) + Math.abs(kick) * 0.20);
 
-                // Perna / TÃ­bia-fÃ­bula
-                const ankleX = -this.size * (1.70 * scale) + kick * 0.8;
-                const ankleY = side * (this.size * (0.82 * scale));
+                // Perna / Tibia-fibula
+                const ankleX = -this.size * (1.68 * scale) + kick * 0.75;
+                const ankleY = side * (this.size * (0.80 * scale));
 
-                // Tarso / AutopÃ³dio
-                const toeX = -this.size * (2.20 * scale) + kick * 1.1;
-                const toeY = side * (this.size * (0.62 * scale));
-
-                ctx.beginPath();
-                ctx.moveTo(hipX, hipY);
-                ctx.lineTo(kneeX, kneeY);
-                ctx.lineTo(ankleX, ankleY);
-                ctx.lineTo(toeX, toeY);
-                ctx.stroke();
-
-                // Dedinhos posteriores (5 dÃ­gitos com membrana natatÃ³ria)
-                ctx.lineWidth = Math.max(0.8, this.size * 0.15);
-                ctx.beginPath();
-                ctx.moveTo(ankleX, ankleY);
-                ctx.lineTo(toeX - side * 1.3, toeY - side * (this.size * 0.22));
-                ctx.moveTo(ankleX, ankleY);
-                ctx.lineTo(toeX + 1.1, toeY + side * (this.size * 0.20));
-                ctx.stroke();
-
-                if (isAdult) {
-                    // Discos adesivos (ventosas) na ponta dos dedos de perereca
-                    ctx.fillStyle = this.baseColor;
-                    ctx.beginPath();
-                    ctx.arc(toeX, toeY, Math.max(1.1, this.size * 0.13), 0, Math.PI * 2);
-                    ctx.arc(toeX - side * 1.3, toeY - side * (this.size * 0.22), Math.max(1.0, this.size * 0.12), 0, Math.PI * 2);
-                    ctx.arc(toeX + 1.1, toeY + side * (this.size * 0.20), Math.max(1.0, this.size * 0.12), 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                ctx.lineWidth = Math.max(1.2, this.size * 0.24);
-            }
-        }
-
-        // Patas anteriores (Membros dianteiros - Gosner 41+)
-        drawFrontArms(isAdult = false) {
-            ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = Math.max(1.0, this.size * 0.19);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            for (let side = -1; side <= 1; side += 2) {
-                const shX = this.size * 0.22;
-                const shY = side * (this.size * 0.72);
-
-                const elbowX = this.size * 0.02;
-                const elbowY = side * (this.size * 1.18);
-
-                const handX = this.size * 0.32;
-                const handY = side * (this.size * 1.42);
-
-                ctx.beginPath();
-                ctx.moveTo(shX, shY);
-                ctx.lineTo(elbowX, elbowY);
-                ctx.lineTo(handX, handY);
-                ctx.stroke();
-
-                // 4 Dedos na mÃ£o anterior (anatomia exata de anuro)
-                ctx.lineWidth = Math.max(0.7, this.size * 0.13);
-                for (let d = -1; d <= 1; d += 2) {
-                    const fingerX = handX + (d * this.size * 0.18);
-                    const fingerY = handY + side * (this.size * 0.22);
-                    ctx.beginPath();
-                    ctx.moveTo(handX, handY);
-                    ctx.lineTo(fingerX, fingerY);
-                    ctx.stroke();
-
-                    if (isAdult) {
-                        ctx.fillStyle = this.baseColor;
-                        ctx.beginPath();
-                        ctx.arc(fingerX, fingerY, Math.max(1.0, this.size * 0.12), 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-                ctx.lineWidth = Math.max(1.0, this.size * 0.19);
-            }
-        }
-
-        // EstÃ¡gio 0: Girino clÃ¡ssico (Ã¡pode, cauda longa)
-        drawClassicTadpole() {
-            this.drawTail(this.tailLength, 5);
-            this.drawTadpoleBody();
-        }
-
-        // EstÃ¡gio 1: Girino com patas posteriores em desenvolvimento
-        drawTwoLeggedTadpole() {
-            this.drawTail(this.tailLength, 5);
-            this.drawHindLegs(1.0, false);
-            this.drawTadpoleBody();
-        }
-
-        // EstÃ¡gio 2: Imago metamorfo (4 patas e cauda regredindo)
-        drawImago() {
-            // Cauda curta em regressÃ£o ativa
-            this.drawTail(this.tailLength, 4, 0.55);
-            this.drawFrontArms(false);
-            this.drawHindLegs(1.15, false);
-
-            // Corpo anuro intermediÃ¡rio
-            ctx.beginPath();
-            ctx.ellipse(0, 0, this.size * 1.30, this.size * 0.94, 0, 0, Math.PI * 2);
-            ctx.fillStyle = this.baseColor;
-            ctx.fill();
-
-            // Espiral visceral ainda visÃ­vel
-            ctx.strokeStyle = this.viscColor;
-            ctx.lineWidth = Math.max(0.7, this.size * 0.12);
-            ctx.beginPath();
-            ctx.arc(-this.size * 0.1, 0, this.size * 0.28, 0.6, Math.PI * 1.6);
-            ctx.stroke();
-
-            // Olhos mais protuberantes
-            this.drawEyes(this.size * 0.42, this.size * 0.52, this.size * 0.24);
-        }
-
-        // EstÃ¡gio 3: Pererequinha adulta jovem (sem cauda, discos adesivos e pernada anura)
-        drawAdultFrog() {
-            const kickCycle = Math.sin(this.kickPhase);
-            const kickExt = kickCycle > 0.25 ? (kickCycle - 0.25) * 1.4 : 0;
-
-            // Bracinhos com ventosas
-            this.drawFrontArms(true);
-
-            // Pernas traseiras longas de Hylidae com pernada sincronizada
-            ctx.strokeStyle = this.baseColor;
-            ctx.lineWidth = Math.max(1.3, this.size * 0.25);
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            for (let side = -1; side <= 1; side += 2) {
-                const hipX = -this.size * 0.44;
-                const hipY = side * (this.size * 0.62);
-
-                const kneeX = -this.size * (0.92 + kickExt * 0.65);
-                const kneeY = side * (this.size * (1.52 - kickExt * 0.45));
-
-                const ankleX = -this.size * (1.70 + kickExt * 1.30);
-                const ankleY = side * (this.size * (0.82 - kickExt * 0.42));
-
-                const footX = -this.size * (2.35 + kickExt * 1.65);
-                const footY = side * (this.size * (0.58 - kickExt * 0.35));
+                // Tarso e Pe
+                const footX = -this.size * (2.15 * scale) + kick * 1.05;
+                const footY = side * (this.size * (0.60 * scale));
 
                 ctx.beginPath();
                 ctx.moveTo(hipX, hipY);
@@ -699,44 +661,247 @@ function initBioCanvas() {
                 ctx.lineTo(footX, footY);
                 ctx.stroke();
 
-                // Dedinhos longos com ventosas
-                ctx.lineWidth = Math.max(0.8, this.size * 0.15);
-                for (let d = -1; d <= 1; d++) {
-                    const toeAngle = (d * 0.35);
-                    const toeLen = this.size * 0.42;
-                    const tipX = footX - Math.cos(toeAngle) * toeLen;
-                    const tipY = footY + side * Math.sin(toeAngle) * toeLen;
+                // 5 Digitos posteriores com hierarquia anura real (IV > III > V > II > I)
+                const toeAngles = [-0.48, -0.24, 0.0, 0.26, 0.50];
+                const toeLengths = [
+                    this.size * 0.32 * scale,
+                    this.size * 0.44 * scale,
+                    this.size * 0.62 * scale,
+                    this.size * 0.75 * scale,
+                    this.size * 0.54 * scale
+                ];
 
+                const toePts = [];
+                for (let d = 0; d < 5; d++) {
+                    const ang = toeAngles[d];
+                    const tLen = toeLengths[d];
+                    const tx = footX - Math.cos(ang) * tLen;
+                    const ty = footY + side * Math.sin(ang) * tLen;
+                    toePts.push({ x: tx, y: ty });
+                }
+
+                // Membrana interdigital translucida
+                ctx.fillStyle = this.webColor;
+                ctx.beginPath();
+                ctx.moveTo(footX, footY);
+                for (let d = 0; d < 5; d++) {
+                    ctx.lineTo(toePts[d].x, toePts[d].y);
+                }
+                ctx.closePath();
+                ctx.fill();
+
+                // Ossos dos dedos e ventosas
+                ctx.strokeStyle = this.baseColor;
+                ctx.lineWidth = Math.max(0.7, this.size * 0.12);
+                for (let d = 0; d < 5; d++) {
                     ctx.beginPath();
                     ctx.moveTo(footX, footY);
-                    ctx.lineTo(tipX, tipY);
+                    ctx.lineTo(toePts[d].x, toePts[d].y);
                     ctx.stroke();
 
-                    // Discos adesivos circulares (ventosas de Hylidae)
-                    ctx.fillStyle = this.baseColor;
-                    ctx.beginPath();
-                    ctx.arc(tipX, tipY, Math.max(1.1, this.size * 0.13), 0, Math.PI * 2);
-                    ctx.fill();
+                    if (isAdult) {
+                        ctx.fillStyle = this.baseColor;
+                        ctx.beginPath();
+                        ctx.arc(toePts[d].x, toePts[d].y, Math.max(1.1, this.size * 0.13), 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                 }
-                ctx.lineWidth = Math.max(1.3, this.size * 0.25);
+                ctx.lineWidth = Math.max(1.2, this.size * 0.24);
             }
+        }
 
-            // Corpo esguio de perereca (cabeÃ§a triangular + cintura)
+        // Patas anteriores com 4 dedos livres (Gosner 41+)
+        drawFrontArms(isAdult = false) {
+            ctx.strokeStyle = this.baseColor;
+            ctx.lineWidth = Math.max(1.0, this.size * 0.20);
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            for (let side = -1; side <= 1; side += 2) {
+                const shX = this.size * 0.28;
+                const shY = side * (this.size * 0.74);
+
+                const elbowX = this.size * 0.08;
+                const elbowY = side * (this.size * 1.20);
+
+                const wristX = this.size * 0.38;
+                const wristY = side * (this.size * 1.45);
+
+                ctx.beginPath();
+                ctx.moveTo(shX, shY);
+                ctx.lineTo(elbowX, elbowY);
+                ctx.lineTo(wristX, wristY);
+                ctx.stroke();
+
+                // 4 Dedos na mao anterior (anatomia estrita de Anura)
+                const armAngles = [-0.40, -0.12, 0.15, 0.42];
+                const armLens = [this.size * 0.28, this.size * 0.35, this.size * 0.36, this.size * 0.26];
+                ctx.lineWidth = Math.max(0.7, this.size * 0.12);
+
+                for (let d = 0; d < 4; d++) {
+                    const fx = wristX + Math.sin(armAngles[d]) * armLens[d];
+                    const fy = wristY + side * Math.cos(armAngles[d]) * armLens[d];
+
+                    ctx.beginPath();
+                    ctx.moveTo(wristX, wristY);
+                    ctx.lineTo(fx, fy);
+                    ctx.stroke();
+
+                    if (isAdult) {
+                        ctx.fillStyle = this.baseColor;
+                        ctx.beginPath();
+                        ctx.arc(fx, fy, Math.max(1.0, this.size * 0.12), 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                ctx.lineWidth = Math.max(1.0, this.size * 0.20);
+            }
+        }
+
+        // Estagio 0: Girino classico apode (Gosner 25)
+        drawClassicTadpole() {
+            this.drawTail(this.tailLength, 6);
+            this.drawTadpoleBody();
+        }
+
+        // Estagio 1: Girino com patas posteriores em desenvolvimento (Gosner 37-39)
+        drawTwoLeggedTadpole() {
+            this.drawTail(this.tailLength, 6);
+            this.drawHindLegs(1.0, false);
+            this.drawTadpoleBody();
+        }
+
+        // Estagio 2: Imago metamorfico (4 patas e cauda regredindo) (Gosner 42-44)
+        drawImago() {
+            // Cauda curta em reabsorcao ativa (apoptose tecidual)
+            this.drawTail(this.tailLength, 5, 0.50);
+            this.drawFrontArms(false);
+            this.drawHindLegs(1.15, false);
+
+            // Corpo anuro intermediario
             ctx.beginPath();
-            ctx.moveTo(this.size * 1.35, 0);
-            ctx.quadraticCurveTo(this.size * 0.75, -this.size * 0.88, -this.size * 0.15, -this.size * 0.82);
-            ctx.quadraticCurveTo(-this.size * 0.65, -this.size * 0.55, -this.size * 0.85, 0);
-            ctx.quadraticCurveTo(-this.size * 0.65, this.size * 0.55, -this.size * 0.15, this.size * 0.82);
-            ctx.quadraticCurveTo(this.size * 0.75, this.size * 0.88, this.size * 1.35, 0);
+            ctx.moveTo(this.size * 1.40, 0);
+            ctx.quadraticCurveTo(this.size * 1.05, -this.size * 0.75, 0, -this.size * 0.88);
+            ctx.quadraticCurveTo(-this.size * 0.60, -this.size * 0.60, -this.size * 0.82, 0);
+            ctx.quadraticCurveTo(-this.size * 0.60, this.size * 0.60, 0, this.size * 0.88);
+            ctx.quadraticCurveTo(this.size * 1.05, this.size * 0.75, this.size * 1.40, 0);
             ctx.closePath();
             ctx.fillStyle = this.baseColor;
             ctx.fill();
 
-            // Olhos grandes e proeminentes
-            this.drawEyes(this.size * 0.40, this.size * 0.56, this.size * 0.26);
+            // Espiral visceral ainda visivel em regressao
+            ctx.strokeStyle = this.viscColor;
+            ctx.lineWidth = Math.max(0.7, this.size * 0.12);
+            ctx.beginPath();
+            ctx.arc(-this.size * 0.12, 0, this.size * 0.28, 0.6, Math.PI * 1.6);
+            ctx.stroke();
+
+            // Olhos mais protuberantes
+            this.drawEyes(this.size * 0.44, this.size * 0.54, this.size * 0.25);
+        }
+
+        // Estagio 3: Jovem pererequinha adulta (Gosner 46 - sem cauda, ventosas e pernada anura)
+        drawAdultFrog() {
+            const kickCycle = Math.sin(this.kickPhase);
+            const kickExt = kickCycle > 0.20 ? (kickCycle - 0.20) * 1.45 : 0;
+
+            // 1. Membros anteriores com ventosas
+            this.drawFrontArms(true);
+
+            // 2. Membros posteriores longos e ageis em Z-fold
+            ctx.strokeStyle = this.baseColor;
+            ctx.lineWidth = Math.max(1.3, this.size * 0.26);
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            for (let side = -1; side <= 1; side += 2) {
+                const hipX = -this.size * 0.46;
+                const hipY = side * (this.size * 0.58);
+
+                const kneeX = -this.size * (0.95 + kickExt * 0.65);
+                const kneeY = side * (this.size * (1.52 - kickExt * 0.48));
+
+                const ankleX = -this.size * (1.72 + kickExt * 1.30);
+                const ankleY = side * (this.size * (0.80 - kickExt * 0.42));
+
+                const footX = -this.size * (2.35 + kickExt * 1.65);
+                const footY = side * (this.size * (0.55 - kickExt * 0.35));
+
+                ctx.beginPath();
+                ctx.moveTo(hipX, hipY);
+                ctx.lineTo(kneeX, kneeY);
+                ctx.lineTo(ankleX, ankleY);
+                ctx.lineTo(footX, footY);
+                ctx.stroke();
+
+                // 5 Dedos longos com membrana natatoria e ventosas de Hylidae
+                const toeAngles = [-0.50, -0.25, 0.0, 0.25, 0.50];
+                const toeLens = [
+                    this.size * 0.35,
+                    this.size * 0.48,
+                    this.size * 0.68,
+                    this.size * 0.82,
+                    this.size * 0.58
+                ];
+                const toePts = [];
+                for (let d = 0; d < 5; d++) {
+                    const ang = toeAngles[d];
+                    const tLen = toeLens[d];
+                    const tipX = footX - Math.cos(ang) * tLen;
+                    const tipY = footY + side * Math.sin(ang) * tLen;
+                    toePts.push({ x: tipX, y: tipY });
+                }
+
+                // Membrana interdigital translucida
+                ctx.fillStyle = this.webColor;
+                ctx.beginPath();
+                ctx.moveTo(footX, footY);
+                for (let d = 0; d < 5; d++) {
+                    ctx.lineTo(toePts[d].x, toePts[d].y);
+                }
+                ctx.closePath();
+                ctx.fill();
+
+                // Dedos e discos adesivos
+                ctx.strokeStyle = this.baseColor;
+                ctx.lineWidth = Math.max(0.7, this.size * 0.13);
+                for (let d = 0; d < 5; d++) {
+                    ctx.beginPath();
+                    ctx.moveTo(footX, footY);
+                    ctx.lineTo(toePts[d].x, toePts[d].y);
+                    ctx.stroke();
+
+                    ctx.fillStyle = this.baseColor;
+                    ctx.beginPath();
+                    ctx.arc(toePts[d].x, toePts[d].y, Math.max(1.1, this.size * 0.13), 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.lineWidth = Math.max(1.3, this.size * 0.26);
+            }
+
+            // 3. Tronco esguio de Hylidae com crista sacral e cintura nitida
+            ctx.beginPath();
+            ctx.moveTo(this.size * 1.45, 0); // Focinho triangular proeminente
+            ctx.quadraticCurveTo(this.size * 0.95, -this.size * 0.88, -this.size * 0.15, -this.size * 0.82);
+            ctx.quadraticCurveTo(-this.size * 0.50, -this.size * 0.52, -this.size * 0.90, 0);
+            ctx.quadraticCurveTo(-this.size * 0.50, this.size * 0.52, -this.size * 0.15, this.size * 0.82);
+            ctx.quadraticCurveTo(this.size * 0.95, this.size * 0.88, this.size * 1.45, 0);
+            ctx.closePath();
+            ctx.fillStyle = this.baseColor;
+            ctx.fill();
+
+            // 4. Mancha criptica dorsal sutil
+            if (this.size > 4.5) {
+                ctx.fillStyle = this.spotColor;
+                ctx.beginPath();
+                ctx.ellipse(this.size * 0.20, 0, this.size * 0.55, this.size * 0.28, 0, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 5. Olhos grandes e protuberantes laterais de perereca
+            this.drawEyes(this.size * 0.45, this.size * 0.58, this.size * 0.28);
         }
     }
-
     for (let i = 0; i < count; i++) {
         organisms.push(new Organism(i, count));
     }
