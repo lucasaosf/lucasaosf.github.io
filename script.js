@@ -1545,6 +1545,8 @@ function initLanguageSystem() {
 
 
 
+
+
 /* ==========================================================================
    10. DISTRIBUICAO GEOGRAFICA DE LUCAS AOSF (Leaflet.js - Satelite Fixo)
    ========================================================================== */
@@ -1577,15 +1579,50 @@ function initFieldMap() {
         maxZoom: 18
     }).addTo(map);
 
-    // 2. Camada sutil de Referencia e Fronteiras (Esri Boundaries & Places) para legibilidade geografica
+    // 2. Camada sutil de Referencia e Fronteiras Internacionais (Esri Boundaries & Places)
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
         maxZoom: 18,
-        opacity: 0.75
+        opacity: 0.65
     }).addTo(map);
+
+    // 3. Divisao dos Estados Brasileiros (Fronteiras Estaduais Vetoriais IBGE)
+    if (typeof brazilStatesGeoJson !== 'undefined') {
+        L.geoJSON(brazilStatesGeoJson, {
+            style: function() {
+                return {
+                    color: 'rgba(78, 204, 163, 0.48)',
+                    weight: 1.3,
+                    opacity: 0.85,
+                    fillColor: 'transparent',
+                    fillOpacity: 0,
+                    dashArray: '3, 4'
+                };
+            },
+            interactive: false
+        }).addTo(map);
+    }
+
+    // 4. Siglas dos Estados Brasileiros (Rotulos Geograficos Flutuantes)
+    if (typeof brazilStateLabels !== 'undefined') {
+        const stateLabelsLayer = L.layerGroup().addTo(map);
+        brazilStateLabels.forEach(st => {
+            const labelIcon = L.divIcon({
+                className: 'state-acronym-label',
+                html: '<span>' + st.sigla + '</span>',
+                iconSize: [26, 18],
+                iconAnchor: [13, 9]
+            });
+            L.marker(st.coords, {
+                icon: labelIcon,
+                interactive: false,
+                keyboard: false
+            }).addTo(stateLabelsLayer);
+        });
+    }
 
     // Attribution discreto no canto inferior direito
     L.control.attribution({ position: 'bottomright', prefix: false })
-        .addAttribution('&copy; Esri &bull; Earthstar &bull; Distribui&ccedil;&atilde;o Lucas A&oslash;sf')
+        .addAttribution('&copy; Esri &bull; IBGE &bull; Distribui&ccedil;&atilde;o Lucas A&oslash;sf')
         .addTo(map);
 
     // Botao de restauracao da visao geral do Brasil
@@ -1607,12 +1644,10 @@ function initFieldMap() {
         counterEl.textContent = lucasDistributionPoints.length + ' Pontos';
     }
 
-    // Renderizacao dos Pontinhos Simples Georreferenciados
-    // Usamos L.circleMarker com aceleracao Canvas para maxima fluidez a 120 FPS
+    // 5. Renderizacao dos Pontinhos Simples Georreferenciados (Camada Superior)
     const markersLayer = L.layerGroup().addTo(map);
 
     lucasDistributionPoints.forEach(pt => {
-        // Pontinho simples verde-esmeralda brilhante com borda branca nitida
         const marker = L.circleMarker(pt.coords, {
             radius: 5,
             fillColor: '#00ff88',
@@ -1623,7 +1658,6 @@ function initFieldMap() {
             className: 'lucas-point-dot'
         });
 
-        // Tooltip elegante e leve ao passar o mouse ou tocar no ponto
         const tooltipHtml = '<div style="font-family:monospace; font-size:11.5px; line-height:1.35;">' +
                             '<strong style="color:#ffffff; font-size:12.5px;">' + pt.title + '</strong>' +
                             '<div style="color:#00ff88; margin-top:2px;"><i class="fa-solid fa-location-dot" style="font-size:10px;"></i> ' + pt.locality + '</div>' +
@@ -1637,7 +1671,6 @@ function initFieldMap() {
             opacity: 0.96
         });
 
-        // Efeito interativo ao passar o mouse: aumenta ligeiramente o ponto
         marker.on('mouseover', function() {
             this.setRadius(7.5);
             this.setStyle({ fillColor: '#ffffff', color: '#00ff88', weight: 2 });
