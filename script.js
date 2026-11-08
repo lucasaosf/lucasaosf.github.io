@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAvatarToggle();
     initDronePlayer();
     initDroneLightbox();
+    initFieldMap();
 });
 
 /* ==========================================================================
@@ -1483,6 +1484,11 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         header_manifesto: "Scientific Manifesto",
         manifesto_quote: "&ldquo;True conservation begins on the forest floor, identifying every species by its voice and its identity. By bridging the rigor of classical taxonomy with data intelligence and environmental management, we turn scientific knowledge into an enduring legacy for biodiversity.&rdquo;",
         manifesto_cite: "&mdash; Lucas A&oslash;sf, Biologist, Environmental Manager &amp; Co-founder of BioKuri",
+        header_field_map: "Field Expeditions &amp; Brazil Georeferenced Mapping",
+        badge_georref: "GEOREFERENCED",
+        intro_field_map: "Georeferenced spatial mapping of scientific expeditions, taxonomic fauna inventories, and environmental management contracts conducted by Lucas A&oslash;sf across Brazilian biomes.",
+        map_kpi_gps: "Real Field GPS &amp; KML Waypoints",
+        filter_all: "All (25)",
         btn_whatsapp_cta: "Chat on WhatsApp",
         sub_whatsapp_cta: "Direct contact for environmental consulting, surveys, and partnerships",
         header_sage_mode: "Sage Mode // Toad Summoning",
@@ -1528,4 +1534,572 @@ function initLanguageSystem() {
             }
         });
     }
+}
+
+
+
+/* ==========================================================================
+   10. BRAZIL EXPEDITIONS INTERACTIVE MAP (Leaflet.js)
+   ========================================================================== */
+const expeditionPoints = [
+    {
+        id: "mantiqueira",
+        title: "Serra da Mantiqueira — P. boticariana",
+        locality: "Santo Antônio do Pinhal & Campos do Jordão, SP",
+        coords: [-22.894452, -45.996946],
+        category: "herpeto",
+        categoryLabel: "Herpetofauna & Taxonomia",
+        state: "SP",
+        biome: "Mata Atlântica (1.411m)",
+        project: "Redescoberta e Taxonomia de Anfíbios Raros",
+        client: "BioKuri // Pesquisa Acadêmica",
+        desc: "Coleta e diagnóstico georreferenciado da rara perereca-das-folhagens (Phrynomedusa boticariana), estudo morfológico de girinos e bioacústica em riachos de altitude.",
+        icon: "fa-frog",
+        isHighlight: true
+    },
+    {
+        id: "patos_pb",
+        title: "Fazenda Tamanduá & Açude Conceição",
+        locality: "Patos & Santa Terezinha, PB",
+        coords: [-7.0158, -37.3908],
+        category: "masto",
+        categoryLabel: "Mastofauna & Quirópteros",
+        state: "PB",
+        biome: "Caatinga Hiperxerófila",
+        project: "Bioacústica de Morcegos e Herpetofauna do Semiárido",
+        client: "Expedição de Campo // Pesquisa",
+        desc: "Monitoramento com detectores ultrassônicos de quirópteros, inventário herpetofaunístico e amostragem de fauna em corpos d'água temporários no sertão paraibano.",
+        icon: "fa-paw",
+        isHighlight: true
+    },
+    {
+        id: "pch_verde2",
+        title: "PCH Verde 2 & Linha de Transmissão 138 kV",
+        locality: "Rio Verde & Montividiu, GO",
+        coords: [-17.2939, -50.8501],
+        category: "energy",
+        categoryLabel: "Energia & Hidrelétricas",
+        state: "GO",
+        biome: "Cerrado Sentido Restrito",
+        project: "Resgate e Monitoramento de Fauna na PCH Verde 2",
+        client: "Setor Energético // Consultoria",
+        desc: "Coordenação de resgate e afugentamento de herpetofauna e mastofauna durante o enchimento do reservatório e abertura da faixa de servidão da LT 138 kV.",
+        icon: "fa-water",
+        isHighlight: true
+    },
+    {
+        id: "carajas_vale",
+        title: "Complexo Minerário de Carajás (S11D / N4)",
+        locality: "Parauapebas & Canaã dos Carajás, PA",
+        coords: [-6.0674, -50.1584],
+        category: "mining",
+        categoryLabel: "Mineração (Vale) & Herpeto",
+        state: "PA",
+        biome: "Floresta Amazônica & Cangas",
+        project: "Diagnóstico e Monitoramento de Fauna Silvestre",
+        client: "Vale S.A. // Consultoria Ambiental",
+        desc: "Inventário de herpetofauna e mamíferos em áreas de canga hematítica e floresta ombrófila densa na Amazônia Oriental, avaliação de impacto e mitigação.",
+        icon: "fa-mountain",
+        isHighlight: true
+    },
+    {
+        id: "solar_ba",
+        title: "Complexo Solar Fotovoltaico (UFV)",
+        locality: "Bom Jesus da Lapa & Caetité, BA",
+        coords: [-13.2550, -43.4210],
+        category: "energy",
+        categoryLabel: "Energia Solar & UFVs",
+        state: "BA",
+        biome: "Caatinga & Cerrado",
+        project: "Licenciamento de Usina Fotovoltaica de Grande Porte",
+        client: "Setor Solar & Renováveis",
+        desc: "Inventário de vertebrados terrestres em parques solares fotovoltaicos de grande escala, afugentamento pré-supressão e planos de manejo de fauna adaptados ao semiárido.",
+        icon: "fa-solar-panel",
+        isHighlight: true
+    },
+    {
+        id: "pardinho_cuesta",
+        title: "Cuesta de Botucatu & Pardinho",
+        locality: "Pardinho, SP",
+        coords: [-23.0841, -48.3772],
+        category: "masto",
+        categoryLabel: "Mastofauna & Campo",
+        state: "SP",
+        biome: "Mata Atlântica & Cerrado",
+        project: "Monitoramento de Médios e Grandes Mamíferos",
+        client: "BioKuri // Gestão Ambiental",
+        desc: "Pontos de monitoramento georreferenciados de capivaras (Hydrochoerus hydrochaeris) e mesocarnívoros, análise de corredores ecológicos na Cuesta Basáltica.",
+        icon: "fa-paw",
+        isHighlight: false
+    },
+    {
+        id: "piracicaba_esalq",
+        title: "Polo Científico & Laboratório de Girinos",
+        locality: "Piracicaba & Rio Claro, SP",
+        coords: [-22.7253, -47.6492],
+        category: "herpeto",
+        categoryLabel: "Taxonomia & Sistemática",
+        state: "SP",
+        biome: "Mata Atlântica Interiorana",
+        project: "Mestrado em Sistemática & Morfologia de Girinos",
+        client: "UNESP Rio Claro / ESALQ USP // BioKuri",
+        desc: "Sede de pesquisas taxonômicas, chaves dicotômicas interativas, descrição morfológica de girinos em estágios de Gosner e modelagem estatística em RStudio e Python.",
+        icon: "fa-frog",
+        isHighlight: true
+    },
+    {
+        id: "pantanal_corumba",
+        title: "Pantanal da Nhecolândia & Rio Paraguai",
+        locality: "Corumbá & Miranda, MS",
+        coords: [-19.0076, -57.6534],
+        category: "masto",
+        categoryLabel: "Mastofauna & Pantanal",
+        state: "MS",
+        biome: "Pantanal & Chaco",
+        project: "Expedições Mastofaunísticas e Comunidades de Anuros",
+        client: "Expedições Científicas // Consultoria",
+        desc: "Armadilhamento fotográfico de grandes mamíferos (Onça-pintada, Anta, Tamanduá-bandeira) e levantamento acústico de assembleias de anuros em corixos e vazantes pantaneiras.",
+        icon: "fa-paw",
+        isHighlight: false
+    },
+    {
+        id: "transmissao_ms_sp",
+        title: "Linhas de Transmissão LT 500 kV & Subestações",
+        locality: "Três Lagoas & Castilho, MS/SP",
+        coords: [-20.8034, -51.7058],
+        category: "energy",
+        categoryLabel: "Linhas de Transmissão",
+        state: "MS",
+        biome: "Cerrado do Alto Paraná",
+        project: "Supervisão Ambiental & Afugentamento LT 500 kV",
+        client: "Ecology and Environment / Arcadis",
+        desc: "Vistoria e resgate de fauna silvestre ao longo de centenas de quilômetros de faixa de servidão de Linha de Transmissão de extra-alta tensão, com foco em herpeto e masto.",
+        icon: "fa-bolt",
+        isHighlight: false
+    },
+    {
+        id: "serra_cipo",
+        title: "Serra do Cipó & Parque Nacional",
+        locality: "Santana do Riacho & Jaboticatubas, MG",
+        coords: [-19.3456, -43.6128],
+        category: "herpeto",
+        categoryLabel: "Herpetofauna & Endemismos",
+        state: "MG",
+        biome: "Campos Rupestres (Espinhaço)",
+        project: "Especialização em Anfíbios Endêmicos do Espinhaço",
+        client: "Pesquisa Herpetológica",
+        desc: "Estudos taxonômicos e bioacústicos de pererecas e sapos restritos a afloramentos quartzíticos (Bokermannohyla martinsi, Pithecopus ayeaye) e córregos de altitude.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "ubatuba_costa",
+        title: "Litoral Norte Paulista & Ilhabela",
+        locality: "Ubatuba & São Sebastião, SP",
+        coords: [-23.4332, -45.0834],
+        category: "ornito",
+        categoryLabel: "Ornitologia & Fauna Costeira",
+        state: "SP",
+        biome: "Mata Atlântica Litorânea",
+        project: "Inventário de Aves Marinhas e Anfíbios Bromelígenas",
+        client: "BioKuri // Consultoria Litoral",
+        desc: "Amostragem de aves marinhas e costeiras (anilhamento CEMAVE), monitoramento de Phyllodytes e girinos fitotelmatais associados a bromélias de encosta.",
+        icon: "fa-dove",
+        isHighlight: false
+    },
+    {
+        id: "cananeia_iguape",
+        title: "Complexo Estuarino Lagunar & Ilha do Cardoso",
+        locality: "Cananéia & Ilha Comprida, SP",
+        coords: [-25.0147, -47.9267],
+        category: "ornito",
+        categoryLabel: "Vida Marinha & Ornitologia",
+        state: "SP",
+        biome: "Manguezais & Restinga",
+        project: "Monitoramento de Aves Migratórias e Fauna Estuarina",
+        client: "Gestão Costeira // BioKuri",
+        desc: "Censos de aves limícolas migratórias, diagnóstico ambiental em ecossistemas de manguezal e restinga do mosaico de unidades de conservação do Lagamar.",
+        icon: "fa-dove",
+        isHighlight: false
+    },
+    {
+        id: "paranapiacaba_serra",
+        title: "Serra do Mar & Reserva de Paranapiacaba",
+        locality: "Santo André & Cubatão, SP",
+        coords: [-23.7781, -46.3025],
+        category: "herpeto",
+        categoryLabel: "Herpetofauna de Riacho",
+        state: "SP",
+        biome: "Floresta Ombrófila Densa",
+        project: "Bioacústica e Taxonomia de Anfíbios de Correnteza",
+        client: "Pesquisa Acadêmica",
+        desc: "Gravação de cantos de anúncio e diagnose de espécies do gênero Hylodes e Crossodactylus em riachos pedregosos com alto ruído hidrodinâmico.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "botucatu_cuesta",
+        title: "Cuesta de Botucatu & Rubião Júnior",
+        locality: "Botucatu, SP",
+        coords: [-22.8858, -48.4450],
+        category: "herpeto",
+        categoryLabel: "Taxonomia & Ecologia",
+        state: "SP",
+        biome: "Transição Cerrado / Mata Atlântica",
+        project: "Amostragem de Formas Larvais & Taxonomia",
+        client: "BioKuri // Coleções Zoológicas",
+        desc: "Amostragens sistemáticas em poças temporárias e riachos, análise ontogenética de girinos com microscopia estereoscópica e fotografias de espécimes vivos.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "vale_paraiba_rodovia",
+        title: "Eixo Rodoviário & Industrial do Vale do Paraíba",
+        locality: "Taubaté, Pinda & Guaratinguetá, SP",
+        coords: [-22.9535, -45.4608],
+        category: "mining",
+        categoryLabel: "Rodovias & Condomínios",
+        state: "SP",
+        biome: "Mata Atlântica & Várzeas",
+        project: "Licenciamento de Empreendimentos, Dutos e Rodovias",
+        client: "Econatur / Arcadis // Consultoria",
+        desc: "Monitoramento de atropelamento de fauna em rodovias, licenciamento de condomínios urbanísticos e planos de manejo de áreas de preservação permanente (APP).",
+        icon: "fa-road",
+        isHighlight: false
+    },
+    {
+        id: "itatiaia_parna",
+        title: "Parque Nacional do Itatiaia & Agulhas Negras",
+        locality: "Itatiaia & Resende, RJ",
+        coords: [-22.4542, -44.6067],
+        category: "herpeto",
+        categoryLabel: "Herpetofauna Altimontana",
+        state: "RJ",
+        biome: "Campos de Altitude (2.200m+)",
+        project: "Inventários em Climas Extremos Altimontanos",
+        client: "Expedições Científicas",
+        desc: "Levantamento de anfíbios e répteis adaptados a temperaturas negativas e geadas nos topos da Mantiqueira, com registros fotográficos e bioacústicos.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "angra_paraty_uhe",
+        title: "Costa Verde & Baía da Ilha Grande",
+        locality: "Angra dos Reis & Paraty, RJ",
+        coords: [-23.0067, -44.3181],
+        category: "energy",
+        categoryLabel: "Infraestrutura Costeira",
+        state: "RJ",
+        biome: "Mata Atlântica de Costão",
+        project: "Gestão Ambiental de Empreendimentos Costeiros",
+        client: "Consultoria Ambiental",
+        desc: "Vistoria faunística para empreendimentos de infraestrutura costeira, programas de resgate de fauna e salvaguarda de ecossistemas insulares e costeiros.",
+        icon: "fa-water",
+        isHighlight: false
+    },
+    {
+        id: "pocos_caldas",
+        title: "Planalto Vulcânico de Poços de Caldas",
+        locality: "Poços de Caldas, MG",
+        coords: [-21.7895, -46.5626],
+        category: "herpeto",
+        categoryLabel: "Mata Atlântica & Brejos",
+        state: "MG",
+        biome: "Mata Atlântica Interiorana",
+        project: "Inventário Herpetofaunístico em Áreas Alagadas",
+        client: "BioKuri // Estudos Faunísticos",
+        desc: "Diagnóstico taxonômico de pererecas e rãs de brejos de altitude da caldeira vulcânica, caracterização de sítios reprodutivos e bioacústica.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "quadrilatero_ferrifero",
+        title: "Quadrilátero Ferrífero & Minas Gerais",
+        locality: "Nova Lima & Brumadinho, MG",
+        coords: [-19.9858, -43.8467],
+        category: "mining",
+        categoryLabel: "Mineração (Vale) & Arcadis",
+        state: "MG",
+        biome: "Transição Mata Atlântica / Cerrado",
+        project: "Monitoramento e Mitigação de Impactos Minerários",
+        client: "Vale S.A. / Arcadis",
+        desc: "Supervisão ambiental e inventários faunísticos para grandes complexos de mineração de ferro, estruturação de planos de emergência e resgate de fauna silvestre.",
+        icon: "fa-mountain",
+        isHighlight: true
+    },
+    {
+        id: "chapada_guimaraes",
+        title: "Canyons da Chapada dos Guimarães",
+        locality: "Chapada dos Guimarães, MT",
+        coords: [-15.4607, -55.7497],
+        category: "masto",
+        categoryLabel: "Mastofauna & Cerrado",
+        state: "MT",
+        biome: "Cerrado Rupestre & Veredas",
+        project: "Levantamento de Fauna em Ambientes Areníticos",
+        client: "Expedições Científicas",
+        desc: "Mapeamento e armadilhamento fotográfico de predadores de topo e ungulados em áreas de paredões rochosos e veredas com buritis.",
+        icon: "fa-paw",
+        isHighlight: false
+    },
+    {
+        id: "chapada_veadeiros",
+        title: "Parque Nacional da Chapada dos Veadeiros",
+        locality: "Alto Paraíso de Goiás, GO",
+        coords: [-14.1311, -47.5147],
+        category: "herpeto",
+        categoryLabel: "Cerrado & Anuros Reófilos",
+        state: "GO",
+        biome: "Cerrado de Altitude",
+        project: "Bioacústica e Taxonomia de Anfíbios de Corredeira",
+        client: "Pesquisa Acadêmica",
+        desc: "Amostragem de espécies reófilas (Bokermannohyla pseudopseudis) adaptadas a cachoeiras e leitos rochosos de alta energia nas cabeceiras da Bacia Tocantins-Araguaia.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "foz_iguacu",
+        title: "Parque Nacional do Iguaçu & Bacia do Paraná",
+        locality: "Foz do Iguaçu, PR",
+        coords: [-25.5957, -54.4367],
+        category: "ornito",
+        categoryLabel: "Ornitologia & Mastofauna",
+        state: "PR",
+        biome: "Floresta Estacional Semidecidual",
+        project: "Monitoramento de Aves Raras e Mamíferos Florestais",
+        client: "BioKuri // Pesquisa de Campo",
+        desc: "Redes de neblina para anilhamento de aves da Mata Atlântica do interior e detecção de mamíferos florestais no corredor trinacional de biodiversidade.",
+        icon: "fa-dove",
+        isHighlight: false
+    },
+    {
+        id: "serra_graciosa",
+        title: "Serra da Graciosa & Antonina",
+        locality: "Morretes & Antonina, PR",
+        coords: [-25.4287, -48.7121],
+        category: "herpeto",
+        categoryLabel: "Herpetofauna da Serra do Mar Sul",
+        state: "PR",
+        biome: "Floresta Ombrófila Densa Montana",
+        project: "Taxonomia de Anfíbios de Folhiço e Riachos",
+        client: "Pesquisa Herpetológica",
+        desc: "Inventário taxonômico de espécies de folhiço (Brachycephalus, Ischnocnema) e anuros de riacho sob altíssima pluviosidade na encosta atlântica paranaense.",
+        icon: "fa-frog",
+        isHighlight: false
+    },
+    {
+        id: "reserva_linhares",
+        title: "Reserva Natural Vale Linhares",
+        locality: "Linhares & Sooretama, ES",
+        coords: [-19.1481, -40.0658],
+        category: "mining",
+        categoryLabel: "Mata de Tabuleiros (Vale)",
+        state: "ES",
+        biome: "Floresta de Tabuleiros",
+        project: "Pesquisas Herpetológicas em Floresta de Baixada",
+        client: "Vale S.A. // Estudos Ambientais",
+        desc: "Amostragens herpetológicas em um dos maiores remanescentes contínuos de Mata de Tabuleiro do Brasil, com inventário de serpentes e anuros de lagoas sazonais.",
+        icon: "fa-mountain",
+        isHighlight: false
+    },
+    {
+        id: "vale_itajai",
+        title: "Vale do Itajaí & Bacia Hidrográfica",
+        locality: "Itajaí & Blumenau, SC",
+        coords: [-26.9078, -48.6619],
+        category: "ornito",
+        categoryLabel: "Ornitologia & Recursos Hídricos",
+        state: "SC",
+        biome: "Mata Atlântica Sul",
+        project: "Diagnóstico Faunístico para Bacias e Portos",
+        client: "BioKuri // Consultoria Ambiental",
+        desc: "Levantamento integrado de avifauna e fauna límnica em áreas fluviais e estuarinas do Vale do Itajaí, subsidiando planos de manejo e licenciamento.",
+        icon: "fa-dove",
+        isHighlight: false
+    }
+];
+
+function initFieldMap() {
+    const mapContainer = document.getElementById('brazil-expedition-map');
+    if (!mapContainer || typeof L === 'undefined') return;
+
+    // Brazil center & optimal zoom
+    const brazilCenter = [-15.2, -51.8];
+    const initialZoom = window.innerWidth < 768 ? 3.8 : 4.4;
+
+    const map = L.map('brazil-expedition-map', {
+        center: brazilCenter,
+        zoom: initialZoom,
+        minZoom: 3.5,
+        maxZoom: 18,
+        scrollWheelZoom: false
+    });
+
+    // Enable scroll wheel zoom on click to avoid trap while scrolling page
+    map.on('click', () => { map.scrollWheelZoom.enable(); });
+    mapContainer.addEventListener('mouseleave', () => { map.scrollWheelZoom.disable(); });
+
+    // Basemaps: CartoDB Dark Matter & Esri World Imagery
+    const darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CARTO &copy; OpenStreetMap',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    const satTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+        maxZoom: 18
+    });
+
+    // Basemap toggle buttons
+    const btnDark = document.getElementById('btn-layer-dark');
+    const btnSat = document.getElementById('btn-layer-sat');
+    const btnReset = document.getElementById('btn-map-reset');
+
+    if (btnDark && btnSat) {
+        btnDark.addEventListener('click', () => {
+            if (!map.hasLayer(darkTileLayer)) {
+                map.removeLayer(satTileLayer);
+                map.addLayer(darkTileLayer);
+                btnDark.classList.add('active');
+                btnSat.classList.remove('active');
+            }
+        });
+        btnSat.addEventListener('click', () => {
+            if (!map.hasLayer(satTileLayer)) {
+                map.removeLayer(darkTileLayer);
+                map.addLayer(satTileLayer);
+                btnSat.classList.add('active');
+                btnDark.classList.remove('active');
+            }
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener('click', () => {
+            map.flyTo(brazilCenter, initialZoom, { duration: 1.2 });
+            document.querySelectorAll('.map-expedition-card').forEach(c => c.classList.remove('active'));
+        });
+    }
+
+    // Marker Layer Group
+    const markersLayer = L.layerGroup().addTo(map);
+    const markerMap = new Map();
+
+    function renderPoints(category = 'all') {
+        markersLayer.clearLayers();
+        markerMap.clear();
+
+        const filtered = category === 'all' 
+            ? expeditionPoints 
+            : expeditionPoints.filter(p => p.category === category);
+
+        // Update counter badge
+        const counterEl = document.getElementById('map-counter-points');
+        if (counterEl) {
+            counterEl.textContent = filtered.length;
+        }
+
+        filtered.forEach(pt => {
+            const isHighlight = pt.isHighlight ? 'gold' : '';
+            const pinIcon = L.divIcon({
+                className: 'custom-leaflet-pin',
+                html: `<div class="custom-pin-marker ${isHighlight}" title="${pt.title}">
+                         <i class="fa-solid ${pt.icon}"></i>
+                       </div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -18]
+            });
+
+            const marker = L.marker(pt.coords, { icon: pinIcon });
+
+            const popupHtml = `
+                <div class="custom-map-popup">
+                    <span class="popup-tag">${pt.categoryLabel}</span>
+                    <h4 class="popup-title">${pt.title}</h4>
+                    <div class="popup-meta">
+                        <i class="fa-solid fa-location-dot"></i> ${pt.locality} &bull; ${pt.state}
+                    </div>
+                    <p class="popup-desc">${pt.desc}</p>
+                    <div class="popup-footer">
+                        <span><i class="fa-solid fa-leaf"></i> ${pt.biome}</span>
+                        <span><i class="fa-solid fa-crosshairs"></i> ${pt.coords[0].toFixed(4)}, ${pt.coords[1].toFixed(4)}</span>
+                    </div>
+                </div>
+            `;
+
+            marker.bindPopup(popupHtml, {
+                maxWidth: 320,
+                className: 'bio-leaflet-popup'
+            });
+
+            marker.on('click', () => {
+                highlightCard(pt.id);
+            });
+
+            markersLayer.addLayer(marker);
+            markerMap.set(pt.id, marker);
+        });
+
+        renderCarousel(filtered);
+    }
+
+    // Expeditions bottom horizontal cards
+    const scrollContainer = document.getElementById('map-expeditions-scroll');
+
+    function renderCarousel(pointsList) {
+        if (!scrollContainer) return;
+        scrollContainer.innerHTML = '';
+
+        pointsList.forEach(pt => {
+            const card = document.createElement('div');
+            card.className = 'map-expedition-card';
+            card.id = `card-exp-${pt.id}`;
+            card.innerHTML = `
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.35rem;">
+                    <span style="font-size:0.68rem; color:var(--bio-gold); text-transform:uppercase; letter-spacing:0.5px;">${pt.categoryLabel}</span>
+                    <span style="background:rgba(78,204,163,0.15); color:var(--bio-emerald); padding:2px 6px; border-radius:4px; font-size:0.65rem; font-weight:700;">${pt.state}</span>
+                </div>
+                <h5><i class="fa-solid ${pt.icon}" style="color:var(--bio-emerald); margin-right:4px;"></i> ${pt.title}</h5>
+                <span style="color:var(--text-muted); font-size:0.73rem; margin-top:2px;"><i class="fa-solid fa-location-dot" style="font-size:0.65rem;"></i> ${pt.locality}</span>
+                <span style="color:var(--bio-sage); font-size:0.68rem; margin-top:4px;"><i class="fa-solid fa-leaf" style="font-size:0.65rem;"></i> ${pt.biome}</span>
+            `;
+
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.map-expedition-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                map.flyTo(pt.coords, 10, { duration: 1.4 });
+                const m = markerMap.get(pt.id);
+                if (m) {
+                    setTimeout(() => { m.openPopup(); }, 1450);
+                }
+            });
+
+            scrollContainer.appendChild(card);
+        });
+    }
+
+    function highlightCard(id) {
+        document.querySelectorAll('.map-expedition-card').forEach(c => c.classList.remove('active'));
+        const card = document.getElementById(`card-exp-${id}`);
+        if (card) {
+            card.classList.add('active');
+            card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+
+    // Category Filter Buttons
+    const filterButtons = document.querySelectorAll('#map-filter-group .map-filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const cat = btn.getAttribute('data-category');
+            renderPoints(cat);
+        });
+    });
+
+    // Initial render
+    renderPoints('all');
 }
