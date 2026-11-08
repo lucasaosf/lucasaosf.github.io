@@ -3572,3 +3572,29 @@ h2 {
     color: var(--bio-sage);
     display: block;
 }
+
+/* Tooltip & Styling para Pontinhos Simples da Distribuicao de Lucas Aosf */
+.brazil-expedition-map {
+    height: 580px !important;
+}
+
+.bio-simple-tooltip {
+    background: rgba(7, 20, 11, 0.95) !important;
+    border: 1px solid #4ECCA3 !important;
+    color: #ffffff !important;
+    font-family: var(--font-terminal) !important;
+    font-size: 0.74rem !important;
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+.bio-simple-tooltip::before {
+    border-top-color: #4ECCA3 !important;
+}
+
+.lucas-point-dot {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}

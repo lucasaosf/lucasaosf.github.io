@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-    <link rel="stylesheet" href="style.css?v=10.2">
+    <link rel="stylesheet" href="style.css?v=10.3">
     <noscript>
         <style>
             .fade-in { opacity: 1 !important; transform: none !important; }
@@ -1089,55 +1089,29 @@
         <!-- Mapeamento Georreferenciado de Expedicoes pelo Brasil -->
         <section class="field-map-section glass-panel fade-in" id="field-map-section">
             <div class="section-title-wrap">
-                <h2><i class="fa-solid fa-map-location-dot neon-green-icon"></i> <span data-i18n="header_field_map">Mapeamento de Expedi&ccedil;&otilde;es &amp; Atua&ccedil;&atilde;o pelo Brasil</span></h2>
-                <span class="badge-status live" data-i18n="badge_georref">GEORREFERENCIADO</span>
+                <h2><i class="fa-solid fa-earth-americas neon-green-icon"></i> <span data-i18n="header_field_map">Distribui&ccedil;&atilde;o de Lucas A&oslash;sf</span></h2>
+                <span class="badge-status live" data-i18n="badge_georref">SAT&Eacute;LITE</span>
             </div>
-            <p class="section-intro" data-i18n="intro_field_map">Mapeamento georreferenciado das expedi&ccedil;&otilde;es cient&iacute;ficas, invent&aacute;rios taxon&ocirc;micos de fauna e contratos de gest&atilde;o ambiental executados por Lucas A&oslash;sf em m&uacute;ltiplos biomas brasileiros.</p>
+            <p class="section-intro" data-i18n="intro_field_map">Mapeamento biogeogr&aacute;fico de ocorr&ecirc;ncia: todos os pontos, cidades, rotas e expedi&ccedil;&otilde;es de campo percorridas pelo pesquisador pelo Brasil.</p>
 
             <!-- Metrics Counter Strip -->
             <div class="map-kpi-strip">
                 <div class="map-kpi-item">
                     <i class="fa-solid fa-location-dot neon-green-icon"></i>
-                    <span><strong id="map-counter-points">25</strong> Polos de Campo</span>
+                    <span><strong id="map-counter-points">192 Pontos</strong> Registrados</span>
                 </div>
                 <div class="map-kpi-item">
-                    <i class="fa-solid fa-map neon-green-icon"></i>
-                    <span><strong>10</strong> Estados (SP &middot; MG &middot; GO &middot; MS &middot; MT &middot; PR &middot; RJ &middot; ES &middot; PB &middot; PA)</span>
-                </div>
-                <div class="map-kpi-item">
-                    <i class="fa-solid fa-leaf neon-green-icon"></i>
-                    <span><strong>4</strong> Biomas (Mata Atl&acirc;ntica &middot; Cerrado &middot; Caatinga &middot; Amaz&ocirc;nia)</span>
+                    <i class="fa-solid fa-route neon-green-icon"></i>
+                    <span>Rotas: Bel&eacute;m &rarr; Tucum&atilde; &bull; Barra do Gar&ccedil;as &rarr; Manaus &bull; Nordeste &bull; Centro-Sul</span>
                 </div>
                 <div class="map-kpi-item">
                     <i class="fa-solid fa-satellite neon-green-icon"></i>
-                    <span data-i18n="map_kpi_gps">Pontos de Campo &amp; KML/GPS Reais</span>
+                    <span data-i18n="map_kpi_gps">Vis&atilde;o Fixa de Sat&eacute;lite em Alta Resolu&ccedil;&atilde;o</span>
                 </div>
             </div>
 
-            <!-- Toolbar: Filters & Basemap Switcher -->
-            <div class="map-toolbar">
-                <div class="map-filter-group" id="map-filter-group">
-                    <button class="map-filter-btn active" data-category="all"><i class="fa-solid fa-earth-americas"></i> <span data-i18n="filter_all">Todos (25)</span></button>
-                    <button class="map-filter-btn" data-category="herpeto"><i class="fa-solid fa-frog"></i> Herpetofauna &amp; Taxonomia</button>
-                    <button class="map-filter-btn" data-category="energy"><i class="fa-solid fa-solar-panel"></i> Energia, UHE &amp; Solar</button>
-                    <button class="map-filter-btn" data-category="masto"><i class="fa-solid fa-paw"></i> Mastofauna &amp; Ferrovias</button>
-                    <button class="map-filter-btn" data-category="ornito"><i class="fa-solid fa-dove"></i> Ornitologia &amp; Vida Marinha</button>
-                    <button class="map-filter-btn" data-category="mining"><i class="fa-solid fa-mountain"></i> Minera&ccedil;&atilde;o (Vale) &amp; Rodovias</button>
-                </div>
-                <div class="map-layers-group">
-                    <button class="map-layer-btn active" id="btn-layer-dark" title="Alternar para Mapa Cartografico Dark"><i class="fa-solid fa-moon"></i> Dark</button>
-                    <button class="map-layer-btn" id="btn-layer-sat" title="Alternar para Foto de Satelite em Alta Resolucao"><i class="fa-solid fa-satellite"></i> Sat&eacute;lite</button>
-                    <button class="map-layer-btn" id="btn-map-reset" title="Restaurar Visao Geral do Brasil"><i class="fa-solid fa-expand"></i> Brasil</button>
-                </div>
-            </div>
-
-            <!-- Leaflet Interactive Map Container -->
+            <!-- Leaflet Interactive Map Container (Visao Fixa de Satelite) -->
             <div id="brazil-expedition-map" class="brazil-expedition-map"></div>
-
-            <!-- Quick Expeditions Jump Cards -->
-            <div class="map-expeditions-scroll" id="map-expeditions-scroll">
-                <!-- Injected via JavaScript -->
-            </div>
         </section>
 
         <!-- Academic Formation & Professional Accreditations -->
@@ -1307,7 +1281,7 @@
     <!-- Custom Script -->
         <!-- Leaflet Map JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
-    <script src="script.js?v=10.2"></script>
+    <script src="script.js?v=10.3"></script>
 </body>
 
 </html>

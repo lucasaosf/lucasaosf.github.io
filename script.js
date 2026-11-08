@@ -1484,9 +1484,9 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         header_manifesto: "Scientific Manifesto",
         manifesto_quote: "&ldquo;True conservation begins on the forest floor, identifying every species by its voice and its identity. By bridging the rigor of classical taxonomy with data intelligence and environmental management, we turn scientific knowledge into an enduring legacy for biodiversity.&rdquo;",
         manifesto_cite: "&mdash; Lucas A&oslash;sf, Biologist, Environmental Manager &amp; Co-founder of BioKuri",
-        header_field_map: "Field Expeditions &amp; Brazil Georeferenced Mapping",
-        badge_georref: "GEOREFERENCED",
-        intro_field_map: "Georeferenced spatial mapping of scientific expeditions, taxonomic fauna inventories, and environmental management contracts conducted by Lucas A&oslash;sf across Brazilian biomes.",
+        header_field_map: "Distribution of Lucas A&oslash;sf",
+        badge_georref: "SATELLITE VIEW",
+        intro_field_map: "Biogeographic occurrence mapping: all points, cities, overland routes, and field expeditions traversed by the researcher across Brazil.",
         map_kpi_gps: "Real Field GPS &amp; KML Waypoints",
         filter_all: "All (25)",
         btn_whatsapp_cta: "Chat on WhatsApp",
@@ -1538,568 +1538,321 @@ function initLanguageSystem() {
 
 
 
+
+
 /* ==========================================================================
-   10. BRAZIL EXPEDITIONS INTERACTIVE MAP (Leaflet.js)
+   10. DISTRIBUICAO GEOGRAFICA DE LUCAS AOSF (Leaflet.js - Satelite Fixo)
    ========================================================================== */
-const expeditionPoints = [
-    {
-        id: "mantiqueira",
-        title: "Serra da Mantiqueira — P. boticariana",
-        locality: "Santo Antônio do Pinhal & Campos do Jordão, SP",
-        coords: [-22.894452, -45.996946],
-        category: "herpeto",
-        categoryLabel: "Herpetofauna & Taxonomia",
-        state: "SP",
-        biome: "Mata Atlântica (1.411m)",
-        project: "Redescoberta e Taxonomia de Anfíbios Raros",
-        client: "BioKuri // Pesquisa Acadêmica",
-        desc: "Coleta e diagnóstico georreferenciado da rara perereca-das-folhagens (Phrynomedusa boticariana), estudo morfológico de girinos e bioacústica em riachos de altitude.",
-        icon: "fa-frog",
-        isHighlight: true
-    },
-    {
-        id: "patos_pb",
-        title: "Fazenda Tamanduá & Açude Conceição",
-        locality: "Patos & Santa Terezinha, PB",
-        coords: [-7.0158, -37.3908],
-        category: "masto",
-        categoryLabel: "Mastofauna & Quirópteros",
-        state: "PB",
-        biome: "Caatinga Hiperxerófila",
-        project: "Bioacústica de Morcegos e Herpetofauna do Semiárido",
-        client: "Expedição de Campo // Pesquisa",
-        desc: "Monitoramento com detectores ultrassônicos de quirópteros, inventário herpetofaunístico e amostragem de fauna em corpos d'água temporários no sertão paraibano.",
-        icon: "fa-paw",
-        isHighlight: true
-    },
-    {
-        id: "pch_verde2",
-        title: "PCH Verde 2 & Linha de Transmissão 138 kV",
-        locality: "Rio Verde & Montividiu, GO",
-        coords: [-17.2939, -50.8501],
-        category: "energy",
-        categoryLabel: "Energia & Hidrelétricas",
-        state: "GO",
-        biome: "Cerrado Sentido Restrito",
-        project: "Resgate e Monitoramento de Fauna na PCH Verde 2",
-        client: "Setor Energético // Consultoria",
-        desc: "Coordenação de resgate e afugentamento de herpetofauna e mastofauna durante o enchimento do reservatório e abertura da faixa de servidão da LT 138 kV.",
-        icon: "fa-water",
-        isHighlight: true
-    },
-    {
-        id: "carajas_vale",
-        title: "Complexo Minerário de Carajás (S11D / N4)",
-        locality: "Parauapebas & Canaã dos Carajás, PA",
-        coords: [-6.0674, -50.1584],
-        category: "mining",
-        categoryLabel: "Mineração (Vale) & Herpeto",
-        state: "PA",
-        biome: "Floresta Amazônica & Cangas",
-        project: "Diagnóstico e Monitoramento de Fauna Silvestre",
-        client: "Vale S.A. // Consultoria Ambiental",
-        desc: "Inventário de herpetofauna e mamíferos em áreas de canga hematítica e floresta ombrófila densa na Amazônia Oriental, avaliação de impacto e mitigação.",
-        icon: "fa-mountain",
-        isHighlight: true
-    },
-    {
-        id: "solar_ba",
-        title: "Complexo Solar Fotovoltaico (UFV)",
-        locality: "Bom Jesus da Lapa & Caetité, BA",
-        coords: [-13.2550, -43.4210],
-        category: "energy",
-        categoryLabel: "Energia Solar & UFVs",
-        state: "BA",
-        biome: "Caatinga & Cerrado",
-        project: "Licenciamento de Usina Fotovoltaica de Grande Porte",
-        client: "Setor Solar & Renováveis",
-        desc: "Inventário de vertebrados terrestres em parques solares fotovoltaicos de grande escala, afugentamento pré-supressão e planos de manejo de fauna adaptados ao semiárido.",
-        icon: "fa-solar-panel",
-        isHighlight: true
-    },
-    {
-        id: "pardinho_cuesta",
-        title: "Cuesta de Botucatu & Pardinho",
-        locality: "Pardinho, SP",
-        coords: [-23.0841, -48.3772],
-        category: "masto",
-        categoryLabel: "Mastofauna & Campo",
-        state: "SP",
-        biome: "Mata Atlântica & Cerrado",
-        project: "Monitoramento de Médios e Grandes Mamíferos",
-        client: "BioKuri // Gestão Ambiental",
-        desc: "Pontos de monitoramento georreferenciados de capivaras (Hydrochoerus hydrochaeris) e mesocarnívoros, análise de corredores ecológicos na Cuesta Basáltica.",
-        icon: "fa-paw",
-        isHighlight: false
-    },
-    {
-        id: "piracicaba_esalq",
-        title: "Polo Científico & Laboratório de Girinos",
-        locality: "Piracicaba & Rio Claro, SP",
-        coords: [-22.7253, -47.6492],
-        category: "herpeto",
-        categoryLabel: "Taxonomia & Sistemática",
-        state: "SP",
-        biome: "Mata Atlântica Interiorana",
-        project: "Mestrado em Sistemática & Morfologia de Girinos",
-        client: "UNESP Rio Claro / ESALQ USP // BioKuri",
-        desc: "Sede de pesquisas taxonômicas, chaves dicotômicas interativas, descrição morfológica de girinos em estágios de Gosner e modelagem estatística em RStudio e Python.",
-        icon: "fa-frog",
-        isHighlight: true
-    },
-    {
-        id: "pantanal_corumba",
-        title: "Pantanal da Nhecolândia & Rio Paraguai",
-        locality: "Corumbá & Miranda, MS",
-        coords: [-19.0076, -57.6534],
-        category: "masto",
-        categoryLabel: "Mastofauna & Pantanal",
-        state: "MS",
-        biome: "Pantanal & Chaco",
-        project: "Expedições Mastofaunísticas e Comunidades de Anuros",
-        client: "Expedições Científicas // Consultoria",
-        desc: "Armadilhamento fotográfico de grandes mamíferos (Onça-pintada, Anta, Tamanduá-bandeira) e levantamento acústico de assembleias de anuros em corixos e vazantes pantaneiras.",
-        icon: "fa-paw",
-        isHighlight: false
-    },
-    {
-        id: "transmissao_ms_sp",
-        title: "Linhas de Transmissão LT 500 kV & Subestações",
-        locality: "Três Lagoas & Castilho, MS/SP",
-        coords: [-20.8034, -51.7058],
-        category: "energy",
-        categoryLabel: "Linhas de Transmissão",
-        state: "MS",
-        biome: "Cerrado do Alto Paraná",
-        project: "Supervisão Ambiental & Afugentamento LT 500 kV",
-        client: "Ecology and Environment / Arcadis",
-        desc: "Vistoria e resgate de fauna silvestre ao longo de centenas de quilômetros de faixa de servidão de Linha de Transmissão de extra-alta tensão, com foco em herpeto e masto.",
-        icon: "fa-bolt",
-        isHighlight: false
-    },
-    {
-        id: "serra_cipo",
-        title: "Serra do Cipó & Parque Nacional",
-        locality: "Santana do Riacho & Jaboticatubas, MG",
-        coords: [-19.3456, -43.6128],
-        category: "herpeto",
-        categoryLabel: "Herpetofauna & Endemismos",
-        state: "MG",
-        biome: "Campos Rupestres (Espinhaço)",
-        project: "Especialização em Anfíbios Endêmicos do Espinhaço",
-        client: "Pesquisa Herpetológica",
-        desc: "Estudos taxonômicos e bioacústicos de pererecas e sapos restritos a afloramentos quartzíticos (Bokermannohyla martinsi, Pithecopus ayeaye) e córregos de altitude.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "ubatuba_costa",
-        title: "Litoral Norte Paulista & Ilhabela",
-        locality: "Ubatuba & São Sebastião, SP",
-        coords: [-23.4332, -45.0834],
-        category: "ornito",
-        categoryLabel: "Ornitologia & Fauna Costeira",
-        state: "SP",
-        biome: "Mata Atlântica Litorânea",
-        project: "Inventário de Aves Marinhas e Anfíbios Bromelígenas",
-        client: "BioKuri // Consultoria Litoral",
-        desc: "Amostragem de aves marinhas e costeiras (anilhamento CEMAVE), monitoramento de Phyllodytes e girinos fitotelmatais associados a bromélias de encosta.",
-        icon: "fa-dove",
-        isHighlight: false
-    },
-    {
-        id: "cananeia_iguape",
-        title: "Complexo Estuarino Lagunar & Ilha do Cardoso",
-        locality: "Cananéia & Ilha Comprida, SP",
-        coords: [-25.0147, -47.9267],
-        category: "ornito",
-        categoryLabel: "Vida Marinha & Ornitologia",
-        state: "SP",
-        biome: "Manguezais & Restinga",
-        project: "Monitoramento de Aves Migratórias e Fauna Estuarina",
-        client: "Gestão Costeira // BioKuri",
-        desc: "Censos de aves limícolas migratórias, diagnóstico ambiental em ecossistemas de manguezal e restinga do mosaico de unidades de conservação do Lagamar.",
-        icon: "fa-dove",
-        isHighlight: false
-    },
-    {
-        id: "paranapiacaba_serra",
-        title: "Serra do Mar & Reserva de Paranapiacaba",
-        locality: "Santo André & Cubatão, SP",
-        coords: [-23.7781, -46.3025],
-        category: "herpeto",
-        categoryLabel: "Herpetofauna de Riacho",
-        state: "SP",
-        biome: "Floresta Ombrófila Densa",
-        project: "Bioacústica e Taxonomia de Anfíbios de Correnteza",
-        client: "Pesquisa Acadêmica",
-        desc: "Gravação de cantos de anúncio e diagnose de espécies do gênero Hylodes e Crossodactylus em riachos pedregosos com alto ruído hidrodinâmico.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "botucatu_cuesta",
-        title: "Cuesta de Botucatu & Rubião Júnior",
-        locality: "Botucatu, SP",
-        coords: [-22.8858, -48.4450],
-        category: "herpeto",
-        categoryLabel: "Taxonomia & Ecologia",
-        state: "SP",
-        biome: "Transição Cerrado / Mata Atlântica",
-        project: "Amostragem de Formas Larvais & Taxonomia",
-        client: "BioKuri // Coleções Zoológicas",
-        desc: "Amostragens sistemáticas em poças temporárias e riachos, análise ontogenética de girinos com microscopia estereoscópica e fotografias de espécimes vivos.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "vale_paraiba_rodovia",
-        title: "Eixo Rodoviário & Industrial do Vale do Paraíba",
-        locality: "Taubaté, Pinda & Guaratinguetá, SP",
-        coords: [-22.9535, -45.4608],
-        category: "mining",
-        categoryLabel: "Rodovias & Condomínios",
-        state: "SP",
-        biome: "Mata Atlântica & Várzeas",
-        project: "Licenciamento de Empreendimentos, Dutos e Rodovias",
-        client: "Econatur / Arcadis // Consultoria",
-        desc: "Monitoramento de atropelamento de fauna em rodovias, licenciamento de condomínios urbanísticos e planos de manejo de áreas de preservação permanente (APP).",
-        icon: "fa-road",
-        isHighlight: false
-    },
-    {
-        id: "itatiaia_parna",
-        title: "Parque Nacional do Itatiaia & Agulhas Negras",
-        locality: "Itatiaia & Resende, RJ",
-        coords: [-22.4542, -44.6067],
-        category: "herpeto",
-        categoryLabel: "Herpetofauna Altimontana",
-        state: "RJ",
-        biome: "Campos de Altitude (2.200m+)",
-        project: "Inventários em Climas Extremos Altimontanos",
-        client: "Expedições Científicas",
-        desc: "Levantamento de anfíbios e répteis adaptados a temperaturas negativas e geadas nos topos da Mantiqueira, com registros fotográficos e bioacústicos.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "angra_paraty_uhe",
-        title: "Costa Verde & Baía da Ilha Grande",
-        locality: "Angra dos Reis & Paraty, RJ",
-        coords: [-23.0067, -44.3181],
-        category: "energy",
-        categoryLabel: "Infraestrutura Costeira",
-        state: "RJ",
-        biome: "Mata Atlântica de Costão",
-        project: "Gestão Ambiental de Empreendimentos Costeiros",
-        client: "Consultoria Ambiental",
-        desc: "Vistoria faunística para empreendimentos de infraestrutura costeira, programas de resgate de fauna e salvaguarda de ecossistemas insulares e costeiros.",
-        icon: "fa-water",
-        isHighlight: false
-    },
-    {
-        id: "pocos_caldas",
-        title: "Planalto Vulcânico de Poços de Caldas",
-        locality: "Poços de Caldas, MG",
-        coords: [-21.7895, -46.5626],
-        category: "herpeto",
-        categoryLabel: "Mata Atlântica & Brejos",
-        state: "MG",
-        biome: "Mata Atlântica Interiorana",
-        project: "Inventário Herpetofaunístico em Áreas Alagadas",
-        client: "BioKuri // Estudos Faunísticos",
-        desc: "Diagnóstico taxonômico de pererecas e rãs de brejos de altitude da caldeira vulcânica, caracterização de sítios reprodutivos e bioacústica.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "quadrilatero_ferrifero",
-        title: "Quadrilátero Ferrífero & Minas Gerais",
-        locality: "Nova Lima & Brumadinho, MG",
-        coords: [-19.9858, -43.8467],
-        category: "mining",
-        categoryLabel: "Mineração (Vale) & Arcadis",
-        state: "MG",
-        biome: "Transição Mata Atlântica / Cerrado",
-        project: "Monitoramento e Mitigação de Impactos Minerários",
-        client: "Vale S.A. / Arcadis",
-        desc: "Supervisão ambiental e inventários faunísticos para grandes complexos de mineração de ferro, estruturação de planos de emergência e resgate de fauna silvestre.",
-        icon: "fa-mountain",
-        isHighlight: true
-    },
-    {
-        id: "chapada_guimaraes",
-        title: "Canyons da Chapada dos Guimarães",
-        locality: "Chapada dos Guimarães, MT",
-        coords: [-15.4607, -55.7497],
-        category: "masto",
-        categoryLabel: "Mastofauna & Cerrado",
-        state: "MT",
-        biome: "Cerrado Rupestre & Veredas",
-        project: "Levantamento de Fauna em Ambientes Areníticos",
-        client: "Expedições Científicas",
-        desc: "Mapeamento e armadilhamento fotográfico de predadores de topo e ungulados em áreas de paredões rochosos e veredas com buritis.",
-        icon: "fa-paw",
-        isHighlight: false
-    },
-    {
-        id: "chapada_veadeiros",
-        title: "Parque Nacional da Chapada dos Veadeiros",
-        locality: "Alto Paraíso de Goiás, GO",
-        coords: [-14.1311, -47.5147],
-        category: "herpeto",
-        categoryLabel: "Cerrado & Anuros Reófilos",
-        state: "GO",
-        biome: "Cerrado de Altitude",
-        project: "Bioacústica e Taxonomia de Anfíbios de Corredeira",
-        client: "Pesquisa Acadêmica",
-        desc: "Amostragem de espécies reófilas (Bokermannohyla pseudopseudis) adaptadas a cachoeiras e leitos rochosos de alta energia nas cabeceiras da Bacia Tocantins-Araguaia.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "foz_iguacu",
-        title: "Parque Nacional do Iguaçu & Bacia do Paraná",
-        locality: "Foz do Iguaçu, PR",
-        coords: [-25.5957, -54.4367],
-        category: "ornito",
-        categoryLabel: "Ornitologia & Mastofauna",
-        state: "PR",
-        biome: "Floresta Estacional Semidecidual",
-        project: "Monitoramento de Aves Raras e Mamíferos Florestais",
-        client: "BioKuri // Pesquisa de Campo",
-        desc: "Redes de neblina para anilhamento de aves da Mata Atlântica do interior e detecção de mamíferos florestais no corredor trinacional de biodiversidade.",
-        icon: "fa-dove",
-        isHighlight: false
-    },
-    {
-        id: "serra_graciosa",
-        title: "Serra da Graciosa & Antonina",
-        locality: "Morretes & Antonina, PR",
-        coords: [-25.4287, -48.7121],
-        category: "herpeto",
-        categoryLabel: "Herpetofauna da Serra do Mar Sul",
-        state: "PR",
-        biome: "Floresta Ombrófila Densa Montana",
-        project: "Taxonomia de Anfíbios de Folhiço e Riachos",
-        client: "Pesquisa Herpetológica",
-        desc: "Inventário taxonômico de espécies de folhiço (Brachycephalus, Ischnocnema) e anuros de riacho sob altíssima pluviosidade na encosta atlântica paranaense.",
-        icon: "fa-frog",
-        isHighlight: false
-    },
-    {
-        id: "reserva_linhares",
-        title: "Reserva Natural Vale Linhares",
-        locality: "Linhares & Sooretama, ES",
-        coords: [-19.1481, -40.0658],
-        category: "mining",
-        categoryLabel: "Mata de Tabuleiros (Vale)",
-        state: "ES",
-        biome: "Floresta de Tabuleiros",
-        project: "Pesquisas Herpetológicas em Floresta de Baixada",
-        client: "Vale S.A. // Estudos Ambientais",
-        desc: "Amostragens herpetológicas em um dos maiores remanescentes contínuos de Mata de Tabuleiro do Brasil, com inventário de serpentes e anuros de lagoas sazonais.",
-        icon: "fa-mountain",
-        isHighlight: false
-    },
-    {
-        id: "vale_itajai",
-        title: "Vale do Itajaí & Bacia Hidrográfica",
-        locality: "Itajaí & Blumenau, SC",
-        coords: [-26.9078, -48.6619],
-        category: "ornito",
-        categoryLabel: "Ornitologia & Recursos Hídricos",
-        state: "SC",
-        biome: "Mata Atlântica Sul",
-        project: "Diagnóstico Faunístico para Bacias e Portos",
-        client: "BioKuri // Consultoria Ambiental",
-        desc: "Levantamento integrado de avifauna e fauna límnica em áreas fluviais e estuarinas do Vale do Itajaí, subsidiando planos de manejo e licenciamento.",
-        icon: "fa-dove",
-        isHighlight: false
-    }
-];
+const lucasDistributionPoints = [
+  {"id":"belem","title":"Belém","locality":"Pará · Capital","coords":[-1.4558,-48.4902],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"ananindeua","title":"Ananindeua","locality":"Pará · Região Metropolitana","coords":[-1.3656,-48.3725],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"marituba","title":"Marituba","locality":"Pará · BR-316","coords":[-1.3556,-48.3431],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"benevides","title":"Benevides","locality":"Pará · BR-316","coords":[-1.3614,-48.2450],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"santa_izabel","title":"Santa Izabel do Pará","locality":"Pará · BR-316","coords":[-1.2989,-48.1606],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"castanhal","title":"Castanhal","locality":"Pará · Cidade Modelo","coords":[-1.2975,-47.9250],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"barcarena","title":"Barcarena","locality":"Pará · Polo Portuário","coords":[-1.5058,-48.6258],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"abaetetuba","title":"Abaetetuba","locality":"Pará · Baixo Tocantins","coords":[-1.7219,-48.8828],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"moju","title":"Moju","locality":"Pará · PA-150","coords":[-1.8842,-48.7686],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"tailandia","title":"Tailândia","locality":"Pará · PA-150","coords":[-2.9464,-48.9519],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"goianesia","title":"Goianésia do Pará","locality":"Pará · PA-150","coords":[-3.8456,-49.0967],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"jacunda","title":"Jacundá","locality":"Pará · PA-150","coords":[-4.4519,-49.1167],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"nova_ipixuna","title":"Nova Ipixuna","locality":"Pará · PA-150","coords":[-4.9142,-49.0833],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"maraba","title":"Marabá","locality":"Pará · Rio Tocantins & Itacaiúnas","coords":[-5.3686,-49.1178],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"sao_geraldo","title":"São Geraldo do Araguaia","locality":"Pará · Serra das Andorinhas","coords":[-6.4006,-48.5550],"state":"PA","route":"Sul do Pará"},
+  {"id":"eldorado_carajas","title":"Eldorado do Carajás","locality":"Pará · BR-155","coords":[-6.1042,-49.3550],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"curionopolis","title":"Curionópolis","locality":"Pará · Serra Pelada","coords":[-6.1039,-49.5989],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"parauapebas","title":"Parauapebas · Serra dos Carajás","locality":"Pará · Complexo Vale Carajás","coords":[-6.0674,-49.9022],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"canaa","title":"Canaã dos Carajás · S11D","locality":"Pará · Complexo S11D Vale","coords":[-6.4969,-49.8761],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"agua_azul","title":"Água Azul do Norte","locality":"Pará · PA-279","coords":[-6.7906,-49.8331],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"xinguara","title":"Xinguara","locality":"Pará · Entroncamento PA-279 / BR-155","coords":[-7.0989,-49.9439],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"sapucaia","title":"Sapucaia","locality":"Pará · Sul do Pará","coords":[-6.9367,-49.4800],"state":"PA","route":"Sul do Pará"},
+  {"id":"rio_maria","title":"Rio Maria","locality":"Pará · BR-155","coords":[-7.3125,-50.0267],"state":"PA","route":"Sul do Pará"},
+  {"id":"bannach","title":"Bannach","locality":"Pará · Sul do Pará","coords":[-7.5850,-50.3956],"state":"PA","route":"Sul do Pará"},
+  {"id":"redencao","title":"Redenção","locality":"Pará · Polo Regional Sul","coords":[-8.0269,-50.0322],"state":"PA","route":"Sul do Pará"},
+  {"id":"pau_darco","title":"Pau D'Arco","locality":"Pará · BR-155","coords":[-7.8319,-50.0436],"state":"PA","route":"Sul do Pará"},
+  {"id":"ourilandia","title":"Ourilândia do Norte","locality":"Pará · PA-279","coords":[-6.7558,-51.0886],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"tucuma","title":"Tucumã","locality":"Pará · PA-279 Polo de Atuação","coords":[-6.7419,-51.1550],"state":"PA","route":"Rota Belém-Tucumã"},
+  {"id":"sao_felix_xingu","title":"São Félix do Xingu","locality":"Pará · Bacia do Rio Xingu","coords":[-6.6447,-51.9950],"state":"PA","route":"Bacia do Xingu"},
+  {"id":"tucurui","title":"Tucuruí","locality":"Pará · UHE Tucuruí","coords":[-3.7661,-49.6725],"state":"PA","route":"Linha de Transmissão"},
+
+  {"id":"barra_garcas","title":"Barra do Garças","locality":"Mato Grosso · Encontro das Águas","coords":[-15.8900,-52.2567],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"general_carneiro","title":"General Carneiro","locality":"Mato Grosso · BR-070","coords":[-15.7083,-52.7561],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"primavera_leste","title":"Primavera do Leste","locality":"Mato Grosso · Cerrado","coords":[-15.5586,-54.2961],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"campo_verde","title":"Campo Verde","locality":"Mato Grosso · BR-070","coords":[-15.5450,-55.1681],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"cuiaba","title":"Cuiabá","locality":"Mato Grosso · Capital Pantaneira","coords":[-15.6014,-56.0979],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"varzea_grande","title":"Várzea Grande","locality":"Mato Grosso · Conurbação Cuiabá","coords":[-15.6464,-56.1325],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"jangada","title":"Jangada","locality":"Mato Grosso · BR-163/364","coords":[-15.2411,-56.4889],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"rosario_oeste","title":"Rosário Oeste","locality":"Mato Grosso · BR-163","coords":[-14.8361,-56.4275],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"nobres","title":"Nobres","locality":"Mato Grosso · Província Espeleológica","coords":[-14.7206,-56.3275],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"diamantino","title":"Diamantino","locality":"Mato Grosso · Nascentes do Paraguai","coords":[-14.4086,-56.4461],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"nova_mutum","title":"Nova Mutum","locality":"Mato Grosso · BR-163","coords":[-13.8322,-56.0828],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"lucas_rio_verde","title":"Lucas do Rio Verde","locality":"Mato Grosso · BR-163","coords":[-13.0642,-55.9100],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"sorriso","title":"Sorriso","locality":"Mato Grosso · BR-163","coords":[-12.5425,-55.7214],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"sinop","title":"Sinop","locality":"Mato Grosso · Norte Matogrossense","coords":[-11.8606,-55.5097],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"itauba","title":"Itaúba","locality":"Mato Grosso · BR-163","coords":[-11.0667,-55.2833],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"terra_nova","title":"Terra Nova do Norte","locality":"Mato Grosso · BR-163","coords":[-10.5186,-55.2289],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"peixoto_azevedo","title":"Peixoto de Azevedo","locality":"Mato Grosso · Vale do Peixoto","coords":[-10.2228,-54.9806],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"matupa","title":"Matupá","locality":"Mato Grosso · BR-163","coords":[-10.1839,-54.9350],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"guaranta_norte","title":"Guarantã do Norte","locality":"Mato Grosso · Divisa MT/PA","coords":[-9.7892,-54.9083],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"caceres","title":"Cáceres","locality":"Mato Grosso · Pantanal de Cáceres","coords":[-16.0747,-57.6789],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"pontes_lacerda","title":"Pontes e Lacerda","locality":"Mato Grosso · Vale do Guaporé","coords":[-15.2269,-59.3353],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"comodoro","title":"Comodoro","locality":"Mato Grosso · Divisa MT/RO","coords":[-13.6631,-59.7867],"state":"MT","route":"Rota Barra do Garças-Manaus"},
+  {"id":"vilhena","title":"Vilhena","locality":"Rondônia · Portal da Amazônia","coords":[-12.7406,-60.1458],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"colorado_oeste","title":"Colorado do Oeste","locality":"Rondônia · Cone Sul","coords":[-13.1197,-60.5439],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"pimenta_bueno","title":"Pimenta Bueno","locality":"Rondônia · BR-364","coords":[-11.6725,-61.1936],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"cacoal","title":"Cacoal","locality":"Rondônia · BR-364","coords":[-11.4386,-61.4472],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"ji_parana","title":"Ji-Paraná","locality":"Rondônia · Rio Machado","coords":[-10.8847,-61.9514],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"ouro_preto_oeste","title":"Ouro Preto do Oeste","locality":"Rondônia · BR-364","coords":[-10.7481,-62.2567],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"jaru","title":"Jaru","locality":"Rondônia · BR-364","coords":[-10.4386,-62.4664],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"ariquemes","title":"Ariquemes","locality":"Rondônia · Vale do Jamari","coords":[-9.9133,-63.0408],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"itapua_oeste","title":"Itapuã do Oeste","locality":"Rondônia · Floresta Nacional Jamari","coords":[-9.1975,-63.1814],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"candeias_jamari","title":"Candeias do Jamari","locality":"Rondônia · Rio Candeeiras","coords":[-8.7889,-63.6989],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"porto_velho","title":"Porto Velho","locality":"Rondônia · Capital & Rio Madeira","coords":[-8.7619,-63.9039],"state":"RO","route":"Rota Barra do Garças-Manaus"},
+  {"id":"humaita","title":"Humaitá","locality":"Amazonas · Calha do Rio Madeira & BR-319","coords":[-7.5147,-63.0189],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"manicore","title":"Manicoré","locality":"Amazonas · Rio Madeira","coords":[-5.8094,-61.3003],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"borba","title":"Borba","locality":"Amazonas · Médio Madeira","coords":[-4.3886,-59.5939],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"autazes","title":"Autazes","locality":"Amazonas · Várzeas Amazônicas","coords":[-3.5797,-59.1306],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"careiro_castanho","title":"Careiro Castanho","locality":"Amazonas · BR-319","coords":[-3.7681,-60.3697],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"careiro_varzea","title":"Careiro da Várzea","locality":"Amazonas · Encontro das Águas","coords":[-3.1978,-59.8225],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"iranduba","title":"Iranduba","locality":"Amazonas · Ponte Rio Negro","coords":[-3.2847,-60.1864],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"manaus","title":"Manaus","locality":"Amazonas · Coração da Amazônia","coords":[-3.1190,-60.0217],"state":"AM","route":"Rota Barra do Garças-Manaus"},
+  {"id":"presidente_figueiredo","title":"Presidente Figueiredo","locality":"Amazonas · Terra das Cachoeiras","coords":[-2.0522,-60.0250],"state":"AM","route":"Amazônia Norte"},
+  {"id":"itacoatiara","title":"Itacoatiara","locality":"Amazonas · Velha Serpa","coords":[-3.1431,-58.4442],"state":"AM","route":"Médio Amazonas"},
+
+  {"id":"fortaleza","title":"Fortaleza","locality":"Ceará · Capital & Litoral","coords":[-3.7319,-38.5267],"state":"CE","route":"Nordeste"},
+  {"id":"sobral","title":"Sobral","locality":"Ceará · Serra da Meruoca","coords":[-3.6880,-40.3497],"state":"CE","route":"Nordeste"},
+  {"id":"juazeiro_norte","title":"Juazeiro do Norte","locality":"Ceará · Cariri","coords":[-7.2132,-39.3151],"state":"CE","route":"Nordeste"},
+  {"id":"crato","title":"Crato · Chapada do Araripe","locality":"Ceará · Floresta Nacional do Araripe","coords":[-7.2342,-39.4094],"state":"CE","route":"Nordeste"},
+  {"id":"quixada","title":"Quixadá","locality":"Ceará · Monólitos & Caatinga","coords":[-4.9715,-39.0154],"state":"CE","route":"Nordeste"},
+  {"id":"jericoacoara","title":"Jijoca de Jericoacoara","locality":"Ceará · Parque Nacional Jericoacoara","coords":[-2.7936,-40.5142],"state":"CE","route":"Nordeste"},
+  {"id":"aracati","title":"Aracati · Canoa Quebrada","locality":"Ceará · Falésias & Litoral Leste","coords":[-4.5619,-37.7699],"state":"CE","route":"Nordeste"},
+  {"id":"tiangua","title":"Tianguá · Serra da Ibiapaba","locality":"Ceará · Brejos de Altitude","coords":[-3.7319,-40.9930],"state":"CE","route":"Nordeste"},
+
+  {"id":"teresina","title":"Teresina","locality":"Piauí · Encontro dos Rios Poti e Parnaíba","coords":[-5.0920,-42.8038],"state":"PI","route":"Nordeste"},
+  {"id":"parnaiba","title":"Parnaíba · Delta do Parnaíba","locality":"Piauí · Único Delta em Mar Aberto","coords":[-2.9032,-41.7766],"state":"PI","route":"Nordeste"},
+  {"id":"luis_correia","title":"Luís Correia","locality":"Piauí · Litoral Piauiense","coords":[-2.8794,-41.6669],"state":"PI","route":"Nordeste"},
+  {"id":"picos","title":"Picos","locality":"Piauí · Caatinga Central","coords":[-7.0772,-41.4669],"state":"PI","route":"Nordeste"},
+  {"id":"serra_capivara","title":"São Raimundo Nonato · Serra da Capivara","locality":"Piauí · Parque Nacional Serra da Capivara","coords":[-9.0153,-42.6994],"state":"PI","route":"Nordeste"},
+  {"id":"floriano","title":"Floriano","locality":"Piauí · Rio Parnaíba","coords":[-6.7669,-43.0225],"state":"PI","route":"Nordeste"},
+  {"id":"piripiri","title":"Piripiri","locality":"Piauí · Parque Nacional de Sete Cidades","coords":[-4.2733,-41.7769],"state":"PI","route":"Nordeste"},
+
+  {"id":"sao_luis","title":"São Luís","locality":"Maranhão · Ilha Upaon-Açu","coords":[-2.5387,-44.2828],"state":"MA","route":"Nordeste"},
+  {"id":"barreirinhas","title":"Barreirinhas · Lençóis Maranhenses","locality":"Maranhão · Parque Nacional Lençóis","coords":[-2.7486,-42.8258],"state":"MA","route":"Nordeste"},
+  {"id":"imperatriz","title":"Imperatriz","locality":"Maranhão · Rio Tocantins","coords":[-5.5266,-47.4778],"state":"MA","route":"Nordeste"},
+  {"id":"caxias","title":"Caxias","locality":"Maranhão · Leste Maranhense","coords":[-4.8631,-43.3561],"state":"MA","route":"Nordeste"},
+  {"id":"acailandia","title":"Açailândia","locality":"Maranhão · Corredor Carajás","coords":[-4.9472,-47.5028],"state":"MA","route":"Nordeste"},
+  {"id":"balsas","title":"Balsas","locality":"Maranhão · Chapada das Mesas / Sul","coords":[-7.5322,-46.0356],"state":"MA","route":"Nordeste"},
+  {"id":"bacabal","title":"Bacabal","locality":"Maranhão · Médio Mearim","coords":[-4.2372,-44.7919],"state":"MA","route":"Nordeste"},
+  {"id":"santa_ines","title":"Santa Inês","locality":"Maranhão · Estrada de Ferro Carajás","coords":[-3.6669,-45.3800],"state":"MA","route":"Nordeste"},
+
+  {"id":"recife","title":"Recife","locality":"Pernambuco · Capital & Manguezais","coords":[-8.0476,-34.8770],"state":"PE","route":"Nordeste"},
+  {"id":"olinda","title":"Olinda","locality":"Pernambuco · Cidade Histórica","coords":[-7.9989,-34.8459],"state":"PE","route":"Nordeste"},
+  {"id":"petrolina","title":"Petrolina","locality":"Pernambuco · Vale do São Francisco","coords":[-9.3891,-40.5028],"state":"PE","route":"Nordeste"},
+  {"id":"caruaru","title":"Caruaru","locality":"Pernambuco · Agreste Pernambucano","coords":[-8.2833,-35.9761],"state":"PE","route":"Nordeste"},
+  {"id":"garanhuns","title":"Garanhuns","locality":"Pernambuco · Suíça Pernambucana / Brejos","coords":[-8.8906,-36.4928],"state":"PE","route":"Nordeste"},
+  {"id":"serra_talhada","title":"Serra Talhada","locality":"Pernambuco · Sertão do Pajeú","coords":[-7.9919,-38.2981],"state":"PE","route":"Nordeste"},
+  {"id":"salgueiro","title":"Salgueiro","locality":"Pernambuco · Encruzilhada do Nordeste","coords":[-8.0744,-39.1197],"state":"PE","route":"Nordeste"},
+  {"id":"araripina","title":"Araripina","locality":"Pernambuco · Chapada do Araripe Sul","coords":[-7.5761,-40.4983],"state":"PE","route":"Nordeste"},
+
+  {"id":"patos","title":"Patos","locality":"Paraíba · Capital do Sertão","coords":[-7.0158,-37.3908],"state":"PB","route":"Sertão Paraibano"},
+  {"id":"fazenda_tamandua","title":"Santa Terezinha · Fazenda Tamanduá","locality":"Paraíba · Caatinga Hiperxerófila (KML real)","coords":[-7.0983,-37.4489],"state":"PB","route":"Sertão Paraibano"},
+  {"id":"acude_conceicao","title":"Patos · Açude Conceição","locality":"Paraíba · Corpo d'Água Semiárido (KML real)","coords":[-7.0225,-37.3850],"state":"PB","route":"Sertão Paraibano"},
+  {"id":"joao_pessoa","title":"João Pessoa","locality":"Paraíba · Ponto Mais Oriental das Américas","coords":[-7.1195,-34.8450],"state":"PB","route":"Nordeste"},
+  {"id":"campina_grande","title":"Campina Grande","locality":"Paraíba · Planalto da Borborema","coords":[-7.2307,-35.8817],"state":"PB","route":"Nordeste"},
+  {"id":"sousa","title":"Sousa · Vale dos Dinossauros","locality":"Paraíba · Bacia Sedimentar do Rio do Peixe","coords":[-6.7611,-38.2281],"state":"PB","route":"Nordeste"},
+  {"id":"cajazeiras","title":"Cajazeiras","locality":"Paraíba · Sertão Ocidental","coords":[-6.8889,-38.5600],"state":"PB","route":"Nordeste"},
+  {"id":"pombal","title":"Pombal","locality":"Paraíba · Rio Piancó","coords":[-6.7725,-37.7986],"state":"PB","route":"Nordeste"},
+  {"id":"cabedelo","title":"Cabedelo","locality":"Paraíba · Restinga & Estuário Paraíba","coords":[-6.9811,-34.8339],"state":"PB","route":"Nordeste"},
+
+  {"id":"natal","title":"Natal","locality":"Rio Grande do Norte · Cidade do Sol & Dunas","coords":[-5.7945,-35.2110],"state":"RN","route":"Nordeste"},
+  {"id":"pipa","title":"Tibau do Sul · Praia da Pipa","locality":"Rio Grande do Norte · Falésias & Golfinhos","coords":[-6.2308,-35.0933],"state":"RN","route":"Nordeste"},
+  {"id":"mossoro","title":"Mossoró","locality":"Rio Grande do Norte · Costa Branca / Semiárido","coords":[-5.1878,-37.3442],"state":"RN","route":"Nordeste"},
+  {"id":"caico","title":"Caicó","locality":"Rio Grande do Norte · Seridó Potiguar","coords":[-6.4586,-37.0978],"state":"RN","route":"Nordeste"},
+  {"id":"currais_novos","title":"Currais Novos","locality":"Rio Grande do Norte · Mina Brejuí / Seridó","coords":[-6.2606,-36.5147],"state":"RN","route":"Nordeste"},
+  {"id":"parnamirim","title":"Parnamirim","locality":"Rio Grande do Norte · Maior Cajueiro do Mundo","coords":[-5.9156,-35.2628],"state":"RN","route":"Nordeste"},
+  {"id":"touros","title":"Touros","locality":"Rio Grande do Norte · Esquina do Brasil / Farol do Calcanhar","coords":[-5.1989,-35.4608],"state":"RN","route":"Nordeste"},
+
+  {"id":"salvador","title":"Salvador","locality":"Bahia · Baía de Todos os Santos","coords":[-12.9777,-38.5016],"state":"BA","route":"Bahia"},
+  {"id":"bom_jesus_lapa","title":"Bom Jesus da Lapa · Parques Solares UFV","locality":"Bahia · Usinas Fotovoltaicas de Grande Porte","coords":[-13.2550,-43.4210],"state":"BA","route":"Bahia"},
+  {"id":"caetite","title":"Caetité","locality":"Bahia · Serra Geral / Complexo Eólico-Solar","coords":[-14.0694,-42.4753],"state":"BA","route":"Bahia"},
+  {"id":"feira_santana","title":"Feira de Santana","locality":"Bahia · Portal do Sertão","coords":[-12.2667,-38.9667],"state":"BA","route":"Bahia"},
+  {"id":"vitoria_conquista","title":"Vitória da Conquista","locality":"Bahia · Planalto da Conquista","coords":[-14.8661,-40.8394],"state":"BA","route":"Bahia"},
+  {"id":"barreiras","title":"Barreiras","locality":"Bahia · Oeste Baiano / Bacia do Rio Grande","coords":[-12.1528,-44.9900],"state":"BA","route":"Bahia"},
+  {"id":"juazeiro_ba","title":"Juazeiro","locality":"Bahia · Margem Sul do Rio São Francisco","coords":[-9.4167,-40.5000],"state":"BA","route":"Bahia"},
+  {"id":"lencois_diamantina","title":"Lençóis · Chapada Diamantina","locality":"Bahia · Parque Nacional Chapada Diamantina","coords":[-12.5631,-41.3894],"state":"BA","route":"Bahia"},
+
+  {"id":"mantiqueira_kml","title":"Serra da Mantiqueira · Phrynomedusa boticariana","locality":"São Paulo · Santo Antônio do Pinhal (1.411m - KMZ real)","coords":[-22.894452,-45.996946],"state":"SP","route":"Mantiqueira"},
+  {"id":"campos_jordao","title":"Campos do Jordão","locality":"São Paulo · Floresta de Araucárias Altimontana","coords":[-22.7394,-45.5913],"state":"SP","route":"Mantiqueira"},
+  {"id":"pinda","title":"Pindamonhangaba","locality":"São Paulo · Vale do Paraíba","coords":[-22.9247,-45.4614],"state":"SP","route":"Vale do Paraíba"},
+  {"id":"taubate","title":"Taubaté","locality":"São Paulo · Rodovias Dutra & Carvalho Pinto","coords":[-23.0205,-45.5558],"state":"SP","route":"Vale do Paraíba"},
+  {"id":"guara","title":"Guaratinguetá","locality":"São Paulo · Parque das Nascentes / Restauração","coords":[-22.8164,-45.1925],"state":"SP","route":"Vale do Paraíba"},
+  {"id":"aparecida","title":"Aparecida","locality":"São Paulo · Margens do Rio Paraíba do Sul","coords":[-22.8469,-45.2289],"state":"SP","route":"Vale do Paraíba"},
+  {"id":"sjc","title":"São José dos Campos","locality":"São Paulo · Vale do Paraíba","coords":[-23.1896,-45.8841],"state":"SP","route":"Vale do Paraíba"},
+  {"id":"paraibuna","title":"Paraibuna · Viveiro CESP","locality":"São Paulo · Represa & Reintrodução de Fauna","coords":[-23.3858,-45.6625],"state":"SP","route":"Vale do Paraíba"},
+  {"id":"ubatuba","title":"Ubatuba · Picinguaba","locality":"São Paulo · Mata Atlântica de Encosta & Ilhotes","coords":[-23.4332,-45.0834],"state":"SP","route":"Litoral Norte"},
+  {"id":"sao_sebastiao","title":"São Sebastião · Porto & Canal","locality":"São Paulo · Ornitofauna Portuária","coords":[-23.7600,-45.4100],"state":"SP","route":"Litoral Norte"},
+  {"id":"ilhabela","title":"Ilhabela · Parque Estadual","locality":"São Paulo · Arquipélago & Anfíbios Bromelígenas","coords":[-23.7781,-45.3581],"state":"SP","route":"Litoral Norte"},
+  {"id":"caraguatatuba","title":"Caraguatatuba · Rodovia dos Tamoios Serra","locality":"São Paulo · RT Fauna Obra Nova Tamoios","coords":[-23.6228,-45.4128],"state":"SP","route":"Litoral Norte"},
+  {"id":"cubatao","title":"Cubatão · Terminal Tatu / Piaçaguera","locality":"São Paulo · Manguezal & EIA/RIMA Logístico","coords":[-23.8950,-46.4253],"state":"SP","route":"Baixada Santista"},
+  {"id":"paranapiacaba","title":"Paranapiacaba · Serra do Mar","locality":"São Paulo · Reserva Biológica & Hylodes de Riacho","coords":[-23.7781,-46.3025],"state":"SP","route":"Serra do Mar"},
+  {"id":"itanhaem","title":"Itanhaém · SouthWild Felinos","locality":"São Paulo · Monitoramento de Onça-Parda (Puma concolor)","coords":[-24.1831,-46.7889],"state":"SP","route":"Litoral Sul"},
+  {"id":"santos","title":"Santos","locality":"São Paulo · Complexo Estuarino Portuário","coords":[-23.9608,-46.3331],"state":"SP","route":"Baixada Santista"},
+  {"id":"sao_paulo_cap","title":"São Paulo","locality":"São Paulo · Capital & Coleções Científicas","coords":[-23.5505,-46.6333],"state":"SP","route":"Capital"},
+  {"id":"piracicaba","title":"Piracicaba · ESALQ USP","locality":"São Paulo · Laboratório de Girinos & Taxonomia","coords":[-22.7253,-47.6492],"state":"SP","route":"Mestrado & Pesquisa"},
+  {"id":"rio_claro","title":"Rio Claro · UNESP","locality":"São Paulo · Coleção Herpetológica Célio Haddad","coords":[-22.4114,-47.5614],"state":"SP","route":"Mestrado & Pesquisa"},
+  {"id":"botucatu","title":"Botucatu · Cuesta Basáltica","locality":"São Paulo · Transição Cerrado-Mata Atlântica","coords":[-22.8858,-48.4450],"state":"SP","route":"Cuesta"},
+  {"id":"pardinho_kml","title":"Pardinho · Capivaras","locality":"São Paulo · Monitoramento de Mastofauna (KMZ real)","coords":[-23.0841,-48.3772],"state":"SP","route":"Cuesta"},
+  {"id":"boituva","title":"Boituva · Porto de Areia Realmix","locality":"São Paulo · Monitoramento Ambiental de Mineração","coords":[-23.2847,-47.6789],"state":"SP","route":"Interior SP"},
+  {"id":"cananeia","title":"Cananéia · Ilha do Cardoso","locality":"São Paulo · Complexo Estuarino Lagunar / Lagamar","coords":[-25.0147,-47.9267],"state":"SP","route":"Lagamar"},
+  {"id":"iguape","title":"Iguape · Ilha Comprida","locality":"São Paulo · Restingas & Aves Migratórias","coords":[-24.7081,-47.5550],"state":"SP","route":"Lagamar"},
+  {"id":"castilho","title":"Castilho · Subestação LT 500 kV","locality":"São Paulo · Interligação Elétrica Rio Paraná","coords":[-20.8719,-51.4875],"state":"SP","route":"Linhas de Transmissão"},
+
+  {"id":"resende","title":"Resende","locality":"Rio de Janeiro · Vale do Paraíba Fluminense","coords":[-22.4689,-44.4467],"state":"RJ","route":"Rio de Janeiro"},
+  {"id":"itatiaia","title":"Itatiaia · Parque Nacional do Itatiaia","locality":"Rio de Janeiro · Agulhas Negras / Climas Extremos","coords":[-22.4542,-44.6067],"state":"RJ","route":"Mantiqueira"},
+  {"id":"angra_reis","title":"Angra dos Reis","locality":"Rio de Janeiro · Costa Verde / Baía da Ilha Grande","coords":[-23.0067,-44.3181],"state":"RJ","route":"Costa Verde"},
+  {"id":"paraty","title":"Paraty","locality":"Rio de Janeiro · Bocaina & Costão Rochoso","coords":[-23.2178,-44.7131],"state":"RJ","route":"Costa Verde"},
+  {"id":"rio_capital","title":"Rio de Janeiro","locality":"Rio de Janeiro · Capital","coords":[-22.9068,-43.1729],"state":"RJ","route":"Rio de Janeiro"},
+  {"id":"niteroi","title":"Niterói","locality":"Rio de Janeiro · Baía de Guanabara","coords":[-22.8833,-43.1036],"state":"RJ","route":"Rio de Janeiro"},
+
+  {"id":"nova_lima","title":"Nova Lima · Quadrilátero Ferrífero","locality":"Minas Gerais · Mineração de Ferro Vale S.A.","coords":[-19.9858,-43.8467],"state":"MG","route":"Mineração"},
+  {"id":"brumadinho","title":"Brumadinho","locality":"Minas Gerais · Bacia do Rio Paraopeba","coords":[-20.1436,-44.1989],"state":"MG","route":"Mineração"},
+  {"id":"belo_horizonte","title":"Belo Horizonte","locality":"Minas Gerais · Capital","coords":[-19.9167,-43.9345],"state":"MG","route":"Minas Gerais"},
+  {"id":"serra_cipo_mg","title":"Santana do Riacho · Serra do Cipó","locality":"Minas Gerais · Campos Rupestres da Cadeia do Espinhaço","coords":[-19.3456,-43.6128],"state":"MG","route":"Espinhaço"},
+  {"id":"pocos_caldas_mg","title":"Poços de Caldas","locality":"Minas Gerais · Planalto Vulcânico & Brejos de Altitude","coords":[-21.7895,-46.5626],"state":"MG","route":"Mantiqueira Ocidental"},
+  {"id":"janauba","title":"Janaúba · Complexo Solar","locality":"Minas Gerais · Parque Solar do Norte de Minas","coords":[-15.8025,-43.3089],"state":"MG","route":"Energia Solar"},
+  {"id":"estreito","title":"Estreito / Ibiá","locality":"Minas Gerais · Subestação LT 500 kV Estreito","coords":[-19.6450,-47.0125],"state":"MG","route":"Linhas de Transmissão"},
+
+  {"id":"rio_verde_kml","title":"Rio Verde · PCH Verde 2","locality":"Goiás · PCH Verde 2 & LT 138 kV (KMZ real)","coords":[-17.2939,-50.8501],"state":"GO","route":"Setor Hidrelétrico"},
+  {"id":"montividiu","title":"Montividiu","locality":"Goiás · Bacia do Rio Verdão","coords":[-17.4431,-51.1739],"state":"GO","route":"Setor Hidrelétrico"},
+  {"id":"chapada_veadeiros_go","title":"Alto Paraíso · Chapada dos Veadeiros","locality":"Goiás · Cerrado de Altitude & Anuros Reófilos","coords":[-14.1311,-47.5147],"state":"GO","route":"Cerrado Rupestre"},
+  {"id":"goiania","title":"Goiânia","locality":"Goiás · Capital do Cerrado","coords":[-16.6869,-49.2648],"state":"GO","route":"Goiás"},
+  {"id":"itumbiara","title":"Itumbiara","locality":"Goiás · UHE Itumbiara & Linhas de Transmissão","coords":[-18.4194,-49.2167],"state":"GO","route":"Setor Hidrelétrico"},
+
+  {"id":"tres_lagoas","title":"Três Lagoas","locality":"Mato Grosso do Sul · Bacia do Rio Paraná","coords":[-20.7847,-51.7006],"state":"MS","route":"Mato Grosso do Sul"},
+  {"id":"inocencia","title":"Inocência · Fábrica Celulose Arauco","locality":"Mato Grosso do Sul · Licenciamento & Monitoramento Fauna","coords":[-19.7289,-51.9306],"state":"MS","route":"Mato Grosso do Sul"},
+  {"id":"bataguassu","title":"Bataguassu","locality":"Mato Grosso do Sul · Bacia do Rio Pardo / Celulose","coords":[-21.7139,-52.4222],"state":"MS","route":"Mato Grosso do Sul"},
+  {"id":"corumba","title":"Corumbá · Pantanal Sul","locality":"Mato Grosso do Sul · Nhecolândia & Rio Paraguai","coords":[-19.0076,-57.6534],"state":"MS","route":"Pantanal"},
+  {"id":"miranda","title":"Miranda · Pantanal","locality":"Mato Grosso do Sul · Bacia do Miranda / Armadilhamento","coords":[-20.2406,-56.3789],"state":"MS","route":"Pantanal"},
+  {"id":"campo_grande","title":"Campo Grande","locality":"Mato Grosso do Sul · Capital","coords":[-20.4697,-54.6201],"state":"MS","route":"Mato Grosso do Sul"},
+  {"id":"paranaiba","title":"Paranaíba","locality":"Mato Grosso do Sul · LT 230 kV Itumbiara-Paranaíba","coords":[-19.6739,-51.1906],"state":"MS","route":"Linhas de Transmissão"},
+
+  {"id":"chapada_guimaraes_mt","title":"Chapada dos Guimarães · Canyons","locality":"Mato Grosso · Parque Nacional Chapada dos Guimarães","coords":[-15.4607,-55.7497],"state":"MT","route":"Cerrado"},
+
+  {"id":"curitiba","title":"Curitiba","locality":"Paraná · Primeiro Planalto Paranaense","coords":[-25.4284,-49.2733],"state":"PR","route":"Paraná"},
+  {"id":"morretes","title":"Morretes · Serra da Graciosa","locality":"Paraná · Mata Atlântica Pluvial & Anuros de Folhiço","coords":[-25.4756,-48.8344],"state":"PR","route":"Serra do Mar Sul"},
+  {"id":"antonina","title":"Antonina","locality":"Paraná · Baía de Antonina & Manguezais","coords":[-25.4287,-48.7121],"state":"PR","route":"Serra do Mar Sul"},
+  {"id":"foz_iguacu_pr","title":"Foz do Iguaçu · Parque Nacional","locality":"Paraná · Corredor Trinacional de Biodiversidade","coords":[-25.5957,-54.4367],"state":"PR","route":"Paraná"},
+  {"id":"maringa","title":"Maringá","locality":"Paraná · Terceiro Planalto Paranaense","coords":[-23.4210,-51.9331],"state":"PR","route":"Paraná"},
+  {"id":"londrina","title":"Londrina","locality":"Paraná · Bacia do Tibagi","coords":[-23.3045,-51.1696],"state":"PR","route":"Paraná"},
+
+  {"id":"linhares","title":"Linhares · Reserva Natural Vale","locality":"Espírito Santo · Mata de Tabuleiros & Lagoas Costeiras","coords":[-19.1481,-40.0658],"state":"ES","route":"Mata de Tabuleiros"},
+  {"id":"sooretama","title":"Sooretama · Reserva Biológica","locality":"Espírito Santo · Floresta Atlântica de Baixada","coords":[-19.1975,-40.0911],"state":"ES","route":"Mata de Tabuleiros"},
+  {"id":"vitoria","title":"Vitória","locality":"Espírito Santo · Capital & Baía de Vitória","coords":[-20.3155,-40.3128],"state":"ES","route":"Espírito Santo"},
+
+  {"id":"florianopolis","title":"Florianópolis","locality":"Santa Catarina · Ilha de Santa Catarina","coords":[-27.5954,-48.5480],"state":"SC","route":"Santa Catarina"},
+  {"id":"itajai","title":"Itajaí · Foz do Rio Itajaí-Açu","locality":"Santa Catarina · Complexo Portuário & Fauna Aquática","coords":[-26.9078,-48.6619],"state":"SC","route":"Santa Catarina"},
+  {"id":"blumenau","title":"Blumenau · Médio Vale do Itajaí","locality":"Santa Catarina · Floresta Ombrófila Densa Montana","coords":[-26.9194,-49.0661],"state":"SC","route":"Santa Catarina"},
+  {"id":"joinville","title":"Joinville · Baía da Babitonga","locality":"Santa Catarina · Ecossistemas de Manguezal e Mata Atlântica","coords":[-26.3045,-48.8487],"state":"SC","route":"Santa Catarina"}
+]
+;
 
 function initFieldMap() {
     const mapContainer = document.getElementById('brazil-expedition-map');
     if (!mapContainer || typeof L === 'undefined') return;
 
-    // Brazil center & optimal zoom
-    const brazilCenter = [-15.2, -51.8];
+    // Centro geografico do Brasil com visao panoramica
+    const brazilCenter = [-14.8, -52.2];
     const initialZoom = window.innerWidth < 768 ? 3.8 : 4.4;
 
+    // Inicializacao do mapa Leaflet com visao fixa de Satelite em Alta Resolucao
     const map = L.map('brazil-expedition-map', {
         center: brazilCenter,
         zoom: initialZoom,
         minZoom: 3.5,
         maxZoom: 18,
-        scrollWheelZoom: false
+        scrollWheelZoom: false,
+        attributionControl: false
     });
 
-    // Enable scroll wheel zoom on click to avoid trap while scrolling page
+    // Ativa scrollWheelZoom ao clicar no mapa para evitar prender a rolagem da pagina
     map.on('click', () => { map.scrollWheelZoom.enable(); });
     mapContainer.addEventListener('mouseleave', () => { map.scrollWheelZoom.disable(); });
 
-    // Basemaps: CartoDB Dark Matter & Esri World Imagery
-    const darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; CARTO &copy; OpenStreetMap',
-        subdomains: 'abcd',
-        maxZoom: 19
+    // 1. Camada de Satelite de Alta Resolucao (Esri World Imagery) - VISAO FIXA
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18
     }).addTo(map);
 
-    const satTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '&copy; Esri, Maxar, Earthstar Geographics',
-        maxZoom: 18
-    });
+    // 2. Camada sutil de Referencia e Fronteiras (Esri Boundaries & Places) para legibilidade geografica
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        opacity: 0.75
+    }).addTo(map);
 
-    // Basemap toggle buttons
-    const btnDark = document.getElementById('btn-layer-dark');
-    const btnSat = document.getElementById('btn-layer-sat');
-    const btnReset = document.getElementById('btn-map-reset');
+    // Attribution discreto no canto inferior direito
+    L.control.attribution({ position: 'bottomright', prefix: false })
+        .addAttribution('&copy; Esri &bull; Earthstar &bull; Distribui&ccedil;&atilde;o Lucas A&oslash;sf')
+        .addTo(map);
 
-    if (btnDark && btnSat) {
-        btnDark.addEventListener('click', () => {
-            if (!map.hasLayer(darkTileLayer)) {
-                map.removeLayer(satTileLayer);
-                map.addLayer(darkTileLayer);
-                btnDark.classList.add('active');
-                btnSat.classList.remove('active');
-            }
-        });
-        btnSat.addEventListener('click', () => {
-            if (!map.hasLayer(satTileLayer)) {
-                map.removeLayer(darkTileLayer);
-                map.addLayer(satTileLayer);
-                btnSat.classList.add('active');
-                btnDark.classList.remove('active');
-            }
-        });
-    }
-
-    if (btnReset) {
-        btnReset.addEventListener('click', () => {
+    // Botao de restauracao da visao geral do Brasil
+    const resetControl = L.control({ position: 'topright' });
+    resetControl.onAdd = function() {
+        const div = L.DomUtil.create('div', 'leaflet-bar map-reset-control');
+        div.innerHTML = '<button id="btn-map-fit-brazil" title="Restaurar visÃ£o geral do Brasil" style="background:rgba(7,20,11,0.9); border:1px solid #4ECCA3; color:#4ECCA3; width:34px; height:34px; border-radius:4px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5);"><i class="fa-solid fa-expand"></i></button>';
+        div.onclick = function(e) {
+            e.stopPropagation();
             map.flyTo(brazilCenter, initialZoom, { duration: 1.2 });
-            document.querySelectorAll('.map-expedition-card').forEach(c => c.classList.remove('active'));
-        });
+        };
+        return div;
+    };
+    resetControl.addTo(map);
+
+    // Atualiza contador de pontos no cabecalho
+    const counterEl = document.getElementById('map-counter-points');
+    if (counterEl) {
+        counterEl.textContent = lucasDistributionPoints.length + ' Pontos';
     }
 
-    // Marker Layer Group
+    // Renderizacao dos Pontinhos Simples Georreferenciados
+    // Usamos L.circleMarker com aceleracao Canvas para maxima fluidez a 120 FPS
     const markersLayer = L.layerGroup().addTo(map);
-    const markerMap = new Map();
 
-    function renderPoints(category = 'all') {
-        markersLayer.clearLayers();
-        markerMap.clear();
-
-        const filtered = category === 'all' 
-            ? expeditionPoints 
-            : expeditionPoints.filter(p => p.category === category);
-
-        // Update counter badge
-        const counterEl = document.getElementById('map-counter-points');
-        if (counterEl) {
-            counterEl.textContent = filtered.length;
-        }
-
-        filtered.forEach(pt => {
-            const isHighlight = pt.isHighlight ? 'gold' : '';
-            const pinIcon = L.divIcon({
-                className: 'custom-leaflet-pin',
-                html: `<div class="custom-pin-marker ${isHighlight}" title="${pt.title}">
-                         <i class="fa-solid ${pt.icon}"></i>
-                       </div>`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 15],
-                popupAnchor: [0, -18]
-            });
-
-            const marker = L.marker(pt.coords, { icon: pinIcon });
-
-            const popupHtml = `
-                <div class="custom-map-popup">
-                    <span class="popup-tag">${pt.categoryLabel}</span>
-                    <h4 class="popup-title">${pt.title}</h4>
-                    <div class="popup-meta">
-                        <i class="fa-solid fa-location-dot"></i> ${pt.locality} &bull; ${pt.state}
-                    </div>
-                    <p class="popup-desc">${pt.desc}</p>
-                    <div class="popup-footer">
-                        <span><i class="fa-solid fa-leaf"></i> ${pt.biome}</span>
-                        <span><i class="fa-solid fa-crosshairs"></i> ${pt.coords[0].toFixed(4)}, ${pt.coords[1].toFixed(4)}</span>
-                    </div>
-                </div>
-            `;
-
-            marker.bindPopup(popupHtml, {
-                maxWidth: 320,
-                className: 'bio-leaflet-popup'
-            });
-
-            marker.on('click', () => {
-                highlightCard(pt.id);
-            });
-
-            markersLayer.addLayer(marker);
-            markerMap.set(pt.id, marker);
+    lucasDistributionPoints.forEach(pt => {
+        // Pontinho simples verde-esmeralda brilhante com borda branca nitida
+        const marker = L.circleMarker(pt.coords, {
+            radius: 5,
+            fillColor: '#00ff88',
+            color: '#ffffff',
+            weight: 1.4,
+            opacity: 0.95,
+            fillOpacity: 0.88,
+            className: 'lucas-point-dot'
         });
 
-        renderCarousel(filtered);
-    }
+        // Tooltip elegante e leve ao passar o mouse ou tocar no ponto
+        const tooltipHtml = '<div style="font-family:monospace; font-size:11.5px; line-height:1.35;">' +
+                            '<strong style="color:#ffffff; font-size:12.5px;">' + pt.title + '</strong>' +
+                            '<div style="color:#00ff88; margin-top:2px;"><i class="fa-solid fa-location-dot" style="font-size:10px;"></i> ' + pt.locality + '</div>' +
+                            '<div style="color:#a0aec0; font-size:10px; margin-top:2px;">' + pt.coords[0].toFixed(4) + ', ' + pt.coords[1].toFixed(4) + '</div>' +
+                            '</div>';
 
-    // Expeditions bottom horizontal cards
-    const scrollContainer = document.getElementById('map-expeditions-scroll');
-
-    function renderCarousel(pointsList) {
-        if (!scrollContainer) return;
-        scrollContainer.innerHTML = '';
-
-        pointsList.forEach(pt => {
-            const card = document.createElement('div');
-            card.className = 'map-expedition-card';
-            card.id = `card-exp-${pt.id}`;
-            card.innerHTML = `
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.35rem;">
-                    <span style="font-size:0.68rem; color:var(--bio-gold); text-transform:uppercase; letter-spacing:0.5px;">${pt.categoryLabel}</span>
-                    <span style="background:rgba(78,204,163,0.15); color:var(--bio-emerald); padding:2px 6px; border-radius:4px; font-size:0.65rem; font-weight:700;">${pt.state}</span>
-                </div>
-                <h5><i class="fa-solid ${pt.icon}" style="color:var(--bio-emerald); margin-right:4px;"></i> ${pt.title}</h5>
-                <span style="color:var(--text-muted); font-size:0.73rem; margin-top:2px;"><i class="fa-solid fa-location-dot" style="font-size:0.65rem;"></i> ${pt.locality}</span>
-                <span style="color:var(--bio-sage); font-size:0.68rem; margin-top:4px;"><i class="fa-solid fa-leaf" style="font-size:0.65rem;"></i> ${pt.biome}</span>
-            `;
-
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.map-expedition-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                map.flyTo(pt.coords, 10, { duration: 1.4 });
-                const m = markerMap.get(pt.id);
-                if (m) {
-                    setTimeout(() => { m.openPopup(); }, 1450);
-                }
-            });
-
-            scrollContainer.appendChild(card);
+        marker.bindTooltip(tooltipHtml, {
+            direction: 'top',
+            offset: [0, -6],
+            className: 'bio-simple-tooltip',
+            opacity: 0.96
         });
-    }
 
-    function highlightCard(id) {
-        document.querySelectorAll('.map-expedition-card').forEach(c => c.classList.remove('active'));
-        const card = document.getElementById(`card-exp-${id}`);
-        if (card) {
-            card.classList.add('active');
-            card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }
-    }
-
-    // Category Filter Buttons
-    const filterButtons = document.querySelectorAll('#map-filter-group .map-filter-btn');
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const cat = btn.getAttribute('data-category');
-            renderPoints(cat);
+        // Efeito interativo ao passar o mouse: aumenta ligeiramente o ponto
+        marker.on('mouseover', function() {
+            this.setRadius(7.5);
+            this.setStyle({ fillColor: '#ffffff', color: '#00ff88', weight: 2 });
         });
+        marker.on('mouseout', function() {
+            this.setRadius(5);
+            this.setStyle({ fillColor: '#00ff88', color: '#ffffff', weight: 1.4 });
+        });
+
+        markersLayer.addLayer(marker);
     });
-
-    // Initial render
-    renderPoints('all');
 }
