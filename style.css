@@ -3598,3 +3598,47 @@ h2 {
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
+
+/* ==========================================================================
+   DRONE VIDEO SHOWCASE (Full-Width Cinematic Section)
+   ========================================================================== */
+section.drone-video-showcase {
+    margin: 2.5rem 0 !important;
+    width: 100% !important;
+    background: rgba(7, 20, 11, 0.85) !important;
+    border: 1px solid rgba(78, 204, 163, 0.35) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 1.6rem 1.85rem !important;
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.6) !important;
+    overflow: hidden;
+}
+
+section.drone-video-showcase .drone-player-container {
+    max-height: 540px !important;
+    width: 100% !important;
+    aspect-ratio: 16 / 9 !important;
+    margin: 0 auto !important;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.8) !important;
+    border: 1px solid rgba(78, 204, 163, 0.4) !important;
+}
+
+section.drone-video-showcase .drone-clip-selector {
+    display: flex !important;
+    gap: 0.6rem !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    margin: 1.25rem 0 1.5rem 0 !important;
+    align-items: center !important;
+}
+
+section.drone-video-showcase .drone-photo-gallery {
+    margin-top: 1.5rem !important;
+    border-top: 1px solid rgba(78, 204, 163, 0.22) !important;
+    padding-top: 1.25rem !important;
+}
+
+section.drone-video-showcase .drone-photo-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(185px, 1fr)) !important;
+    gap: 0.85rem !important;
+}
