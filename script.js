@@ -248,7 +248,7 @@ function initBioCanvas() {
             this.y = Math.random() * height;
             this.angle = Math.random() * Math.PI * 2;
             this.targetAngle = this.angle;
-            this.speed = Math.random() * 1.0 + 0.65;
+            this.speed = Math.random() * 1.3 + 1.15; // Velocidade base dinamica e vivaz (sem lentidao)
 
             // Ciclo de Metamorfose Anura Realista:
             // 0: Girino clÃ¡ssico Ã¡pode (~40%)
@@ -281,14 +281,14 @@ function initBioCanvas() {
 
             this.tailLength = this.stage === 2 ? this.size * 1.5 : this.size * 3.4;
             this.wigglePhase = Math.random() * Math.PI * 2;
-            this.wiggleSpeed = this.stage === 3 ? (Math.random() * 0.08 + 0.09) : (Math.random() * 0.13 + 0.15);
-            this.turnTimer = Math.floor(Math.random() * 100) + 40;
+            this.wiggleSpeed = this.stage === 3 ? (Math.random() * 0.12 + 0.13) : (Math.random() * 0.18 + 0.20);
+            this.turnTimer = Math.floor(Math.random() * 90) + 35;
             this.scatterTimer = 0;
             this.isGold = Math.random() < 0.16;
 
-            // Ciclo de pernada anura (kick & glide)
+            // Ciclo de pernada anura sincronizada (kick & glide)
             this.kickPhase = Math.random() * Math.PI * 2;
-            this.kickSpeed = Math.random() * 0.05 + 0.06;
+            this.kickSpeed = Math.random() * 0.07 + 0.08;
 
             // Cores prÃ©-computadas por organismo (evita gargalo de GC no canvas)
             const aStr = this.alpha.toFixed(2);
@@ -311,28 +311,28 @@ function initBioCanvas() {
             this.pupilColor = 'rgba(7, 20, 11, 0.88)';
         }
 
-        update() {
-            // 1. ReaÃ§Ã£o a perturbaÃ§Ãµes na Ã¡gua (toque/clique)
+        update(dt = 1.0) {
+            // 1. Reacao a perturbacoes na agua (toque / clique com dispersao agil)
             for (let s = 0; s < shockwaves.length; s++) {
                 const sw = shockwaves[s];
                 const dx = this.x - sw.x;
                 const dy = this.y - sw.y;
                 const dist = Math.hypot(dx, dy);
 
-                if (dist < sw.radius + 18 && dist > sw.radius - 14) {
+                if (dist < sw.radius + 20 && dist > sw.radius - 16) {
                     const awayAngle = Math.atan2(dy, dx);
-                    this.angle = awayAngle + (Math.random() - 0.5) * 1.6;
+                    this.angle = awayAngle + (Math.random() - 0.5) * 1.5;
                     this.targetAngle = this.angle + (Math.random() - 0.5) * 0.8;
-                    this.speed = Math.max(this.speed, 2.4 + Math.random() * 0.8);
-                    this.scatterTimer = Math.floor(Math.random() * 90) + 60;
+                    this.speed = Math.max(this.speed, 2.8 + Math.random() * 1.0);
+                    this.scatterTimer = Math.floor(Math.random() * 80) + 40;
                     break;
                 }
             }
 
-            // 2. Comportamento natatÃ³rio orgÃ¢nico
+            // 2. Comportamento natatorio organico e navegacao fluida
             if (this.scatterTimer > 0) {
-                this.scatterTimer--;
-                this.angle += (Math.random() - 0.5) * 0.08;
+                this.scatterTimer -= dt;
+                this.angle += (Math.random() - 0.5) * 0.10 * dt;
             } else if (mouseInPond && !isTouchInteraction) {
                 const dx = mouseX - this.x;
                 const dy = mouseY - this.y;
@@ -344,59 +344,59 @@ function initBioCanvas() {
                     while (diff < -Math.PI) diff += Math.PI * 2;
                     while (diff > Math.PI) diff -= Math.PI * 2;
 
-                    const steer = Math.max(0.035, 0.12 * (1 - dist / 380));
-                    this.angle += diff * steer;
-                    this.speed = Math.min(this.speed + 0.06, 2.3);
+                    const steer = Math.max(0.04, 0.14 * (1 - dist / 380));
+                    this.angle += diff * Math.min(1.0, steer * dt);
+                    this.speed = Math.min(this.speed + 0.08 * dt, 2.8);
                 } else {
-                    this.naturalSteer();
+                    this.naturalSteer(dt);
                 }
             } else {
-                this.naturalSteer();
+                this.naturalSteer(dt);
             }
 
-            // 3. PropulsÃ£o biomecÃ¢nica real
+            // 3. Propulsao biomecanica real escalada por delta-time (120 FPS nativo)
             if (this.stage === 3) {
                 // Pererequinha adulta: nado por pernada sincronizada (kick & glide)
-                this.kickPhase += this.kickSpeed;
+                this.kickPhase += this.kickSpeed * dt;
                 const kickCycle = Math.sin(this.kickPhase);
-                const burst = kickCycle > 0.25 ? (kickCycle - 0.25) * 1.5 : 0;
-                const currentSpeed = this.speed * (0.75 + burst);
-                this.x += Math.cos(this.angle) * currentSpeed;
-                this.y += Math.sin(this.angle) * currentSpeed;
-                this.wigglePhase += this.wiggleSpeed * 0.7;
+                const burst = kickCycle > 0.20 ? (kickCycle - 0.20) * 1.8 : 0;
+                const currentSpeed = this.speed * (0.80 + burst);
+                this.x += Math.cos(this.angle) * currentSpeed * dt;
+                this.y += Math.sin(this.angle) * currentSpeed * dt;
+                this.wigglePhase += this.wiggleSpeed * 0.75 * dt;
             } else {
-                // Girinos e Imagos: propulsÃ£o ondulante contÃ­nua com cauda
-                this.x += Math.cos(this.angle) * this.speed;
-                this.y += Math.sin(this.angle) * this.speed;
-                this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15);
-                this.kickPhase += this.kickSpeed;
+                // Girinos e Imagos: propulsao ondulante vigorosa com cauda
+                this.x += Math.cos(this.angle) * this.speed * dt;
+                this.y += Math.sin(this.angle) * this.speed * dt;
+                this.wigglePhase += this.wiggleSpeed * (this.speed * 1.15) * dt;
+                this.kickPhase += this.kickSpeed * dt;
             }
 
-            if (this.speed > 1.6) {
-                this.speed *= 0.94;
+            // Damping suave de velocidade alta independente da taxa de quadros
+            if (this.speed > 1.8) {
+                this.speed = 1.8 + (this.speed - 1.8) * Math.pow(0.93, dt);
             }
 
-            // Retorno infinito pelas bordas da tela
+            // Retorno infinito continuo pelas bordas da tela
             if (this.x < -60) this.x = width + 60;
             if (this.x > width + 60) this.x = -60;
             if (this.y < -60) this.y = height + 60;
             if (this.y > height + 60) this.y = -60;
         }
 
-        naturalSteer() {
-            this.turnTimer--;
+        naturalSteer(dt = 1.0) {
+            this.turnTimer -= dt;
             if (this.turnTimer <= 0) {
                 this.targetAngle += (Math.random() - 0.5) * 1.6;
-                this.turnTimer = Math.floor(Math.random() * 110) + 50;
-                this.speed = Math.random() * 1.0 + 0.65;
+                this.turnTimer = Math.floor(Math.random() * 95) + 35;
+                this.speed = Math.random() * 1.3 + 1.15;
             }
 
             let diff = this.targetAngle - this.angle;
             while (diff < -Math.PI) diff += Math.PI * 2;
             while (diff > Math.PI) diff -= Math.PI * 2;
-            this.angle += diff * 0.04;
+            this.angle += diff * Math.min(1.0, 0.05 * dt);
         }
-
         draw() {
             const cos = Math.cos(this.angle);
             const sin = Math.sin(this.angle);
@@ -741,15 +741,26 @@ function initBioCanvas() {
         organisms.push(new Organism(i, count));
     }
 
-    function animate() {
+    let lastTime = performance.now();
+
+    function animate(currentTime) {
+        if (!currentTime) currentTime = performance.now();
+        let deltaMs = currentTime - lastTime;
+        lastTime = currentTime;
+
+        // Normalizacao delta-time: dt = 1.0 a 60 FPS, dt = 0.5 a 120 FPS
+        // Previne saltos bruscos em alternancia de aba ou congelamento
+        if (deltaMs > 60 || deltaMs < 1) deltaMs = 16.667;
+        const dt = deltaMs / 16.667;
+
         ctx.resetTransform();
         ctx.clearRect(0, 0, width, height);
 
-        // Ondas de Ã¡gua da lagoa
+        // Ondas de choque da lagoa calibradas por delta-time
         for (let i = shockwaves.length - 1; i >= 0; i--) {
             const sw = shockwaves[i];
-            sw.radius += sw.speed;
-            sw.alpha *= 0.94;
+            sw.radius += sw.speed * dt;
+            sw.alpha *= Math.pow(0.94, dt);
 
             ctx.beginPath();
             ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
@@ -762,10 +773,10 @@ function initBioCanvas() {
             }
         }
 
-        // RenderizaÃ§Ã£o de todos os organismos no ciclo de metamorfose
+        // Renderizacao de todos os organismos no ciclo de metamorfose com fisica normalizada
         for (let i = 0; i < organisms.length; i++) {
             const o = organisms[i];
-            o.update();
+            o.update(dt);
             o.draw();
         }
 
@@ -783,11 +794,11 @@ function initStationWelcome() {
     if (!output) return;
 
     const messages = [
-        { text: '🌿 Bem-vindo ao acervo científico e portfólio profissional de Lucas Aøsf', gold: true },
-        { text: '🟢 Biólogo (CRBio-01 nº 127233/01-D) · Gestor Ambiental (Especialista UNOPAR) · Taxonomista', ok: true },
-        { text: '🔬 Foco primário: Taxonomia & Sistemática Filogenética, com ênfase em Anfíbios Anuros e Répteis' },
-        { text: '💻 Ecologia Computacional, Automação em R e Python, e Engenharia de Softwares de Campo (PWAs)' },
-        { text: '📍 Experiências longas e consolidadas desde amostragem de campo a elaboração de laudos, relatórios técnicos e publicações científicas', ok: true }
+        { text: '\u{1F33F} Bem-vindo ao acervo cient\u00EDfico e portf\u00F3lio profissional de Lucas A\u00F8sf', gold: true },
+        { text: '\u{1F7E2} Bi\u00F3logo (CRBio-01 n\u00BA 127233/01-D) \u00B7 Gestor Ambiental (Especialista UNOPAR) \u00B7 Pesquisador & Taxonomista', ok: true },
+        { text: '\u{1F52C} Foco em Fauna: Especialista em Anf\u00EDbios Anuros, Mastofauna (m\u00E9dios/grandes e morcegos), Ornitologia e Entomologia' },
+        { text: '\u{1F4BB} Programador Entusiasta: RStudio, Python, JavaScript, Java e HTML (PWAs de campo, bioestat\u00EDstica e modelagem)' },
+        { text: '\u{1F4CD} Ampla experi\u00EAncia de campo, taxonomia cl\u00E1ssica, automa\u00E7\u00E3o de dados, laudos t\u00E9cnicos e publica\u00E7\u00F5es cient\u00EDficas', ok: true }
     ];
 
     let idx = 0;
