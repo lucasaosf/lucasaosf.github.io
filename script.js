@@ -1,4 +1,4 @@
-﻿/**
+/**
  * BIOKURI // PORTFÓLIO DE LUCAS AØSF
  * Biólogo · Gestor Ambiental · Taxonomista & Especialista em Anfíbios Anuros
  * Ecologia Computacional, Automação & Programação
@@ -1405,7 +1405,7 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
         abstract_cop30: "Estudo ecológico e microclimático demonstrando que a recomposição florestal reduziu a temperatura de superfície e promoveu a recuperação da comunidade de aves (de 42 para 131 espécies) no Vale do Paraíba.",
         abstract_guia: "Contribuição fotográfica integral e identificação taxonômica da herpetofauna: fotografias de alta resolução de anfíbios e répteis que compõem quase todo o acervo do guia oficial do ICMBio.",
         header_fieldwork: "Atuação em Campo & Registros de Trabalho",
-        intro_fieldwork: "Registros fotográficos e audiovisuais de Lucas Aøsf em operações técnicas: manejo e contenção física de fauna silvestre, anilhamento científico de aves, quiropterologia, supervisão ambiental em obras de infraestrutura e expedições remotas pelos biomas brasileiros.",
+        intro_fieldwork: "Registros fotogr&aacute;ficos e audiovisuais de Lucas A&oslash;sf em opera&ccedil;&otilde;es t&eacute;cnicas: manejo e conten&ccedil;&atilde;o f&iacute;sica de fauna silvestre, anilhamento cient&iacute;fico de aves, quiropterologia e expedi&ccedil;&otilde;es remotas pelos biomas brasileiros.",
         badge_fieldwork_live: "<i class=\"fa-solid fa-camera\"></i> REGISTROS REAIS",
         pill_fieldwork: "Atuação em Campo",
         field_video_hud: "OPERA&Ccedil;&Atilde;O EM CAMPO // BIOKURI",
@@ -1416,7 +1416,7 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
         fw_filter_all: "Todos os Registros",
         fw_filter_herpeto: "Herpetofauna & Manejo",
         fw_filter_ornito: "Ornitologia & Masto",
-        fw_filter_supervisao: "Supervisão & Obras",
+        fw_filter_supervisao: "Manejo & M&eacute;todos",
         fw_filter_expedicoes: "Expedições & Biomas",
         header_experience: "Experiência Profissional & Gestão Ambiental",
         intro_experience: "Responsabilidade técnica e consultoria especializada em infraestrutura de grande porte e gestão ambiental em todo o Brasil.",
@@ -1534,7 +1534,7 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         abstract_cop30: "Ecological and microclimatic study demonstrating that forest restoration reduced land surface temperature and drove bird community recovery (from 42 to 131 species) in the Paraíba Valley.",
         abstract_guia: "Comprehensive photographic contribution and taxonomic identification: high-resolution imagery of amphibians and reptiles composing nearly the entire herpetofauna section of the official ICMBio guide.",
         header_fieldwork: "Technical Fieldwork & Operations",
-        intro_fieldwork: "Photographic and audiovisual records of Lucas Aøsf during technical fieldwork: handling and physical restraint of wildlife, scientific bird banding, chiropterology, environmental supervision in major infrastructure works, and remote expeditions across Brazilian biomes.",
+        intro_fieldwork: "Photographic and audiovisual records of Lucas A&oslash;sf during technical fieldwork: handling and physical restraint of wildlife, scientific bird banding, chiropterology, and remote expeditions across Brazilian biomes.",
         badge_fieldwork_live: "<i class=\"fa-solid fa-camera\"></i> REAL FIELD RECORDS",
         pill_fieldwork: "Field Operations",
         field_video_hud: "FIELD OPERATION // BIOKURI",
