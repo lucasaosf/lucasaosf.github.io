@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <!-- Leaflet Map CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-    <link rel="stylesheet" href="style.css?v=12.5">
+    <link rel="stylesheet" href="style.css?v=12.6">
     <noscript>
         <style>
             .fade-in { opacity: 1 !important; transform: none !important; }
@@ -1097,28 +1097,41 @@
                 <h2><i class="fa-solid fa-person-digging neon-green-icon"></i> <span data-i18n="header_fieldwork">Atuação em Campo &amp; Registros de Trabalho</span></h2>
                 <span class="badge-status live" data-i18n="badge_fieldwork_live"><i class="fa-solid fa-camera"></i> REGISTROS REAIS</span>
             </div>
-            <p class="section-intro" data-i18n="intro_fieldwork">Registros fotográficos e audiovisuais de Lucas Aøsf em operações técnicas: manejo e contenção física de fauna silvestre, anilhamento científico de aves, quiropterologia, supervisão ambiental em obras de infraestrutura e expedições remotas pelos biomas brasileiros.</p>
+            <p class="section-intro" data-i18n="intro_fieldwork">Registros fotogr&aacute;ficos e audiovisuais de Lucas A&oslash;sf em opera&ccedil;&otilde;es t&eacute;cnicas: manejo e conten&ccedil;&atilde;o f&iacute;sica de fauna silvestre, anilhamento cient&iacute;fico de aves, quiropterologia e expedi&ccedil;&otilde;es remotas pelos biomas brasileiros.</p>
 
-            <!-- Video Spotlight de Operação Técnica em Campo -->
+            <!-- Video Spotlight de Operacao Tecnica em Campo (Multi-Video Showreel) -->
             <div class="fieldwork-video-container">
                 <div class="fieldwork-video-player-wrap">
-                    <video id="fieldwork-video-player" playsinline muted loop controls preload="none" poster="assets/field/field-supervisao-supressao.jpg" class="fieldwork-video-player">
-                        <source src="assets/field/field-video-trabalho.mp4" type="video/mp4">
-                        Seu navegador não suporta vídeos HTML5.
+                    <video id="fieldwork-video-player" playsinline muted loop controls preload="metadata" poster="assets/field/field-bothrops-bilineatus.jpg" class="fieldwork-video-player" src="assets/field/field-video-1.mp4">
+                        <source src="assets/field/field-video-1.mp4" type="video/mp4" id="fieldwork-video-source">
+                        Seu navegador n&atilde;o suporta v&iacute;deos HTML5.
                     </video>
                     <div class="fieldwork-video-badge">
-                        <span class="rec-dot"></span> <span data-i18n="field_video_hud">OPERA&Ccedil;&Atilde;O EM CAMPO // BIOKURI</span>
+                        <span class="rec-dot"></span> <span id="fieldwork-video-hud" data-i18n="field_video_hud">V&Iacute;DEO 1 // OPERA&Ccedil;&Atilde;O EM CAMPO</span>
                     </div>
                 </div>
                 <div class="fieldwork-video-info">
-                    <div class="fieldwork-video-title">
-                        <i class="fa-solid fa-circle-play neon-green-icon"></i> <span data-i18n="field_video_title">Registro Audiovisual de Operação Técnica em Campo</span>
+                    <div class="fieldwork-video-selector">
+                        <span class="video-selector-label"><i class="fa-solid fa-clapperboard"></i> <span data-i18n="video_playlist_title">Registros em V&iacute;deo de Lucas A&oslash;sf:</span></span>
+                        <div class="video-selector-buttons">
+                            <button class="video-select-btn active" data-src="assets/field/field-video-1.mp4" data-index="0" data-title="Operacao e Amostragem Tecnica em Campo" data-desc="Registro em video de rotinas e procedimentos tecnicos de amostragem, manejo e prospeccao de campo." data-hud="V&Iacute;DEO 1 // OPERA&Ccedil;&Atilde;O EM CAMPO">
+                                <i class="fa-solid fa-play"></i> V&iacute;deo 1 (0:14)
+                            </button>
+                            <button class="video-select-btn" data-src="assets/field/field-video-2.mp4" data-index="1" data-title="Procedimento e Manejo de Fauna em Campo" data-desc="Documentacao tecnica de campo acompanhando procedimentos praticos de manejo de fauna silvestre." data-hud="V&Iacute;DEO 2 // MANEJO EM CAMPO">
+                                <i class="fa-solid fa-play"></i> V&iacute;deo 2 (0:46)
+                            </button>
+                            <button class="video-select-btn" data-src="assets/field/field-video-3.mp4" data-index="2" data-title="Percurso e Prospeccao Ambiental de Campo" data-desc="Documentacao de percurso e amostragem ativa de biodiversidade em areas florestais e riparias." data-hud="V&Iacute;DEO 3 // PROSPEC&Ccedil;&Atilde;O">
+                                <i class="fa-solid fa-play"></i> V&iacute;deo 3 (1:43)
+                            </button>
+                        </div>
                     </div>
-                    <p class="fieldwork-video-desc" data-i18n="field_video_desc">Documentação em vídeo de operações técnicas de amostragem, monitoramento e manejo de fauna silvestre em campo. Registro de procedimentos práticos de resgate, avaliação comportamental e fiscalização ambiental em áreas de influência direta de empreendimentos.</p>
-                    <div class="fieldwork-video-tags">
-                        <span class="photo-badge badge-obra"><i class="fa-solid fa-helmet-safety"></i> Supervisão de Obra</span>
+                    <div class="fieldwork-video-title">
+                        <i class="fa-solid fa-circle-play neon-green-icon"></i> <span id="fieldwork-current-title" data-i18n="field_video_title">Opera&ccedil;&atilde;o e Amostragem T&eacute;cnica em Campo</span>
+                    </div>
+                    <p class="fieldwork-video-desc" id="fieldwork-current-desc" data-i18n="field_video_desc">Registro em video de rotinas e procedimentos tecnicos de amostragem, manejo e prospeccao de campo.</p>
+                    <div class="fieldwork-video-tags" id="fieldwork-current-tags">
                         <span class="photo-badge badge-manejo"><i class="fa-solid fa-staff-snake"></i> Manejo de Fauna</span>
-                        <span class="photo-badge badge-atlantica"><i class="fa-solid fa-tree"></i> Mata Atlântica</span>
+                        <span class="photo-badge badge-atlantica"><i class="fa-solid fa-tree"></i> Biodiversidade</span>
                         <span class="photo-badge badge-anilhamento"><i class="fa-solid fa-certificate"></i> ART &bull; CRBio</span>
                     </div>
                 </div>
@@ -1144,7 +1157,7 @@
                             <i class="fa-solid fa-crow"></i> <span data-i18n="fw_filter_ornito">Ornitologia &amp; Masto</span> <span class="filter-count">(6)</span>
                         </button>
                         <button class="field-filter-btn" data-filter="supervisao">
-                            <i class="fa-solid fa-helmet-safety"></i> <span data-i18n="fw_filter_supervisao">Supervisão &amp; Obras</span> <span class="filter-count">(4)</span>
+                            <i class="fa-solid fa-hand-holding-hand"></i> <span data-i18n="fw_filter_supervisao">Manejo &amp; M&eacute;todos</span> <span class="filter-count">(4)</span>
                         </button>
                         <button class="field-filter-btn" data-filter="expedicoes">
                             <i class="fa-solid fa-compass"></i> <span data-i18n="fw_filter_expedicoes">Expedições &amp; Biomas</span> <span class="filter-count">(4)</span>
@@ -1155,130 +1168,130 @@
                 <!-- Grid de Fotografias de Campo -->
                 <div class="field-photo-grid">
                     <!-- 1. Bothrops bilineatus -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-bothrops-bilineatus.jpg" data-caption="&lt;strong&gt;Bothrops bilineatus (Víbora-Verde)&lt;/strong&gt; &mdash; Registro e identificação in situ de Bothrops bilineatus (surucucu-patrona / víbora-verde), serpente peçonhenta arborícola rara da Mata Atlântica. Amostragem noturna no Espírito Santo." data-caption-en="&lt;strong&gt;Bothrops bilineatus (Forest Pitviper)&lt;/strong&gt; &mdash; In situ record and identification of Bothrops bilineatus, a rare arboreal venomous pitviper of the Atlantic Forest. Nocturnal survey in Espírito Santo.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-bothrops-bilineatus.jpg" data-caption="&lt;strong&gt;Jararaca-verde (Bothrops bilineatus)&lt;/strong&gt; &mdash; Esp&eacute;cime hist&oacute;rico da redescoberta cient&iacute;fica no Esp&iacute;rito Santo ap&oacute;s 30 anos sem registros documentados, publicado no artigo de autoria de Lucas A&oslash;sf e colaboradores anexado ao portf&oacute;lio (Revista Latinoamericana de Herpetolog&iacute;a)." data-caption-en="&lt;strong&gt;Forest Pitviper (Bothrops bilineatus)&lt;/strong&gt; &mdash; Historic specimen of the scientific rediscovery in Esp&iacute;rito Santo State after 30 years without documented records, published in the scientific paper attached to this portfolio (Revista Latinoamericana de Herpetolog&iacute;a).">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-bothrops-bilineatus.jpg" alt="Lucas Aosf em campo com Bothrops bilineatus">
+                            <img src="assets/field/field-bothrops-bilineatus.jpg" alt="Lucas Aosf em campo com Bothrops bilineatus - Jararaca-verde reencontrada no artigo">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-atlantica">Mata Atlântica · ES</span>
-                                <span class="photo-badge badge-peconhenta">Viperídeo Peçonhento</span>
+                                <span class="photo-badge badge-peconhenta"><i class="fa-solid fa-award"></i> Redescoberta no ES</span>
+                                <span class="photo-badge badge-atlantica">Artigo Anexado</span>
                             </div>
-                            <h4 class="field-card-title">Víbora-Verde (Bothrops bilineatus)</h4>
-                            <p class="field-card-desc">Identificação in situ e biologia de serpente arborícola peçonhenta rara da Mata Atlântica.</p>
+                            <h4 class="field-card-title">Jararaca-verde (Bothrops bilineatus)</h4>
+                            <p class="field-card-desc">Esp&eacute;cime do artigo cient&iacute;fico de redescoberta ap&oacute;s 30 anos no ES, publicado por Lucas A&oslash;sf e anexado ao portf&oacute;lio.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 2. Jacaré Contenção -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-jacare-contencao.jpg" data-caption="&lt;strong&gt;Caiman latirostris (Jacaré-de-papo-amarelo)&lt;/strong&gt; &mdash; Contenção física e manejo seguro de exemplar adulto com equipamentos de proteção e imobilização técnica na EEAR." data-caption-en="&lt;strong&gt;Caiman latirostris (Broad-snouted Caiman)&lt;/strong&gt; &mdash; Safe physical restraint and handling of adult caiman using technical immobilization gear at EEAR.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-jacare-contencao.jpg" data-caption="&lt;strong&gt;Jacaretinga (Caiman crocodilus)&lt;/strong&gt; &mdash; Conten&ccedil;&atilde;o f&iacute;sica e manejo seguro de exemplar no Mato Grosso para avalia&ccedil;&atilde;o biom&eacute;trica e marca&ccedil;&atilde;o com microchip (transponder)." data-caption-en="&lt;strong&gt;Spectacled Caiman (Caiman crocodilus)&lt;/strong&gt; &mdash; Physical restraint and safe handling of specimen in Mato Grosso for biometric assessment and microchip tagging.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-jacare-contencao.jpg" alt="Lucas Aosf contendo jacaré-de-papo-amarelo">
+                            <img src="assets/field/field-jacare-contencao.jpg" alt="Lucas Aosf em contencao de Caiman crocodilus para chipagem no Mato Grosso">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-atlantica">EEAR · Guaratinguetá/SP</span>
-                                <span class="photo-badge badge-manejo">Contenção Física</span>
+                                <span class="photo-badge badge-manejo">Mato Grosso</span>
+                                <span class="photo-badge badge-anilhamento">Marca&ccedil;&atilde;o com Chip</span>
                             </div>
-                            <h4 class="field-card-title">Manejo de Jacaré (Caiman latirostris)</h4>
-                            <p class="field-card-desc">Imobilização e manejo seguro de crocodiliano adulto para instrução técnica e preservação.</p>
+                            <h4 class="field-card-title">Jacaretinga (Caiman crocodilus)</h4>
+                            <p class="field-card-desc">Conten&ccedil;&atilde;o f&iacute;sica t&eacute;cnica no Mato Grosso para inser&ccedil;&atilde;o de microchip (transponder) e biometria.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 3. Filhotes de Jacaré -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-jacare-filhotes.jpg" data-caption="&lt;strong&gt;Neonatos de Caiman latirostris&lt;/strong&gt; &mdash; Amostragem e inspeção biométrica noturna de filhotes de jacaré-de-papo-amarelo durante censo reprodutivo em ambiente palustre." data-caption-en="&lt;strong&gt;Caiman latirostris Hatchlings&lt;/strong&gt; &mdash; Nocturnal biometric sampling and inspection of broad-snouted caiman hatchlings during reproductive surveys.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-jacare-filhotes.jpg" data-caption="&lt;strong&gt;Neonatos de Caiman crocodilus&lt;/strong&gt; &mdash; Filhotes de jacaretinga (Caiman crocodilus) inspecionados em ninho durante censo e monitoramento reprodutivo de crocodilianos no Mato Grosso." data-caption-en="&lt;strong&gt;Caiman crocodilus Hatchlings&lt;/strong&gt; &mdash; Spectacled caiman hatchlings inspected during nesting monitoring and crocodilian surveys in Mato Grosso.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-jacare-filhotes.jpg" alt="Lucas Aosf com filhotes de jacaré">
+                            <img src="assets/field/field-jacare-filhotes.jpg" alt="Lucas Aosf com neonatos de Caiman crocodilus no Mato Grosso">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-atlantica">Vale do Paraíba/SP</span>
-                                <span class="photo-badge badge-manejo">Biometria Noturna</span>
+                                <span class="photo-badge badge-manejo">Mato Grosso</span>
+                                <span class="photo-badge badge-expedicao">Censo Reprodutivo</span>
                             </div>
-                            <h4 class="field-card-title">Filhotes de Jacaré-de-papo-amarelo</h4>
-                            <p class="field-card-desc">Inspeção biométrica e avaliação reprodutiva de neonatos em área úmida.</p>
+                            <h4 class="field-card-title">Neonatos de Caiman crocodilus</h4>
+                            <p class="field-card-desc">Filhotes de jacaretinga inspecionados em campo durante monitoramento reprodutivo no Mato Grosso.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 4. Sucuri Resgate -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-sucuri-resgate.jpg" data-caption="&lt;strong&gt;Manejo e Resgate de Sucuri (Eunectes)&lt;/strong&gt; &mdash; Resgate e translocação orientada de grande serpente aquática (Eunectes) em corpo hídrico com botas de vau e contenção lótica." data-caption-en="&lt;strong&gt;Anaconda Rescue &amp; Handling (Eunectes)&lt;/strong&gt; &mdash; Targeted rescue and translocation of large anaconda in riparian wetland using specialized aquatic handling.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-sucuri-resgate.jpg" data-caption="&lt;strong&gt;Sucuri-verde (Eunectes murinus)&lt;/strong&gt; &mdash; Busca ativa e conten&ccedil;&atilde;o t&eacute;cnica de grande exemplar de Eunectes murinus &agrave;s margens do Rio Araguaia no Mato Grosso." data-caption-en="&lt;strong&gt;Green Anaconda (Eunectes murinus)&lt;/strong&gt; &mdash; Active search and technical handling of large Eunectes murinus specimen on the banks of the Araguaia River, Mato Grosso.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-sucuri-resgate.jpg" alt="Lucas Aosf com sucuri na água">
+                            <img src="assets/field/field-sucuri-resgate.jpg" alt="Lucas Aosf com sucuri-verde Eunectes murinus nas margens do Rio Araguaia MT">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-cerrado">Ambiente Palustre</span>
-                                <span class="photo-badge badge-manejo">Fauna Aquática</span>
+                                <span class="photo-badge badge-manejo">Rio Araguaia &bull; MT</span>
+                                <span class="photo-badge badge-expedicao">Busca Ativa</span>
                             </div>
-                            <h4 class="field-card-title">Resgate e Manejo de Sucuri (Eunectes)</h4>
-                            <p class="field-card-desc">Contenção e translocação orientada em meio aquático com botas de vau e protocolo de salvamento.</p>
+                            <h4 class="field-card-title">Sucuri-verde (Eunectes murinus)</h4>
+                            <p class="field-card-desc">Busca ativa e manejo seguro de sucuri-verde nas margens do Rio Araguaia, Mato Grosso.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 5. Sucuri Amarela -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-sucuri-amarela.jpg" data-caption="&lt;strong&gt;Sucuri-Amarela (Eunectes notaeus)&lt;/strong&gt; &mdash; Manejo e registro noturno de Eunectes notaeus durante busca ativa embarcada em áreas alagáveis." data-caption-en="&lt;strong&gt;Yellow Anaconda (Eunectes notaeus)&lt;/strong&gt; &mdash; Nocturnal handling and documentation of Eunectes notaeus during active boat search in flooded wetlands.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-sucuri-amarela.jpg" data-caption="&lt;strong&gt;Sucuri-verde (Eunectes murinus)&lt;/strong&gt; &mdash; Registro e conten&ccedil;&atilde;o de Eunectes murinus durante monitoramento noturno de herpetofauna em Nova Europa - SP." data-caption-en="&lt;strong&gt;Green Anaconda (Eunectes murinus)&lt;/strong&gt; &mdash; Record and handling of Eunectes murinus during nocturnal wildlife monitoring in Nova Europa, S&atilde;o Paulo.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-sucuri-amarela.jpg" alt="Lucas Aosf segurando sucuri amarela">
+                            <img src="assets/field/field-sucuri-amarela.jpg" alt="Lucas Aosf com Eunectes murinus em monitoramento noturno em Nova Europa SP">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-cerrado">Pantanal &bull; Corredor Fluvial</span>
-                                <span class="photo-badge badge-manejo">Manejo Noturno</span>
+                                <span class="photo-badge badge-atlantica">Nova Europa &bull; SP</span>
+                                <span class="photo-badge badge-manejo">Monitoramento Noturno</span>
                             </div>
-                            <h4 class="field-card-title">Sucuri-Amarela (Eunectes notaeus)</h4>
-                            <p class="field-card-desc">Busca ativa noturna e contenção técnica de espécime em habitat de várzea.</p>
+                            <h4 class="field-card-title">Sucuri-verde (Nova Europa - SP)</h4>
+                            <p class="field-card-desc">Manejo e documenta&ccedil;&atilde;o de Eunectes murinus durante monitoramento noturno de herpetofauna em Nova Europa, SP.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 6. Caninana Armada -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-caninana-armada.jpg" data-caption="&lt;strong&gt;Caninana (Spilotes pullatus)&lt;/strong&gt; &mdash; Registro de comportamento defensivo (inflamento de saco gular e bote em 'S') de caninana adulta em campo florestal." data-caption-en="&lt;strong&gt;Yellow Rat Snake (Spilotes pullatus)&lt;/strong&gt; &mdash; Defensive behavior display (gular sac inflation and S-coil strike posture) of adult Spilotes pullatus in forest habitat.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-caninana-armada.jpg" data-caption="&lt;strong&gt;Caninana na Amaz&ocirc;nia (Spilotes pullatus)&lt;/strong&gt; &mdash; Registro de comportamento defensivo (inflamento de saco gular e postura em 'S') de caninana adulta em campo na Amaz&ocirc;nia." data-caption-en="&lt;strong&gt;Yellow Rat Snake (Spilotes pullatus) in the Amazon&lt;/strong&gt; &mdash; Defensive behavior display (gular sac inflation and S-coil strike posture) of adult Spilotes pullatus in the Amazonian rainforest.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-caninana-armada.jpg" alt="Caninana armada em S com Lucas Aosf">
+                            <img src="assets/field/field-caninana-armada.jpg" alt="Caninana armada na Amazonia com Lucas Aosf">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-atlantica">Mata Atlântica</span>
+                                <span class="photo-badge badge-amazonia">Bioma Amaz&ocirc;nia</span>
                                 <span class="photo-badge badge-peconhenta">Comportamento Defensivo</span>
                             </div>
-                            <h4 class="field-card-title">Caninana Armada (Spilotes pullatus)</h4>
-                            <p class="field-card-desc">Registro etológico do clássico comportamento deipnático e inflamento gular de grande colubrídeo.</p>
+                            <h4 class="field-card-title">Caninana na Amaz&ocirc;nia (Spilotes pullatus)</h4>
+                            <p class="field-card-desc">Registro etol&oacute;gico de display defensivo e inflamento gular de caninana adulta em campo na Amaz&ocirc;nia.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 7. Caninana Manejo -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-caninana-manejo.jpg" data-caption="&lt;strong&gt;Manejo Herpetológico de Colubrídeo&lt;/strong&gt; &mdash; Manejo e contenção técnica de grande exemplar de Spilotes pullatus para registro morfométrico e soltura em área de preservação." data-caption-en="&lt;strong&gt;Colubrid Handling &amp; Biometrics&lt;/strong&gt; &mdash; Safe technical restraint of large Spilotes pullatus specimen for morphometrics and release into protected habitat.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-caninana-manejo.jpg" data-caption="&lt;strong&gt;Coleta Cient&iacute;fica de Spilotes pullatus&lt;/strong&gt; &mdash; Coleta e conten&ccedil;&atilde;o de exemplar de Spilotes pullatus (caninana) para pesquisas do Laborat&oacute;rio de Ecologia do Instituto Butantan." data-caption-en="&lt;strong&gt;Scientific Sampling of Spilotes pullatus&lt;/strong&gt; &mdash; Collection and handling of Spilotes pullatus (caninana) for scientific research at the Ecology Laboratory of Instituto Butantan.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-caninana-manejo.jpg" alt="Lucas Aosf manuseando caninana">
+                            <img src="assets/field/field-caninana-manejo.jpg" alt="Lucas Aosf coletando Spilotes pullatus para o Laboratorio de Ecologia do Instituto Butantan">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-atlantica">Mata Atlântica</span>
-                                <span class="photo-badge badge-manejo">Contenção Segura</span>
+                                <span class="photo-badge badge-anilhamento">Instituto Butantan</span>
+                                <span class="photo-badge badge-manejo">Lab. de Ecologia</span>
                             </div>
-                            <h4 class="field-card-title">Contenção de Spilotes pullatus</h4>
-                            <p class="field-card-desc">Técnicas de contenção sem ferimento para triagem morfométrica e soltura monitorada.</p>
+                            <h4 class="field-card-title">Coleta de Spilotes (Instituto Butantan)</h4>
+                            <p class="field-card-desc">Coleta de Spilotes pullatus destinada a estudos cient&iacute;ficos do Laborat&oacute;rio de Ecologia do Instituto Butantan.</p>
                         </figcaption>
                     </figure>
 
                     <!-- 8. Resgate Serpente EcosBrasil -->
-                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-resgate-serpente-ecosbrasil.jpg" data-caption="&lt;strong&gt;Resgate Noturno de Serpente (Chironius)&lt;/strong&gt; &mdash; Operação de afugentamento e resgate de fauna silvestre em rodovia de acesso florestal pela EcosBrasil em Três Lagoas/MS." data-caption-en="&lt;strong&gt;Nocturnal Snake Rescue (Chironius)&lt;/strong&gt; &mdash; Wildlife flushing and road rescue operation on forestry access corridor by EcosBrasil in Três Lagoas/MS.">
+                    <figure class="field-photo-card" data-category="herpeto" data-full="assets/field/field-resgate-serpente-ecosbrasil.jpg" data-caption="&lt;strong&gt;Amostragem Noturna em Tr&ecirc;s Lagoas - MS&lt;/strong&gt; &mdash; Encontro e documenta&ccedil;&atilde;o de cobra-cip&oacute; (Chironius quadricarinatus) durante amostragem e busca ativa noturna de herpetofauna em Tr&ecirc;s Lagoas, Mato Grosso do Sul." data-caption-en="&lt;strong&gt;Nocturnal Survey in Tr&ecirc;s Lagoas, MS&lt;/strong&gt; &mdash; Encounter and documentation of a whip snake (Chironius quadricarinatus) during active nocturnal herpetofauna survey in Tr&ecirc;s Lagoas, Mato Grosso do Sul.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-resgate-serpente-ecosbrasil.jpg" alt="Lucas Aosf resgatando serpente em Três Lagoas MS">
+                            <img src="assets/field/field-resgate-serpente-ecosbrasil.jpg" alt="Lucas Aosf em amostragem noturna com Chironius quadricarinatus em Tres Lagoas MS">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-cerrado">Três Lagoas/MS</span>
-                                <span class="photo-badge badge-obra">EcosBrasil &bull; Resgate</span>
+                                <span class="photo-badge badge-cerrado">Tr&ecirc;s Lagoas &bull; MS</span>
+                                <span class="photo-badge badge-manejo">Chironius quadricarinatus</span>
                             </div>
-                            <h4 class="field-card-title">Resgate Noturno em Rodovia Florestal</h4>
-                            <p class="field-card-desc">Salvamento de serpente (Chironius) com gancho herpetológico e EPIs em complexo de celulose.</p>
+                            <h4 class="field-card-title">Amostragem Noturna (Chironius)</h4>
+                            <p class="field-card-desc">Encontro de Chironius quadricarinatus durante amostragem e busca ativa noturna em Tr&ecirc;s Lagoas/MS.</p>
                         </figcaption>
                     </figure>
 
@@ -1395,18 +1408,18 @@
                     </figure>
 
                     <!-- 16. Supervisão Supressão -->
-                    <figure class="field-photo-card" data-category="supervisao" data-full="assets/field/field-supervisao-supressao.jpg" data-caption="&lt;strong&gt;Supervisão de Supressão Vegetal &amp; ART&lt;/strong&gt; &mdash; Acompanhamento presencial de desmate/supressão vegetal com gancho herpetológico e coldre personalizado para salvamento de fauna encoberta." data-caption-en="&lt;strong&gt;Vegetation Clearing Supervision &amp; ART&lt;/strong&gt; &mdash; On-site environmental supervision during forest clearing using herpetological hook and custom tactical gear for wildlife rescue.">
+                    <figure class="field-photo-card" data-category="supervisao" data-full="assets/field/field-supervisao-supressao.jpg" data-caption="&lt;strong&gt;Salvamento e Manejo de Fauna em Campo&lt;/strong&gt; &mdash; Prospec&ccedil;&atilde;o e salvamento de fauna silvestre com gancho herpetol&oacute;gico e coldre t&aacute;tico para conten&ccedil;&atilde;o e resgate." data-caption-en="&lt;strong&gt;Wildlife Rescue &amp; Field Handling&lt;/strong&gt; &mdash; Wildlife prospecting and rescue using herpetological hook and tactical field gear.">
                         <div class="field-photo-img-wrap">
-                            <img src="assets/field/field-supervisao-supressao.jpg" alt="Lucas Aosf em supervisão de supressão vegetal">
+                            <img src="assets/field/field-supervisao-supressao.jpg" alt="Lucas Aosf em salvamento e manejo de fauna em campo">
                             <div class="field-photo-zoom-icon"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                         </div>
                         <figcaption>
                             <div class="field-card-badges">
-                                <span class="photo-badge badge-obra">Corredor de Obras</span>
-                                <span class="photo-badge badge-manejo">Resgate &bull; ART</span>
+                                <span class="photo-badge badge-manejo">Resgate de Fauna</span>
+                                <span class="photo-badge badge-anilhamento">ART &bull; CRBio</span>
                             </div>
-                            <h4 class="field-card-title">Supervisão Ambiental de Obras</h4>
-                            <p class="field-card-desc">Fiscalização in situ e salvamento de fauna silvestre durante supressão florestal em infraestrutura.</p>
+                            <h4 class="field-card-title">Salvamento e Manejo de Fauna</h4>
+                            <p class="field-card-desc">Prospec&ccedil;&atilde;o presencial e salvamento de fauna com gancho herpetol&oacute;gico e coldre t&aacute;tico.</p>
                         </figcaption>
                     </figure>
 
@@ -1707,7 +1720,7 @@
         <!-- Leaflet Map JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="brazil-states.js?v=12.1"></script>
-    <script src="script.js?v=12.5"></script>
+    <script src="script.js?v=12.6"></script>
 </body>
 
 </html>

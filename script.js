@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAvatarToggle();
     initDronePlayer();
     initDroneLightbox();
+    initFieldworkVideoPlaylist();
     initFieldworkFilters();
     initFieldMap();
 });
@@ -1125,6 +1126,44 @@ function initDroneLightbox() {
     });
 }
 
+function initFieldworkVideoPlaylist() {
+    const player = document.getElementById('fieldwork-video-player');
+    const hud = document.getElementById('fieldwork-video-hud');
+    const titleEl = document.getElementById('fieldwork-current-title');
+    const descEl = document.getElementById('fieldwork-current-desc');
+    const btns = document.querySelectorAll('.video-select-btn');
+    if (!player || !btns.length) return;
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const src = btn.getAttribute('data-src');
+            const title = btn.getAttribute('data-title');
+            const desc = btn.getAttribute('data-desc');
+            const hudText = btn.getAttribute('data-hud');
+
+            if (!player.src.endsWith(src)) {
+                player.src = src;
+                player.load();
+                player.play().catch(() => {});
+            }
+            if (titleEl) titleEl.textContent = title;
+            if (descEl) descEl.textContent = desc;
+            if (hud) hud.innerHTML = hudText;
+        });
+    });
+
+    player.addEventListener('ended', () => {
+        let currentIdx = -1;
+        btns.forEach((b, i) => { if (b.classList.contains('active')) currentIdx = i; });
+        const nextIdx = (currentIdx + 1) % btns.length;
+        if (btns[nextIdx]) {
+            btns[nextIdx].click();
+        }
+    });
+}
+
 function initFieldworkFilters() {
     const filterBtns = document.querySelectorAll('.field-filter-btn');
     const cards = document.querySelectorAll('.field-photo-card');
@@ -1506,7 +1545,7 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         fw_filter_all: "All Records",
         fw_filter_herpeto: "Herpetology & Handling",
         fw_filter_ornito: "Ornithology & Mammals",
-        fw_filter_supervisao: "Supervision & Works",
+        fw_filter_supervisao: "Handling & Methods",
         fw_filter_expedicoes: "Expeditions & Biomes",
         header_experience: "Professional Experience & Environmental Management",
         intro_experience: "Technical responsibility (RT) and specialized environmental consulting for major infrastructure across Brazil.",

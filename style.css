@@ -3854,8 +3854,8 @@ section.fieldwork-section {
 .fieldwork-video-player {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    object-fit: contain;
+    background: #000;
 }
 
 .fieldwork-video-badge {
@@ -4216,4 +4216,58 @@ section.fieldwork-section {
     .field-photo-img-wrap {
         min-height: 180px !important;
     }
+}
+
+/* Fieldwork Video Playlist Selector */
+.fieldwork-video-selector {
+    margin-bottom: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.video-selector-label {
+    font-family: var(--font-terminal);
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.video-selector-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.video-select-btn {
+    background: rgba(16, 42, 30, 0.75);
+    border: 1px solid rgba(78, 204, 163, 0.28);
+    color: var(--text-muted);
+    padding: 0.38rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.video-select-btn:hover {
+    border-color: var(--neon-green);
+    color: #fff;
+    background: rgba(78, 204, 163, 0.16);
+}
+
+.video-select-btn.active {
+    background: linear-gradient(135deg, rgba(78, 204, 163, 0.32) 0%, rgba(16, 42, 30, 0.95) 100%);
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 0 12px rgba(78, 204, 163, 0.3);
 }
