@@ -1835,67 +1835,179 @@ h2 {
     width: 100%;
 }
 
-/* WhatsApp CTA Button below Signature */
-.whatsapp-cta-wrap {
+/* ==========================================================================
+   CONTACT CONNECT CARD (Signature & Social Widget)
+   ========================================================================== */
+.contact-connect-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1.5rem;
+    text-align: center;
+    margin-top: 1.85rem;
+    width: 100%;
+    max-width: 580px;
+    background: linear-gradient(145deg, rgba(16, 42, 30, 0.78) 0%, rgba(9, 25, 18, 0.9) 100%);
+    border: 1px solid rgba(78, 204, 163, 0.28);
+    border-radius: 22px;
+    padding: 2.1rem 1.8rem 2rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-sizing: border-box;
+}
+
+.contact-card-sub {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-terminal);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--bio-gold, #dfb76c);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.35rem;
+}
+
+.contact-card-sub i {
+    font-size: 0.82rem;
+    color: var(--bio-gold, #dfb76c);
+}
+
+.contact-card-title {
+    font-family: var(--font-serif);
+    font-size: 1.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0.25rem 0 0.55rem;
+    letter-spacing: 0.5px;
+    line-height: 1.25;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.contact-card-divider {
+    width: 44px;
+    height: 3px;
+    background: linear-gradient(90deg, #dfb76c, #00ff88);
+    border-radius: 2px;
+    margin: 0.4rem auto 1.1rem;
+}
+
+.contact-card-desc {
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    color: rgba(235, 245, 239, 0.88);
+    line-height: 1.65;
+    max-width: 460px;
+    margin: 0 auto 1.55rem;
+    font-weight: 400;
+}
+
+.contact-icons-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.95rem;
     width: 100%;
 }
 
-.btn-whatsapp-direct {
+.contact-icons-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.15rem;
+    flex-wrap: wrap;
+}
+
+.contact-circle-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
-    color: #ffffff !important;
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    font-weight: 700;
-    padding: 0.85rem 1.85rem;
-    border-radius: 50px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: #F4EEDD;
+    color: #0b2e1b;
+    border: 2px solid rgba(197, 155, 39, 0.4);
+    font-size: 1.4rem;
     text-decoration: none;
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35), 0 0 12px rgba(37, 211, 102, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.35);
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
-    overflow: hidden;
+    cursor: pointer;
 }
 
-.btn-whatsapp-direct:hover {
-    background: linear-gradient(135deg, #2bf074 0%, #20b85a 100%);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.5), 0 0 20px rgba(37, 211, 102, 0.35);
-    color: #ffffff !important;
+.contact-circle-btn i {
+    transition: transform 0.25s ease;
 }
 
-.btn-whatsapp-direct:active {
-    transform: translateY(-1px) scale(0.99);
+.contact-circle-btn:hover {
+    transform: translateY(-4px) scale(1.08);
 }
 
-.btn-whatsapp-direct .whatsapp-icon {
-    font-size: 1.45rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+.contact-circle-btn:hover i {
+    transform: scale(1.1);
 }
 
-.btn-whatsapp-direct .whatsapp-btn-number {
-    font-family: var(--font-terminal);
-    font-size: 0.85rem;
-    font-weight: 500;
-    opacity: 0.92;
-    padding-left: 0.35rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.35);
+.contact-circle-btn:active {
+    transform: translateY(-1px) scale(1.02);
 }
 
-.whatsapp-cta-sub {
-    font-family: var(--font-terminal);
-    font-size: 0.76rem;
-    color: var(--text-dim);
-    margin-top: 0.65rem;
-    text-align: center;
-    letter-spacing: 0.3px;
+/* Individual Brand Glow States on Hover */
+.contact-circle-btn.whatsapp:hover {
+    background: #25D366;
+    color: #ffffff;
+    border-color: #25D366;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.55), 0 0 16px rgba(37, 211, 102, 0.35);
+}
+
+.contact-circle-btn.linkedin:hover {
+    background: #0077B5;
+    color: #ffffff;
+    border-color: #0077B5;
+    box-shadow: 0 8px 24px rgba(0, 119, 181, 0.55), 0 0 16px rgba(0, 119, 181, 0.35);
+}
+
+.contact-circle-btn.instagram:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    color: #ffffff;
+    border-color: #fd5949;
+    box-shadow: 0 8px 24px rgba(214, 36, 159, 0.55), 0 0 16px rgba(253, 89, 73, 0.35);
+}
+
+.contact-circle-btn.lattes:hover {
+    background: #005696;
+    color: #ffffff;
+    border-color: #005696;
+    box-shadow: 0 8px 24px rgba(0, 86, 150, 0.55), 0 0 16px rgba(0, 86, 150, 0.35);
+}
+
+.contact-circle-btn.email:hover {
+    background: #dfb76c;
+    color: #072015;
+    border-color: #dfb76c;
+    box-shadow: 0 8px 24px rgba(223, 183, 108, 0.55), 0 0 16px rgba(223, 183, 108, 0.35);
+}
+
+@media (max-width: 480px) {
+    .contact-connect-card {
+        padding: 1.75rem 1.15rem 1.65rem;
+    }
+    .contact-card-title {
+        font-size: 1.65rem;
+    }
+    .contact-card-desc {
+        font-size: 0.88rem;
+    }
+    .contact-icons-row {
+        gap: 0.85rem;
+    }
+    .contact-circle-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
 }
 
 .signature-img {
