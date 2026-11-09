@@ -1,4 +1,4 @@
-/**
+﻿/**
  * BIOKURI // PORTFÓLIO DE LUCAS AØSF
  * Biólogo · Gestor Ambiental · Taxonomista & Especialista em Anfíbios Anuros
  * Ecologia Computacional, Automação & Programação
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAvatarToggle();
     initDronePlayer();
     initDroneLightbox();
+    initFieldworkFilters();
     initFieldMap();
 });
 
@@ -1079,7 +1080,7 @@ function initDronePlayer() {
 
 
 function initDroneLightbox() {
-    const cards = document.querySelectorAll('.drone-photo-card');
+    const cards = document.querySelectorAll('.drone-photo-card, .field-photo-card');
     const modal = document.getElementById('drone-lightbox-modal');
     const modalImg = document.getElementById('drone-lightbox-img');
     const modalCap = document.getElementById('drone-lightbox-caption');
@@ -1090,12 +1091,42 @@ function initDroneLightbox() {
     cards.forEach(card => {
         card.addEventListener('click', () => {
             const fullSrc = card.getAttribute('data-full');
-            const caption = card.getAttribute('data-caption');
+            const isEn = document.documentElement.lang && document.documentElement.lang.startsWith('en');
+            const captionEn = card.getAttribute('data-caption-en');
+            const captionPt = card.getAttribute('data-caption');
+            const caption = (isEn && captionEn) ? captionEn : captionPt;
+
             if (fullSrc) {
                 modalImg.src = fullSrc;
                 if (modalCap) modalCap.innerHTML = caption || '';
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
+            }
+        });
+    });
+}
+
+function initFieldworkFilters() {
+    const filterBtns = document.querySelectorAll('.field-filter-btn');
+    const cards = document.querySelectorAll('.field-photo-card');
+    if (!filterBtns.length || !cards.length) return;
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.getAttribute('data-filter');
+            cards.forEach(card => {
+                const cat = card.getAttribute('data-category');
+                if (filter === 'all' || cat === filter) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            if (typeof playBioBeep === 'function') {
+                playBioBeep(520, 0.03);
             }
         });
     });
@@ -1331,6 +1362,20 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
         abstract_atrox_combat: "Investigação pioneira sobre locomoção copulatória bimodal, mecânica reprodutiva e combate ritualizado macho-macho na jararaca-do-norte, correlacionando o dimorfismo sexual de tamanho ao conflito sexual em viperídeos neotropicais.",
         abstract_cop30: "Estudo ecológico e microclimático demonstrando que a recomposição florestal reduziu a temperatura de superfície e promoveu a recuperação da comunidade de aves (de 42 para 131 espécies) no Vale do Paraíba.",
         abstract_guia: "Contribuição fotográfica integral e identificação taxonômica da herpetofauna: fotografias de alta resolução de anfíbios e répteis que compõem quase todo o acervo do guia oficial do ICMBio.",
+        header_fieldwork: "AtuaÃ§Ã£o em Campo & Registros de Trabalho",
+        intro_fieldwork: "Registros fotogrÃ¡ficos e audiovisuais de Lucas AÃ¸sf em operaÃ§Ãµes tÃ©cnicas: manejo e contenÃ§Ã£o fÃ­sica de fauna silvestre, anilhamento cientÃ­fico de aves, quiropterologia, supervisÃ£o ambiental em obras de infraestrutura e expediÃ§Ãµes remotas pelos biomas brasileiros.",
+        badge_fieldwork_live: "<i class=\"fa-solid fa-camera\"></i> REGISTROS REAIS",
+        pill_fieldwork: "AtuaÃ§Ã£o em Campo",
+        field_video_hud: "OPERAÃ‡ÃƒO EM CAMPO // BIOKURI",
+        field_video_title: "Registro Audiovisual de OperaÃ§Ã£o TÃ©cnica em Campo",
+        field_video_desc: "DocumentaÃ§Ã£o em vÃ­deo de operaÃ§Ãµes tÃ©cnicas de amostragem, monitoramento e manejo de fauna silvestre em campo. Registro de procedimentos prÃ¡ticos de resgate, avaliaÃ§Ã£o comportamental e fiscalizaÃ§Ã£o ambiental em Ã¡reas de influÃªncia direta de empreendimentos.",
+        field_gallery_tag: "Galeria FotogrÃ¡fica de OperaÃ§Ãµes &bull; 22 Registros TÃ©cnicos",
+        field_gallery_hint: "Clique em qualquer foto para ampliar em alta resoluÃ§Ã£o",
+        fw_filter_all: "Todos os Registros",
+        fw_filter_herpeto: "Herpetofauna & Manejo",
+        fw_filter_ornito: "Ornitologia & Masto",
+        fw_filter_supervisao: "SupervisÃ£o & Obras",
+        fw_filter_expedicoes: "ExpediÃ§Ãµes & Biomas",
         header_experience: "Experiência Profissional & Gestão Ambiental",
         intro_experience: "Responsabilidade técnica e consultoria especializada em infraestrutura de grande porte e gestão ambiental em todo o Brasil.",
         exp_caruso: "Responsável pela execução das atividades de campo em monitoramento ambiental (fauna, ruído ambiental e qualidade da água), planejamento de campanhas, aplicação metodológica, inventários, fichas de campo e apoio a relatórios técnicos.",
@@ -1446,6 +1491,20 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         abstract_atrox_combat: "Pioneering investigation on bimodal copulatory locomotion, reproductive mechanics, and ritualized male-male combat in the Amazonian lancehead, linking sexual size dimorphism to sexual conflict in Neotropical pitvipers.",
         abstract_cop30: "Ecological and microclimatic study demonstrating that forest restoration reduced land surface temperature and drove bird community recovery (from 42 to 131 species) in the Paraíba Valley.",
         abstract_guia: "Comprehensive photographic contribution and taxonomic identification: high-resolution imagery of amphibians and reptiles composing nearly the entire herpetofauna section of the official ICMBio guide.",
+        header_fieldwork: "Technical Fieldwork & Operations",
+        intro_fieldwork: "Photographic and audiovisual records of Lucas AÃ¸sf during technical fieldwork: handling and physical restraint of wildlife, scientific bird banding, chiropterology, environmental supervision in major infrastructure works, and remote expeditions across Brazilian biomes.",
+        badge_fieldwork_live: "<i class=\"fa-solid fa-camera\"></i> REAL FIELD RECORDS",
+        pill_fieldwork: "Field Operations",
+        field_video_hud: "FIELD OPERATION // BIOKURI",
+        field_video_title: "Field Operation Video Footage",
+        field_video_desc: "Video documentation of technical field sampling, monitoring, and wildlife handling operations. Practical records of rescue procedures, behavioral assessment, and environmental inspection across direct project impact areas.",
+        field_gallery_tag: "Field Operations Photographic Gallery &bull; 22 Technical Records",
+        field_gallery_hint: "Click any photo to view in high resolution",
+        fw_filter_all: "All Records",
+        fw_filter_herpeto: "Herpetology & Handling",
+        fw_filter_ornito: "Ornithology & Mammals",
+        fw_filter_supervisao: "Supervision & Works",
+        fw_filter_expedicoes: "Expeditions & Biomes",
         header_experience: "Professional Experience & Environmental Management",
         intro_experience: "Technical responsibility (RT) and specialized environmental consulting for major infrastructure across Brazil.",
         trust_partners_label: "Global Consultancies & Premier Clients",
