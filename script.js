@@ -1,4 +1,4 @@
-/**
+﻿/**
  * BIOKURI // PORTFÓLIO DE LUCAS AØSF
  * Biólogo · Gestor Ambiental · Taxonomista & Especialista em Anfíbios Anuros
  * Ecologia Computacional, Automação & Programação
@@ -1242,16 +1242,18 @@ function initScrollReveal() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.12
+        threshold: 0.01,
+        rootMargin: '60px 0px 60px 0px'
     });
 
     fadeElements.forEach(el => {
         observer.observe(el);
         const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight) {
+        if (rect.top < window.innerHeight + 150) {
             el.classList.add('visible');
         }
     });

@@ -2099,6 +2099,14 @@ h2 {
     transform: translateY(0);
 }
 
+@media (max-width: 768px) {
+    .fade-in {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
 /* ==========================================================================
    AVATAR MODE TOGGLE & SAGE SHOWCASE (ANIME & AI ART)
    ========================================================================== */
@@ -4147,8 +4155,43 @@ section.fieldwork-section {
 
 @media (max-width: 650px) {
     .field-photo-grid {
-        grid-template-columns: 1fr;
-        gap: 0.85rem;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.65rem !important;
+    }
+    
+    .field-photo-card {
+        border-radius: var(--radius-sm) !important;
+    }
+    
+    .field-photo-img-wrap {
+        height: auto !important;
+        min-height: 115px !important;
+        aspect-ratio: 4 / 3 !important;
+    }
+    
+    .field-photo-card figcaption {
+        padding: 0.55rem 0.6rem !important;
+    }
+    
+    .field-card-title {
+        font-size: 0.88rem !important;
+        line-height: 1.25 !important;
+    }
+    
+    .field-card-desc {
+        font-size: 0.72rem !important;
+        -webkit-line-clamp: 2 !important;
+        line-height: 1.35 !important;
+    }
+    
+    .field-card-badges {
+        gap: 0.25rem !important;
+        margin-bottom: 0.15rem !important;
+    }
+    
+    .photo-badge {
+        font-size: 0.55rem !important;
+        padding: 0.1rem 0.32rem !important;
     }
     
     .field-filter-bar {
@@ -4162,5 +4205,15 @@ section.fieldwork-section {
         flex-shrink: 0;
         font-size: 0.74rem;
         padding: 0.35rem 0.7rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .field-photo-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+    }
+    .field-photo-img-wrap {
+        min-height: 180px !important;
     }
 }
