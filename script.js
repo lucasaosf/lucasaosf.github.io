@@ -1812,10 +1812,6 @@ function initFieldMap() {
               '<div class="live-radar-ping"></div>' +
               '<div class="live-radar-ping ping-delay"></div>' +
               '<div class="live-radar-dot"><i class="fa-solid fa-satellite-dish"></i></div>' +
-              '<div class="live-marker-floating-tag">' +
-              '<span class="live-marker-beacon"></span>' +
-              '<span class="live-marker-text" id="live-floating-tag-text">ATUALMENTE: ' + currentLoc.city.toUpperCase() + ' - ' + currentLoc.state + '</span>' +
-              '</div>' +
               '</div>',
         iconSize: [38, 38],
         iconAnchor: [19, 19]
@@ -1837,13 +1833,13 @@ function initFieldMap() {
 
     liveMarker.bindTooltip(liveTooltipHtml, {
         direction: 'top',
-        offset: [0, -30],
+        offset: [0, -18],
         className: 'bio-simple-tooltip live-radar-tooltip',
         opacity: 0.98
     });
 
     liveMarker.bindPopup(liveTooltipHtml, {
-        offset: [0, -26],
+        offset: [0, -16],
         className: 'bio-simple-tooltip live-radar-tooltip'
     });
 
@@ -1880,10 +1876,6 @@ function initFieldMap() {
                 const txtEl = document.getElementById('map-current-loc-text');
                 if (txtEl && data.city) {
                     txtEl.innerHTML = data.city + ' &bull; ' + (data.state || '');
-                }
-                const floatingTextEl = document.getElementById('live-floating-tag-text');
-                if (floatingTextEl && data.city) {
-                    floatingTextEl.textContent = 'ATUALMENTE: ' + data.city.toUpperCase() + (data.state ? ' - ' + data.state.toUpperCase() : '');
                 }
             }
         })

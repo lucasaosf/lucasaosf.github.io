@@ -4349,61 +4349,6 @@ section.fieldwork-section {
     color: #041209;
 }
 
-/* Permanent Floating Badge over Marker - visible on Mobile & Desktop without click/hover */
-.live-marker-floating-tag {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    background: rgba(4, 18, 9, 0.95);
-    border: 1.5px solid #00ff88;
-    color: #ffffff;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 255, 136, 0.5), 0 2px 6px rgba(0, 0, 0, 0.8);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    pointer-events: auto;
-    z-index: 10000;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.live-marker-floating-tag::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 5px solid transparent;
-    border-top-color: #00ff88;
-}
-
-.live-marker-floating-tag:hover {
-    transform: translateX(-50%) translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 255, 136, 0.75);
-}
-
-.live-marker-beacon {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #00ff88;
-    box-shadow: 0 0 8px #00ff88;
-    animation: blinkRec 1.2s infinite ease-in-out;
-    flex-shrink: 0;
-}
-
-.live-marker-text {
-    letter-spacing: 0.6px;
-    color: #e6fffa;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-}
-
 @keyframes liveRadarPulse {
     0% {
         transform: scale(0.3);
@@ -4439,6 +4384,12 @@ section.fieldwork-section {
     border-color: #00ff88;
     box-shadow: 0 4px 16px rgba(0, 255, 136, 0.35);
     outline: none;
+}
+
+.live-radar-kpi-icon {
+    color: var(--bio-emerald);
+    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.65));
+    animation: liveDotGlow 1.8s infinite alternate;
 }
 
 .live-pulse-dot {
