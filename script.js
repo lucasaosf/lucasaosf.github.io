@@ -1668,15 +1668,18 @@ function initFieldMap() {
     const mapContainer = document.getElementById('brazil-expedition-map');
     if (!mapContainer || typeof L === 'undefined') return;
 
-    // Centro geografico do Brasil com visao panoramica
-    const brazilCenter = [-14.8, -52.2];
-    const initialZoom = window.innerWidth < 768 ? 3.8 : 4.4;
+    // Centro geografico ajustado para celular para incluir Ourinhos/SP e todo o Brasil no enquadramento
+    const isMobile = window.innerWidth < 768;
+    const brazilCenter = isMobile ? [-16.5, -49.5] : [-14.8, -52.2];
+    const initialZoom = isMobile ? 3.6 : 4.4;
 
     // Inicializacao do mapa Leaflet com visao fixa de Satelite em Alta Resolucao
     const map = L.map('brazil-expedition-map', {
         center: brazilCenter,
         zoom: initialZoom,
-        minZoom: 3.5,
+        zoomSnap: 0.1,
+        zoomDelta: 0.5,
+        minZoom: 3.2,
         maxZoom: 18,
         scrollWheelZoom: false,
         attributionControl: false
@@ -1794,21 +1797,25 @@ function initFieldMap() {
 
         markersLayer.addLayer(marker);
     });
-    // 6. Marcador Especial: Localizacao Atual de Lucas Aosf (Radar Pulsante)
+    // 6. Marcador Especial: Localizacao Atual de Lucas Aosf (Radar Pulsante com Tag Flutuante)
     const currentLoc = {
         city: 'Ourinhos',
         state: 'SP',
         coords: [-22.9794, -49.8706],
-        status: 'Localizacao Atual \u2022 Em Operacao',
-        desc: 'Base Operacional / Atuacao em Campo de Lucas A\u00f8sf'
+        status: 'Localização Atual \u2022 Em Operação',
+        desc: 'Base Operacional / Atuação em Campo de Lucas A\u00f8sf'
     };
 
     const radarIcon = L.divIcon({
         className: 'custom-live-radar-icon',
-        html: '<div class="live-radar-container" title="Localizacao Atual: ' + currentLoc.city + ' - ' + currentLoc.state + '">' +
+        html: '<div class="live-radar-container" title="Localização Atual: ' + currentLoc.city + ' - ' + currentLoc.state + '">' +
               '<div class="live-radar-ping"></div>' +
               '<div class="live-radar-ping ping-delay"></div>' +
-              '<div class="live-radar-dot"><i class="fa-solid fa-crosshairs"></i></div>' +
+              '<div class="live-radar-dot"><i class="fa-solid fa-satellite-dish"></i></div>' +
+              '<div class="live-marker-floating-tag">' +
+              '<span class="live-marker-beacon"></span>' +
+              '<span class="live-marker-text" id="live-floating-tag-text">ATUALMENTE: ' + currentLoc.city.toUpperCase() + ' - ' + currentLoc.state + '</span>' +
+              '</div>' +
               '</div>',
         iconSize: [38, 38],
         iconAnchor: [19, 19]
@@ -1830,27 +1837,36 @@ function initFieldMap() {
 
     liveMarker.bindTooltip(liveTooltipHtml, {
         direction: 'top',
-        offset: [0, -14],
+        offset: [0, -30],
         className: 'bio-simple-tooltip live-radar-tooltip',
         opacity: 0.98
     });
 
-    // Ao clicar no badge da barra de metricas, da flyTo suave para a localizacao atual
+    liveMarker.bindPopup(liveTooltipHtml, {
+        offset: [0, -26],
+        className: 'bio-simple-tooltip live-radar-tooltip'
+    });
+
+    // Ao clicar no badge da barra de metricas ou no marcador, da flyTo suave para a localizacao atual
     const btnFly = document.getElementById('btn-fly-current-loc');
+    const flyToCurrent = () => {
+        map.flyTo(currentLoc.coords, 9, { duration: 1.2 });
+        setTimeout(() => {
+            liveMarker.openPopup();
+        }, 600);
+    };
+
     if (btnFly) {
-        btnFly.addEventListener('click', () => {
-            map.flyTo(currentLoc.coords, 10, { duration: 1.4 });
-            liveMarker.openTooltip();
-        });
+        btnFly.addEventListener('click', flyToCurrent);
         btnFly.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
-                map.flyTo(currentLoc.coords, 10, { duration: 1.4 });
-                liveMarker.openTooltip();
+                e.preventDefault();
+                flyToCurrent();
             }
         });
     }
 
-    // Carrega dados dinÃ¢micos de data/current-location.json (preparado para integracao Google Calendar)
+    // Carrega dados dinâmicos de data/current-location.json (preparado para integracao Google Calendar)
     fetch('data/current-location.json?v=' + Date.now())
         .then(res => res.json())
         .then(data => {
@@ -1864,6 +1880,10 @@ function initFieldMap() {
                 const txtEl = document.getElementById('map-current-loc-text');
                 if (txtEl && data.city) {
                     txtEl.innerHTML = data.city + ' &bull; ' + (data.state || '');
+                }
+                const floatingTextEl = document.getElementById('live-floating-tag-text');
+                if (floatingTextEl && data.city) {
+                    floatingTextEl.textContent = 'ATUALMENTE: ' + data.city.toUpperCase() + (data.state ? ' - ' + data.state.toUpperCase() : '');
                 }
             }
         })
