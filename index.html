@@ -35,7 +35,7 @@
     <!-- Top Utility Bar: Language & Audio Ambient Toggle -->
     <header class="top-nav-bar">
         <a href="#" class="brand-mini" aria-label="Biokuri &mdash; Pesquisa e Solu&ccedil;&otilde;es Ambientais">
-            <img src="assets/logo-biokuri-horizontal.png?v=9.2" alt="Biokuri &mdash; Pesquisa e Solu&ccedil;&otilde;es Ambientais" class="nav-brand-logo">
+            <img src="assets/logo-biokuri-horizontal.png?v=13.2" alt="Biokuri &mdash; Pesquisa e Solu&ccedil;&otilde;es Ambientais" class="nav-brand-logo">
         </a>
         <div class="nav-actions">
             <button id="sound-toggle" class="nav-btn" title="Efeitos Sonoros (Vocalizações & Sons)">
@@ -132,6 +132,7 @@
                             <span class="pill highlight-pill"><i class="fa-solid fa-laptop-code"></i> RStudio &bull; Python &bull; JavaScript &bull; Java &bull; HTML</span>
                             <span class="pill"><i class="fa-solid fa-tree-city"></i> Gestor Ambiental (Especialista UNOPAR)</span>
                             <span class="pill"><i class="fa-solid fa-id-card"></i> CRBio-01 Ativo (127233/01-D)</span>
+                            <span class="pill"><i class="fa-solid fa-shield-halved"></i> CTF IBAMA n&ordm; 7723874</span>
                             <span class="pill"><i class="fa-solid fa-camera"></i> Fot&oacute;grafo de Natureza (10+ anos)</span>
                         </div>
 
@@ -1099,40 +1100,31 @@
             </div>
             <p class="section-intro" data-i18n="intro_fieldwork">Registros fotogr&aacute;ficos e audiovisuais de Lucas A&oslash;sf em opera&ccedil;&otilde;es t&eacute;cnicas: manejo e conten&ccedil;&atilde;o f&iacute;sica de fauna silvestre, anilhamento cient&iacute;fico de aves, quiropterologia e expedi&ccedil;&otilde;es remotas pelos biomas brasileiros.</p>
 
-            <!-- Video Spotlight de Operacao Tecnica em Campo (Multi-Video Showreel) -->
+            <!-- Video Spotlight de Operacao Tecnica em Campo (Showreel Montage) -->
             <div class="fieldwork-video-container">
                 <div class="fieldwork-video-player-wrap">
-                    <video id="fieldwork-video-player" playsinline muted loop controls preload="metadata" poster="assets/field/field-bothrops-bilineatus.jpg" class="fieldwork-video-player" src="assets/field/field-video-1.mp4">
-                        <source src="assets/field/field-video-1.mp4" type="video/mp4" id="fieldwork-video-source">
+                    <video id="fieldwork-video-player" playsinline muted loop controls preload="metadata" poster="assets/field/field-bothrops-bilineatus.jpg" class="fieldwork-video-player" src="assets/field/field-showreel.mp4?v=13.2">
+                        <source src="assets/field/field-showreel.mp4?v=13.2" type="video/mp4" id="fieldwork-video-source">
                         Seu navegador n&atilde;o suporta v&iacute;deos HTML5.
                     </video>
                     <div class="fieldwork-video-badge">
-                        <span class="rec-dot"></span> <span id="fieldwork-video-hud" data-i18n="field_video_hud">V&Iacute;DEO 1 // OPERA&Ccedil;&Atilde;O EM CAMPO</span>
+                        <span class="rec-dot"></span> <span id="fieldwork-video-hud" data-i18n="field_video_hud">SHOWREEL // OPERA&Ccedil;&Otilde;ES EM CAMPO</span>
                     </div>
                 </div>
                 <div class="fieldwork-video-info">
-                    <div class="fieldwork-video-selector">
-                        <span class="video-selector-label"><i class="fa-solid fa-clapperboard"></i> <span data-i18n="video_playlist_title">Registros em V&iacute;deo de Lucas A&oslash;sf:</span></span>
-                        <div class="video-selector-buttons">
-                            <button class="video-select-btn active" data-src="assets/field/field-video-1.mp4" data-index="0" data-title="Operacao e Amostragem Tecnica em Campo" data-desc="Registro em video de rotinas e procedimentos tecnicos de amostragem, manejo e prospeccao de campo." data-hud="V&Iacute;DEO 1 // OPERA&Ccedil;&Atilde;O EM CAMPO">
-                                <i class="fa-solid fa-play"></i> V&iacute;deo 1 (0:14)
-                            </button>
-                            <button class="video-select-btn" data-src="assets/field/field-video-2.mp4" data-index="1" data-title="Procedimento e Manejo de Fauna em Campo" data-desc="Documentacao tecnica de campo acompanhando procedimentos praticos de manejo de fauna silvestre." data-hud="V&Iacute;DEO 2 // MANEJO EM CAMPO">
-                                <i class="fa-solid fa-play"></i> V&iacute;deo 2 (0:46)
-                            </button>
-                            <button class="video-select-btn" data-src="assets/field/field-video-3.mp4" data-index="2" data-title="Percurso e Prospeccao Ambiental de Campo" data-desc="Documentacao de percurso e amostragem ativa de biodiversidade em areas florestais e riparias." data-hud="V&Iacute;DEO 3 // PROSPEC&Ccedil;&Atilde;O">
-                                <i class="fa-solid fa-play"></i> V&iacute;deo 3 (1:43)
-                            </button>
-                        </div>
+                    <div class="fieldwork-showreel-badge">
+                        <span class="showreel-chip"><i class="fa-solid fa-film neon-green-icon"></i> <span data-i18n="video_showreel_chip">Montagem Audiovisual Unificada &bull; 1:00</span></span>
                     </div>
                     <div class="fieldwork-video-title">
-                        <i class="fa-solid fa-circle-play neon-green-icon"></i> <span id="fieldwork-current-title" data-i18n="field_video_title">Opera&ccedil;&atilde;o e Amostragem T&eacute;cnica em Campo</span>
+                        <i class="fa-solid fa-circle-play neon-green-icon"></i> <span id="fieldwork-current-title" data-i18n="field_video_title">Opera&ccedil;&otilde;es &amp; Expedi&ccedil;&otilde;es T&eacute;cnicas em Campo</span>
                     </div>
-                    <p class="fieldwork-video-desc" id="fieldwork-current-desc" data-i18n="field_video_desc">Registro em video de rotinas e procedimentos tecnicos de amostragem, manejo e prospeccao de campo.</p>
+                    <p class="fieldwork-video-desc" id="fieldwork-current-desc" data-i18n="field_video_desc">Montagem t&eacute;cnica cont&iacute;nua reunindo navega&ccedil;&atilde;o fluvial remota, busca ativa e monitoramento herpetol&oacute;gico em floresta tropical densa e amostragem ecol&oacute;gica de fauna silvestre.</p>
                     <div class="fieldwork-video-tags" id="fieldwork-current-tags">
                         <span class="photo-badge badge-manejo"><i class="fa-solid fa-staff-snake"></i> Manejo de Fauna</span>
-                        <span class="photo-badge badge-atlantica"><i class="fa-solid fa-tree"></i> Biodiversidade</span>
-                        <span class="photo-badge badge-anilhamento"><i class="fa-solid fa-certificate"></i> ART &bull; CRBio</span>
+                        <span class="photo-badge badge-atlantica"><i class="fa-solid fa-tree"></i> Biodiversidade &amp; Biomas</span>
+                        <span class="photo-badge badge-anilhamento"><i class="fa-solid fa-compass"></i> Expedi&ccedil;&otilde;es Fluviais</span>
+                        <span class="photo-badge badge-manejo"><i class="fa-solid fa-certificate"></i> ART &bull; CRBio-01</span>
+                        <span class="photo-badge badge-atlantica"><i class="fa-solid fa-shield-halved"></i> CTF IBAMA n&ordm; 7723874</span>
                     </div>
                 </div>
             </div>
@@ -1532,6 +1524,16 @@
                         <h4>Registro Profissional CRBio-01 nº 127233/01-D</h4>
                         <p data-i18n="cert_crbio_desc">Biólogo registrado e devidamente habilitado para assunção de Anotações de Responsabilidade Técnica (ART) e laudos de fauna em âmbito nacional.</p>
                         <span class="cert-status completed" data-i18n="status_active">Ativo &amp; Regular</span>
+                    </div>
+                </div>
+
+                <div class="cert-card">
+                    <div class="cert-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="cert-details">
+                        <span class="cert-issuer">IBAMA &bull; Minist&eacute;rio do Meio Ambiente e Mudan&ccedil;a do Clima</span>
+                        <h4>Cadastro T&eacute;cnico Federal (CTF/AIDA &amp; CTF/APP) n&ordm; 7723874</h4>
+                        <p data-i18n="cert_ctf_desc">Inscri&ccedil;&atilde;o federal regularizada para Atividades de Defesa Ambiental (Estudo de Seres Vivos, Invent&aacute;rio de Biodiversidade, Consultoria/Assessoria Biol&oacute;gica &mdash; CBO 2211-05) e Atividades Potencialmente Poluidoras (Manejo de Esp&eacute;cies Ex&oacute;ticas Invasoras &mdash; CONABIO n&ordm; 7/2018). Certificado de Regularidade ativo com autentica&ccedil;&atilde;o digital oficial.</p>
+                        <span class="cert-status completed" data-i18n="status_active"><i class="fa-solid fa-circle-check"></i> Regular &amp; Ativo</span>
                     </div>
                 </div>
 

@@ -128,7 +128,7 @@ body {
 }
 
 .nav-brand-logo {
-    height: 38px;
+    height: 44px;
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.45));
@@ -2793,7 +2793,7 @@ h2 {
     }
 
     .nav-brand-logo {
-        height: 32px;
+        height: 36px;
     }
 
     .nav-brand-text {
@@ -3197,7 +3197,7 @@ h2 {
     }
 
     .nav-brand-logo {
-        height: 26px;
+        height: 30px;
     }
 
     .nav-brand-text {
@@ -4271,4 +4271,25 @@ section.fieldwork-section {
     border-color: var(--neon-green);
     color: var(--neon-green);
     box-shadow: 0 0 12px rgba(78, 204, 163, 0.3);
+}
+
+
+/* Fieldwork Video Showreel Chip */
+.fieldwork-showreel-badge {
+    margin-bottom: 0.35rem;
+}
+.showreel-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.75rem;
+    background: rgba(78, 204, 163, 0.12);
+    border: 1px solid rgba(78, 204, 163, 0.35);
+    border-radius: 999px;
+    font-family: var(--font-terminal);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--bio-emerald);
+    text-transform: uppercase;
 }
