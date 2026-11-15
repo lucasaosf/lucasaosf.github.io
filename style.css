@@ -1111,6 +1111,10 @@ h2 {
     object-position: center 25%;
 }
 
+.project-card img[src*="robson"] {
+    object-position: center 32%;
+}
+
 .project-card:hover .project-img-wrapper img {
     transform: scale(1.08);
 }
