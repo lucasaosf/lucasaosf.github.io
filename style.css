@@ -1226,6 +1226,13 @@ h2 {
     border: 1px solid var(--bio-blue);
 }
 
+.badge-status.experiment,
+.badge-status.test {
+    background: rgba(186, 104, 200, 0.18);
+    color: #d8a4e8;
+    border: 1px solid rgba(186, 104, 200, 0.6);
+}
+
 .project-info h3 {
     font-family: var(--font-serif);
     font-size: 1.45rem;
