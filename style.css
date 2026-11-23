@@ -4417,3 +4417,232 @@ section.fieldwork-section {
     border-color: #00ff88 !important;
     box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4) !important;
 }
+/* ==========================================================================
+   ATTENTION-GRABBING CTA & BIO-SCANNER UNLOCK ENHANCEMENTS
+   ========================================================================== */
+
+/* Bio Scan CTA Pill */
+.bio-scan-cta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: rgba(56, 229, 77, 0.12);
+    border: 1.5px solid var(--bio-green);
+    color: var(--bio-green);
+    font-family: var(--font-terminal);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 0.45rem 1.25rem;
+    border-radius: 50px;
+    margin-bottom: 0.95rem;
+    box-shadow: 0 0 18px rgba(56, 229, 77, 0.35);
+    animation: ctaPillPulse 2.2s infinite ease-in-out;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--transition);
+}
+
+.bio-scan-cta-pill:hover {
+    background: rgba(56, 229, 77, 0.22);
+    box-shadow: 0 0 28px rgba(56, 229, 77, 0.6);
+    transform: translateY(-2px);
+}
+
+@keyframes ctaPillPulse {
+    0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 14px rgba(56, 229, 77, 0.3);
+    }
+    50% {
+        transform: translateY(-4px);
+        box-shadow: 0 0 28px rgba(56, 229, 77, 0.65);
+    }
+}
+
+.live-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bio-green);
+    box-shadow: 0 0 8px var(--bio-green);
+    animation: dotPulse 1.2s infinite alternate;
+}
+
+@keyframes dotPulse {
+    from { opacity: 0.4; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1.25); }
+}
+
+.bounce-arrow {
+    animation: bounceDown 1.3s infinite ease-in-out;
+    color: var(--bio-green);
+}
+
+@keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+}
+
+/* Pulsing Bio Button */
+.bio-button-pulsing {
+    position: relative;
+    overflow: hidden;
+    animation: bioButtonGlow 2.4s infinite ease-in-out;
+}
+
+@keyframes bioButtonGlow {
+    0%, 100% {
+        box-shadow: 0 0 18px rgba(56, 229, 77, 0.45), 0 0 35px rgba(78, 204, 163, 0.25);
+        border-color: var(--bio-green);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 34px rgba(56, 229, 77, 0.85), 0 0 70px rgba(78, 204, 163, 0.5);
+        border-color: #5eff84;
+        transform: scale(1.035);
+    }
+}
+
+.bio-button-pulsing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transform: skewX(-25deg);
+    animation: buttonLightSweep 3s infinite ease-in-out;
+}
+
+@keyframes buttonLightSweep {
+    0% { left: -100%; }
+    40%, 100% { left: 160%; }
+}
+
+.btn-frog-icon {
+    font-size: 1.15rem;
+    color: var(--bio-green);
+    animation: frogWiggle 2s infinite ease-in-out;
+}
+
+@keyframes frogWiggle {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    20% { transform: rotate(-12deg) scale(1.18); }
+    40% { transform: rotate(12deg) scale(1.18); }
+    60% { transform: rotate(0deg) scale(1); }
+}
+
+.btn-click-hint {
+    background: rgba(56, 229, 77, 0.25);
+    border: 1px solid var(--bio-green);
+    color: var(--bio-green);
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    margin-left: 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Container & Locked Overlay Cue */
+.projects-container-relative {
+    position: relative;
+    width: 100%;
+}
+
+.locked-overlay-cue {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.locked-cue-box {
+    background: rgba(7, 20, 11, 0.94);
+    border: 2px solid var(--bio-emerald);
+    border-radius: var(--radius-md);
+    padding: 2.2rem 2.4rem;
+    max-width: 580px;
+    text-align: center;
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85), 0 0 35px rgba(78, 204, 163, 0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: cueFloat 3s infinite ease-in-out;
+    transition: var(--transition);
+}
+
+.locked-overlay-cue:hover .locked-cue-box {
+    border-color: var(--bio-green);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 45px rgba(56, 229, 77, 0.55);
+}
+
+@keyframes cueFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.locked-icon-halo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(56, 229, 77, 0.15);
+    border: 1.5px solid var(--bio-green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 24px rgba(56, 229, 77, 0.35);
+}
+
+.locked-main-icon {
+    font-size: 1.7rem;
+    color: var(--bio-green);
+}
+
+.locked-cue-box h4 {
+    font-family: var(--font-serif);
+    font-size: 1.55rem;
+    color: var(--text-main);
+    margin-bottom: 0.6rem;
+    line-height: 1.25;
+}
+
+.locked-cue-box p {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+}
+
+.cue-trigger-btn {
+    background: var(--bio-emerald);
+    color: #07140B;
+    border: none;
+    font-family: var(--font-terminal);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 0 22px rgba(78, 204, 163, 0.6);
+    transition: var(--transition);
+}
+
+.cue-trigger-btn:hover {
+    background: var(--bio-green);
+    box-shadow: 0 0 32px rgba(56, 229, 77, 0.9);
+    transform: translateY(-2px) scale(1.04);
+}

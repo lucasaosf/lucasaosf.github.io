@@ -420,16 +420,38 @@
             <div class="projects-wrapper">
                 <!-- Trigger Button with Frog & Biodiversity Theme -->
                 <div id="hack-interface" class="hack-interface">
-                    <button id="btn-hack" class="cyber-button bio-button">
-                        <i class="fa-solid fa-frog"></i> <span data-i18n="btn_scan">Explorar Acervo Faunístico &amp; Projetos</span>
+                    <div class="bio-scan-cta-pill" id="scan-cta-pill">
+                        <span class="live-pulse-dot"></span>
+                        <span data-i18n="scan_cta_hint">CLIQUE PARA INICIALIZAR A VARREDURA E DESBLOQUEAR</span>
+                        <i class="fa-solid fa-arrow-down bounce-arrow"></i>
+                    </div>
+                    <button id="btn-hack" class="cyber-button bio-button bio-button-pulsing" aria-label="Inicializar varredura e desbloquear projetos">
+                        <i class="fa-solid fa-frog btn-frog-icon"></i>
+                        <span data-i18n="btn_scan">Explorar Acervo Faunístico &amp; Projetos</span>
+                        <span class="btn-click-hint"><i class="fa-solid fa-hand-pointer"></i> CLIQUE</span>
                     </button>
                     <div id="mini-terminal" class="mini-terminal" style="display: none;">
                         <!-- Javascript will inject scan sequence here -->
                     </div>
                 </div>
 
-                <!-- Projects Grid -->
-                <div id="projects-content" class="projects-grid locked-content">
+                <div class="projects-container-relative">
+                    <!-- Overlay Clarification & Click Trigger -->
+                    <div id="locked-overlay-cue" class="locked-overlay-cue">
+                        <div class="locked-cue-box">
+                            <div class="locked-icon-halo">
+                                <i class="fa-solid fa-lock locked-main-icon"></i>
+                            </div>
+                            <h4 data-i18n="locked_cue_title">Acervo Faunístico &amp; Softwares Bloqueados</h4>
+                            <p data-i18n="locked_cue_desc">O acervo está embaçado por proteção da interface. Toque no botão verde acima ou clique aqui para inicializar a varredura e liberar todos os projetos.</p>
+                            <button class="cue-trigger-btn" type="button" data-i18n="locked_cue_btn">
+                                <i class="fa-solid fa-bolt"></i> Desbloquear Projetos Agora
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Projects Grid -->
+                    <div id="projects-content" class="projects-grid locked-content">
                     
                     <!-- Projeto 1: Caderneta de Campo PWA -->
                     <div class="project-card" data-category="software">
@@ -612,6 +634,7 @@
                         </div>
                     </div>
 
+                </div>
                 </div>
             </div>
         </section>

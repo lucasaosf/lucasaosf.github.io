@@ -1198,12 +1198,51 @@ function initBioScanner() {
     const btnHack = document.getElementById('btn-hack');
     const miniTerminal = document.getElementById('mini-terminal');
     const projectsContent = document.getElementById('projects-content');
+    const lockedCue = document.getElementById('locked-overlay-cue');
+    const scanCtaPill = document.getElementById('scan-cta-pill');
 
     if (!btnHack || !miniTerminal || !projectsContent) return;
 
+    const triggerUnlock = () => {
+        if (!btnHack.disabled) {
+            btnHack.click();
+        }
+    };
+
+    if (scanCtaPill) {
+        scanCtaPill.addEventListener('click', triggerUnlock);
+    }
+
+    if (lockedCue) {
+        lockedCue.addEventListener('click', triggerUnlock);
+    }
+
+    // Auto-unlock if user clicks on filter buttons while locked
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (projectsContent.classList.contains('locked-content') && !btnHack.disabled) {
+                btnHack.click();
+            }
+        });
+    });
+
     btnHack.addEventListener('click', () => {
         btnHack.disabled = true;
-        btnHack.style.opacity = '0.7';
+        btnHack.classList.remove('bio-button-pulsing');
+        btnHack.style.opacity = '0.75';
+        
+        if (scanCtaPill) {
+            scanCtaPill.style.transition = 'opacity 0.4s ease';
+            scanCtaPill.style.opacity = '0';
+            setTimeout(() => { scanCtaPill.style.display = 'none'; }, 400);
+        }
+        if (lockedCue) {
+            lockedCue.style.transition = 'opacity 0.4s ease';
+            lockedCue.style.opacity = '0';
+            setTimeout(() => { lockedCue.style.display = 'none'; }, 400);
+        }
+
         miniTerminal.style.display = 'block';
         miniTerminal.innerHTML = '';
 
@@ -1382,6 +1421,10 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; C&acirc;mera Termal",
         filter_software: "Softwares & PWAs",
         filter_scripts: "Scripts & Automação",
         filter_science: "Pesquisa & Ecologia",
+        scan_cta_hint: "CLIQUE PARA INICIALIZAR A VARREDURA E DESBLOQUEAR",
+        locked_cue_title: "Acervo Faunístico & Softwares Bloqueados",
+        locked_cue_desc: "O acervo está embaçado por proteção da interface. Toque no botão verde acima ou clique aqui para inicializar a varredura e liberar todos os projetos.",
+        locked_cue_btn: "Desbloquear Projetos Agora",
         btn_scan: "Explorar Acervo Faunístico & Projetos",
         btn_open_app: "Abrir App",
         btn_code: "Código",
@@ -1514,6 +1557,10 @@ drone_showcase_badge: "DJI Mini &bull; Pro &bull; Thermal Sensors",
         filter_software: "Software & PWAs",
         filter_scripts: "Scripts & Automation",
         filter_science: "Research & Ecology",
+        scan_cta_hint: "CLICK TO INITIALIZE BIO-SCAN & UNLOCK",
+        locked_cue_title: "Faunal Database & Projects Locked",
+        locked_cue_desc: "The database is blurred for interface security. Tap the green button above or click here to initialize the bio-scanner and unlock all projects.",
+        locked_cue_btn: "Unlock Database Now",
         btn_scan: "Explore Fauna Database & Projects",
         btn_open_app: "Launch App",
         btn_code: "Code",
