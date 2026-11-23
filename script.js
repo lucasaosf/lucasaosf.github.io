@@ -1099,7 +1099,7 @@ function initDroneLightbox() {
 
             if (fullSrc) {
                 modalImg.src = fullSrc;
-                if (modalCap) modalCap.innerHTML = caption || '';
+                if (modalCap) modalCap.textContent = caption || '';
                 modal.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
@@ -1150,7 +1150,7 @@ function initFieldworkVideoPlaylist() {
             }
             if (titleEl) titleEl.textContent = title;
             if (descEl) descEl.textContent = desc;
-            if (hud) hud.innerHTML = hudText;
+            if (hud) hud.textContent = hudText;
         });
     });
 
@@ -1221,7 +1221,7 @@ function initBioScanner() {
             if (i < scanLogs.length) {
                 const line = document.createElement('div');
                 line.style.margin = '0.35rem 0';
-                line.innerHTML = scanLogs[i];
+                line.textContent = scanLogs[i];
                 miniTerminal.appendChild(line);
                 playScanTone(i + 1);
                 i++;
@@ -1879,7 +1879,7 @@ function initFieldMap() {
                 liveMarker.setLatLng(data.coords);
                 const txtEl = document.getElementById('map-current-loc-text');
                 if (txtEl && data.city) {
-                    txtEl.innerHTML = data.city + ' &bull; ' + (data.state || '');
+                    txtEl.textContent = data.city + ' • ' + (data.state || '');
                 }
             }
         })
